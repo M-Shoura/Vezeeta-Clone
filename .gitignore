@@ -1,0 +1,108 @@
+# =========================
+# Build Folders
+# =========================
+bin/
+obj/
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =========================
+# Rider / ReSharper
+# =========================
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+# =========================
+# ASP.NET Core
+# =========================
+wwwroot/lib/
+wwwroot/uploads/
+
+# Logs
+logs/
+*.log
+
+# =========================
+# EF Core
+# =========================
+*.db
+*.db-shm
+*.db-wal
+
+# =========================
+# Publish Output
+# =========================
+publish/
+*.publishsettings
+
+# =========================
+# Node Modules (if frontend tools used)
+# =========================
+node_modules/
+
+# =========================
+# Environment Files
+# =========================
+.env
+.env.*
+
+# Keep example env
+!.env.example
+
+# =========================
+# NuGet
+# =========================
+packages/
+*.nupkg
+
+# Ignore NuGet Packages folder
+**/packages/*
+!**/packages/build/
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.temp
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Test Results
+# =========================
+TestResults/
+
+# =========================
+# Coverage Reports
+# =========================
+coverage/
+*.coverage
+*.coveragexml
+
+# =========================
+# Secrets
+# =========================
+secrets.json
+appsettings.Development.json
+
+# =========================
+# Azure / Deployment
+# =========================
+.azure/
+
+# =========================
+# Generated Files
+# =========================
+Generated/
