@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.DependencyInjection
+namespace Domain.Enums
 {
-    internal class Class1
+    public enum Gender : byte
     {
+        Male,
+        Female
     }
 }
