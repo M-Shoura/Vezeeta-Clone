@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Infrastructure\\Infrastructure.csproj": {}
+    "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Infrastructure\\Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Application\\Application.csproj": {
+    "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Application\\Application.csproj",
+        "projectUniqueName": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Application\\Application.csproj",
+        "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\1msho\\.nuget\\packages\\",
-        "outputPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Application\\obj\\",
+        "outputPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -34,8 +34,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Domain\\Domain.csproj": {
-                "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Domain\\Domain.csproj"
+              "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Domain\\Domain.csproj"
               }
             }
           }
@@ -356,14 +356,14 @@
         }
       }
     },
-    "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Domain\\Domain.csproj": {
+    "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Domain\\Domain.csproj",
+        "projectUniqueName": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Domain\\Domain.csproj",
+        "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\1msho\\.nuget\\packages\\",
-        "outputPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Domain\\obj\\",
+        "outputPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -698,14 +698,14 @@
         }
       }
     },
-    "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Infrastructure\\Infrastructure.csproj": {
+    "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Infrastructure\\Infrastructure.csproj",
+        "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Infrastructure\\Infrastructure.csproj",
         "packagesPath": "C:\\Users\\1msho\\.nuget\\packages\\",
-        "outputPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Infrastructure\\obj\\",
+        "outputPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -728,8 +728,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Application\\Application.csproj": {
-                "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Application\\Application.csproj"
+              "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Application\\Application.csproj": {
+                "projectPath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Application\\Application.csproj"
               }
             }
           }
