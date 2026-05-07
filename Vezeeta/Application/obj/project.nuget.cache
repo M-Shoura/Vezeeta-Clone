@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oDscCOGMS4c=",
+  "dgSpecHash": "KzIHiGxfnRA=",
   "success": true,
-  "projectFilePath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta\\Application\\Application.csproj",
+  "projectFilePath": "D:\\ITI\\Programming - 5 - MVC\\10 - Project\\Vezeeta-Clone-MVC\\Vezeeta\\Application\\Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\1msho\\.nuget\\packages\\automapper\\16.1.1\\automapper.16.1.1.nupkg.sha512",
     "C:\\Users\\1msho\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0\\microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512",
