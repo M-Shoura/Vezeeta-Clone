@@ -39,22 +39,22 @@ namespace Infranstructure.Persistence.Configurations
             // Relationships
 
             // Clinic -> Doctors
-            // builder.HasMany(c => c.Doctors)
-            //        .WithOne(d => d.Clinic)
-            //        .HasForeignKey(d => d.ClinicId)
-            //        .OnDelete(DeleteBehavior.Restrict);
+       //      builder.HasMany(c => c.Doctors)
+       //             .WithOne(d => d.Clinic)
+       //             .HasForeignKey(d => d.ClinicId)
+       //             .OnDelete(DeleteBehavior.Restrict);
 
-            // // Clinic -> Schedules
-            // builder.HasMany(c => c.Schedules)
-            //        .WithOne(s => s.Clinic)
-            //        .HasForeignKey(s => s.ClinicId)
-            //        .OnDelete(DeleteBehavior.Cascade);
+            // Clinic -> Schedules
+            builder.HasMany(c => c.Schedules)
+                   .WithOne(s => s.Clinic)
+                   .HasForeignKey(s => s.ClinicId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
-            // // Clinic -> Appointments
-            // builder.HasMany(c => c.Appointments)
-            //        .WithOne(a => a.Clinic)
-            //        .HasForeignKey(a => a.ClinicId)
-            //        .OnDelete(DeleteBehavior.Restrict);
+            // Clinic -> Appointments
+            builder.HasMany(c => c.Appointments)
+                   .WithOne(a => a.Clinic)
+                   .HasForeignKey(a => a.ClinicId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
