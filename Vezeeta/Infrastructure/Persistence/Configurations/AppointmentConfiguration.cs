@@ -37,10 +37,10 @@ namespace Infrastructure.Persistence.Configurations
                    .HasForeignKey(a => a.ClinicId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            //builder.HasOne(a => a.Payment)
-            //       .WithOne(p => p.Appointments)
-            //       .HasForeignKey<Appointment>(a => a.PaymentId)
-            //       .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(a => a.Payment)
+                  .WithOne(p => p.Appointment)
+                  .HasForeignKey<Appointment>(a => a.PaymentId)
+                  .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(a => a.Review)
                    .WithOne(r => r.Appointment)

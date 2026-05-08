@@ -49,29 +49,29 @@ namespace Infranstructure.Persistence.Configurations
 
             // Relationships
 
-            // // DoctorProfile -> DoctorClinics (many-to-many via join table)
-            // builder.HasMany(d => d.DoctorClinics)
-            //        .WithOne(dc => dc.DoctorProfile)
-            //        .HasForeignKey(dc => dc.DoctorProfileId)
-            //        .OnDelete(DeleteBehavior.Cascade);
+            // DoctorProfile -> DoctorClinics (many-to-many via join table)
+            builder.HasMany(d => d.DoctorClinics)
+                   .WithOne(dc => dc.Doctor)
+                   .HasForeignKey(dc => dc.DoctorId)
+                   .OnDelete(DeleteBehavior.SetNull);
 
-            // // DoctorProfile -> Appointments
-            // builder.HasMany(d => d.Appointments)
-            //        .WithOne(a => a.DoctorProfile)
-            //        .HasForeignKey(a => a.DoctorProfileId)
-            //        .OnDelete(DeleteBehavior.Restrict);
+            // DoctorProfile -> Appointments
+            builder.HasMany(d => d.Appointments)
+                   .WithOne(a => a.Doctor)
+                   .HasForeignKey(a => a.DoctorId)
+                   .OnDelete(DeleteBehavior.SetNull);
 
-            // // DoctorProfile -> Schedules
-            // builder.HasMany(d => d.Schedules)
-            //        .WithOne(s => s.DoctorProfile)
-            //        .HasForeignKey(s => s.DoctorProfileId)
-            //        .OnDelete(DeleteBehavior.Cascade);
+            // DoctorProfile -> Schedules
+            builder.HasMany(d => d.Schedules)
+                   .WithOne(s => s.Doctor)
+                   .HasForeignKey(s => s.DoctorId)
+                   .OnDelete(DeleteBehavior.SetNull);
 
-            // // DoctorProfile -> Reviews
-            // builder.HasMany(d => d.Reviews)
-            //        .WithOne(r => r.DoctorProfile)
-            //        .HasForeignKey(r => r.DoctorProfileId)
-            //        .OnDelete(DeleteBehavior.Restrict);
+            // DoctorProfile -> Reviews
+       //      builder.HasMany(d => d.Reviews)
+       //             .WithOne(r => r.Doctor)
+       //             .HasForeignKey(r => r.DoctorId)
+       //             .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
