@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.DependencyInjection
+namespace Infranstructure.Repositories
 {
     internal class Class1
     {
