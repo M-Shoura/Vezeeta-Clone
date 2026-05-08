@@ -45,7 +45,7 @@ namespace Infranstructure.Persistence.Configurations
             builder.HasMany(d => d.PrescriptionItems)
                    .WithOne(pi => pi.Drug)
                    .HasForeignKey(pi => pi.DrugId)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
