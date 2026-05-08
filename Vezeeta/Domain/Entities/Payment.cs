@@ -11,7 +11,6 @@ namespace Domain.Entities
         public decimal Amount { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
-        // public bool IsPaid { get; set; }
         public DateTime? PaidAt { get; set; }
         // public DateTime? RefundedAt { get; set; }
         public string? TransactionReference { get; set; }

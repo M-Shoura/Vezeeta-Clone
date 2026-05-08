@@ -13,7 +13,7 @@ namespace Domain.Entities
         public string? Description { get; set; }
         public string? Email { get; set; }
         
-        // public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; } = true;
 
         public ICollection<DoctorProfile> Doctors { get; set; } = new HashSet<DoctorProfile>();
         public ICollection<DoctorSchedule> Schedules { get; set; } = new HashSet<DoctorSchedule>();
