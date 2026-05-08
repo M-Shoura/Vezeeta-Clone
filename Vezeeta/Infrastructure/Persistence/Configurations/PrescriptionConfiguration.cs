@@ -23,17 +23,17 @@ namespace Infranstructure.Persistence.Configurations
 
             // Relationships
 
-       //      // Prescription -> Appointment
-       //      builder.HasOne(p => p.Appointment)
-       //             .WithMany(a => a.Prescriptions)
-       //             .HasForeignKey(p => p.AppointmentId)
-       //             .OnDelete(DeleteBehavior.Cascade);
+            // Prescription -> Appointment
+            // builder.HasOne(p => p.Appointment)
+            //        .WithOne(a => a.Prescription)
+            //        .HasForeignKey(p => p.AppointmentId)
+            //        .OnDelete(DeleteBehavior.SetNull);
 
-       //      // Prescription -> PrescriptionItems
-       //      builder.HasMany(p => p.Items)
-       //             .WithOne(i => i.Prescription)
-       //             .HasForeignKey(i => i.PrescriptionId)
-       //             .OnDelete(DeleteBehavior.Cascade);
+            // Prescription -> PrescriptionItems
+            builder.HasMany(p => p.Items)
+                   .WithOne(i => i.Prescription)
+                   .HasForeignKey(i => i.PrescriptionId)
+                   .OnDelete(DeleteBehavior.SetNull);
 
             // Optional index
             builder.HasIndex(p => p.AppointmentId);
