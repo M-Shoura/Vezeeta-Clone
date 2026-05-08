@@ -15,11 +15,6 @@ namespace Domain.Entities
         public string? BloodType { get; set; }
         public string EmergencyContactName { get; set; } = null!;
         public string EmergencyContactPhone { get; set; } = null!;
-        public string? Allergies { get; set; }
-        public string? ChronicDiseases { get; set; }
-        public string? PreviousSurgeries { get; set; }
-        public string? FamilyHistory { get; set; }
-        public string? CurrentMedications { get; set; }
 
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<MedicalRecord> MedicalRecords { get; set; } = new HashSet<MedicalRecord>();

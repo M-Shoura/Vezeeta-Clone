@@ -5,19 +5,20 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    /// <summary>
-    /// Tracks patient medical history including diagnoses, conditions, and treatment outcomes
-    /// </summary>
     public class MedicalRecord : AuditableEntity
     {
         public int PatientId { get; set; }
         public string Condition { get; set; } = null!;
         public string? Description { get; set; }
-        public string? DiagnosisCode { get; set; } // ICD-10 code
+        public string? DiagnosisCode { get; set; }
         public DateTime DiagnosedDate { get; set; }
         public DateTime? ResolvedDate { get; set; }
         public bool IsActive { get; set; } = true;
         public string? Treatment { get; set; }
+        public string? Allergies { get; set; }
+        public string? Medications { get; set; }
+        public string? SurgeryDetails { get; set; }
+        public string? FamilyHistory { get; set; }
         public int? AppointmentId { get; set; }
 
         public PatientProfile Patient { get; set; } = null!;

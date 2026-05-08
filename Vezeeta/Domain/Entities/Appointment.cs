@@ -16,14 +16,14 @@ namespace Domain.Entities
 
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
-        public int ClinicId { get; set; } 
+        public int ClinicId { get; set; }
 
         public DoctorProfile Doctor { get; set; } = null!;
-        public PatientProfile Patient { get; set; } = null!;
+        public PatientProfile Patient { get; set; } = null!; 
         public Clinic Clinic { get; set; } = null!;
         
         public Review? Review { get; set; }
         public Payment? Payment { get; set; }
-        public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();
+        public Prescription Prescription { get; set; } = null!;
     }
 }
