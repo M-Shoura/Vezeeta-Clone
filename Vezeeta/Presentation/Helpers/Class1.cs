@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.DependencyInjection
+namespace Application.Presentation.Helpers
 {
     internal class Class1
     {
