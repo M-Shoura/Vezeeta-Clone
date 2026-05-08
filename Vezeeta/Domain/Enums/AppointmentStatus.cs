@@ -8,7 +8,7 @@ namespace Domain.Enums
     {
         Pending,
         Confirmed,
-        Completed,
-        Cancelled
+        Completed
+        // Cancelled
     }
 }
