@@ -13,10 +13,12 @@ namespace Domain.Entities
         public TimeSpan EndTime { get; set; }
         public int SlotDurationMinutes { get; set; }
 
-        public string DoctorProfileId { get; set; }
+        // public bool IsActive { get; set; } = true;
+
+        public int DoctorId { get; set; }
         public int ClinicId { get; set; }
 
-        public DoctorProfile Doctor { get; set; }
+        public DoctorProfile Doctor { get; set; } = null!;
         public Clinic Clinic { get; set; } = null!;
     }
 }
