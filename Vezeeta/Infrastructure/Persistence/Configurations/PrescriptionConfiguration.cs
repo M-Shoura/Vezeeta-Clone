@@ -22,18 +22,22 @@ namespace Infranstructure.Persistence.Configurations
                    .HasMaxLength(2000);
 
             // Relationships
+            // Prescription is the DEPENDENT entity (has FK: AppointmentId)
+            // So the relationship is configured HERE as the dependent endpoint.
 
-            // Prescription -> Appointment
-            // builder.HasOne(p => p.Appointment)
-            //        .WithOne(a => a.Prescription)
-            //        .HasForeignKey(p => p.AppointmentId)
+            builder.HasOne(p => p.Appointment)
+                   .WithOne(a => a.Prescription)
+                   .HasForeignKey<Prescription>(p => p.AppointmentId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            // Prescription -> PrescriptionItems (one-to-many)
+            // NOTE: This relationship is configured in PrescriptionItemConfiguration as the dependent entity.
+            // Commented out here to avoid duplicate/conflicting relationship mappings.
+
+            // builder.HasMany(p => p.Items)
+            //        .WithOne(i => i.Prescription)
+            //        .HasForeignKey(i => i.PrescriptionId)
             //        .OnDelete(DeleteBehavior.SetNull);
-
-            // Prescription -> PrescriptionItems
-            builder.HasMany(p => p.Items)
-                   .WithOne(i => i.Prescription)
-                   .HasForeignKey(i => i.PrescriptionId)
-                   .OnDelete(DeleteBehavior.SetNull);
 
             // Optional index
             builder.HasIndex(p => p.AppointmentId);

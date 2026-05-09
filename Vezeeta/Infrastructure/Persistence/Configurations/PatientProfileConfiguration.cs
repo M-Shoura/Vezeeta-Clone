@@ -47,15 +47,24 @@ namespace Infranstructure.Persistence.Configurations
 
             // Relationships
 
-            builder.HasMany(p => p.Appointments)
-                   .WithOne(a => a.Patient)
-                   .HasForeignKey(a => a.PatientId)
-                   .OnDelete(DeleteBehavior.SetNull);
+            // PatientProfile -> Appointments (one-to-many)
+            // NOTE: This relationship is configured in AppointmentConfiguration as the dependent entity.
+            // Commented out here to avoid duplicate/conflicting relationship mappings.
+            // See Fluent API Best Practice: Configure relationships on the DEPENDENT entity (the one with the FK).
 
-            builder.HasMany(p => p.MedicalRecords)
-                   .WithOne(m => m.Patient)
-                   .HasForeignKey(m => m.PatientId)
-                   .OnDelete(DeleteBehavior.SetNull);
+            // builder.HasMany(p => p.Appointments)
+            //        .WithOne(a => a.Patient)
+            //        .HasForeignKey(a => a.PatientId)
+            //        .OnDelete(DeleteBehavior.SetNull);
+
+            // PatientProfile -> MedicalRecords (one-to-many)
+            // NOTE: This relationship is configured in MedicalRecordConfiguration as the dependent entity.
+            // Commented out here to avoid duplicate/conflicting relationship mappings.
+
+            // builder.HasMany(p => p.MedicalRecords)
+            //        .WithOne(m => m.Patient)
+            //        .HasForeignKey(m => m.PatientId)
+            //        .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
