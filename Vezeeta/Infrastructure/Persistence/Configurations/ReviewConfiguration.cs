@@ -26,11 +26,13 @@ namespace Infranstructure.Persistence.Configurations
                    .HasConversion<int>();
 
             // Relationships
+            // Review is the DEPENDENT entity (has FK: AppointmentId)
+            // So the relationship is configured HERE as the dependent endpoint.
 
-            // builder.HasOne(r => r.Appointment)
-            //        .WithOne(a => a.Review)
-            //        .HasForeignKey(r => r.AppointmentId)
-            //        .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(r => r.Appointment)
+                   .WithOne(a => a.Review)
+                   .HasForeignKey<Review>(r => r.AppointmentId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes
             builder.HasIndex(r => r.AppointmentId);
