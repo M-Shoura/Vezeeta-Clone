@@ -32,7 +32,7 @@ namespace Infrastructure.Persistence.Configurations
 
             // Relationships
             builder.HasOne(ds => ds.Doctor)
-                .WithMany(d => d.Schedules) 
+                .WithMany(d => d.DoctorSchedules) 
                 .HasForeignKey(ds => ds.DoctorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
