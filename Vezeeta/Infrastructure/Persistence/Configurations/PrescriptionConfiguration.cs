@@ -29,12 +29,6 @@ namespace Infranstructure.Persistence.Configurations
                    .HasForeignKey<Prescription>(p => p.AppointmentId)
                    .OnDelete(DeleteBehavior.SetNull);
 
-            // Prescription -> PrescriptionItems
-            builder.HasMany(p => p.Items)
-                   .WithOne(i => i.Prescription)
-                   .HasForeignKey(i => i.PrescriptionId)
-                   .OnDelete(DeleteBehavior.SetNull);
-
             // Optional index
             builder.HasIndex(p => p.AppointmentId);
         }

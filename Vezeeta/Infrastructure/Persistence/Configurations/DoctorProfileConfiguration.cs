@@ -50,28 +50,41 @@ namespace Infranstructure.Persistence.Configurations
             // Relationships
 
             // DoctorProfile -> DoctorClinics (many-to-many via join table)
-            builder.HasMany(d => d.DoctorClinics)
-                   .WithOne(dc => dc.Doctor)
-                   .HasForeignKey(dc => dc.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull);
+            // NOTE: This relationship is configured in DoctorClinicConfiguration as the dependent entity.
+            // Commented out here to avoid duplicate/conflicting relationship mappings.
+            // See Fluent API Best Practice: Configure relationships on the DEPENDENT entity (the one with the FK).
 
-            // DoctorProfile -> Appointments
-            builder.HasMany(d => d.Appointments)
-                   .WithOne(a => a.Doctor)
-                   .HasForeignKey(a => a.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull);
+            // builder.HasMany(d => d.DoctorClinics)
+            //        .WithOne(dc => dc.Doctor)
+            //        .HasForeignKey(dc => dc.DoctorId)
+            //        .OnDelete(DeleteBehavior.SetNull);
 
-            // DoctorProfile -> Schedules
-            builder.HasMany(d => d.Schedules)
-                   .WithOne(s => s.Doctor)
-                   .HasForeignKey(s => s.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull);
+            // DoctorProfile -> Appointments (one-to-many)
+            // NOTE: This relationship is configured in AppointmentConfiguration as the dependent entity.
+            // Commented out here to avoid duplicate/conflicting relationship mappings.
 
-            // DoctorProfile -> Reviews
-       //      builder.HasMany(d => d.Reviews)
-       //             .WithOne(r => r.Doctor)
-       //             .HasForeignKey(r => r.DoctorId)
-       //             .OnDelete(DeleteBehavior.SetNull);
+            // builder.HasMany(d => d.Appointments)
+            //        .WithOne(a => a.Doctor)
+            //        .HasForeignKey(a => a.DoctorId)
+            //        .OnDelete(DeleteBehavior.SetNull);
+
+            // DoctorProfile -> Schedules (one-to-many)
+            // NOTE: This relationship is configured in DoctorScheduleConfiguration as the dependent entity.
+            // Commented out here to avoid duplicate/conflicting relationship mappings.
+
+            // builder.HasMany(d => d.Schedules)
+            //        .WithOne(s => s.Doctor)
+            //        .HasForeignKey(s => s.DoctorId)
+            //        .OnDelete(DeleteBehavior.SetNull);
+
+            // DoctorProfile -> Reviews (one-to-many)
+            // NOTE: Reviews are linked to Appointment, not directly to DoctorProfile.
+            // This is already handled in ReviewConfiguration and AppointmentConfiguration.
+
+            // builder.HasMany(d => d.Reviews)
+            //        .WithOne(r => r.Doctor)
+            //        .HasForeignKey(r => r.DoctorId)
+            //        .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

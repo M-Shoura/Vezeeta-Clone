@@ -1,3 +1,8 @@
+using Infranstructure.Persistence.Data;
+using Infrastructure.Repositories;
+using Application.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 namespace Presentation
 {
     public class Program
@@ -5,6 +10,16 @@ namespace Presentation
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // ==================== DATABASE CONFIGURATION ====================
+            // Add DbContext
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            // ==================== DEPENDENCY INJECTION ====================
+            // Register Generic Repository
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
