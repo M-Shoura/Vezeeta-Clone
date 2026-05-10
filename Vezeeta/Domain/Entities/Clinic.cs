@@ -15,7 +15,7 @@ namespace Domain.Entities
         
         public bool IsActive { get; set; } = true;
 
-        public ICollection<DoctorSchedule> Schedules { get; set; } = new HashSet<DoctorSchedule>();
+        public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new HashSet<DoctorSchedule>();
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<DoctorClinic> DoctorClinics { get; set; } = new HashSet<DoctorClinic>();
     }

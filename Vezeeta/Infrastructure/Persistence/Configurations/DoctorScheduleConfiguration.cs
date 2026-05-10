@@ -31,17 +31,18 @@ namespace Infrastructure.Persistence.Configurations
                 .HasDefaultValue(true);
 
             // Relationships
+
+            // DoctorSchedule -> Doctor
             builder.HasOne(ds => ds.Doctor)
                 .WithMany(d => d.DoctorSchedules) 
                 .HasForeignKey(ds => ds.DoctorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // DoctorSchedule -> Clinic
             builder.HasOne(ds => ds.Clinic)
-                .WithMany(c => c.Schedules) // Ensure Clinic has ICollection<DoctorSchedule>
+                .WithMany(c => c.DoctorSchedules) 
                 .HasForeignKey(ds => ds.ClinicId)
                 .OnDelete(DeleteBehavior.SetNull);
-            // Using NoAction for one side to avoid multiple cascade paths 
-            // which SQL Server sometimes complains about.
         }
     }
 }

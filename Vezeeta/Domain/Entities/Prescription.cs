@@ -14,6 +14,6 @@ namespace Domain.Entities
         public int AppointmentId { get; set; }
         
         public Appointment Appointment { get; set; } = null!;
-        public ICollection<PrescriptionItem> Items { get; set; } = new HashSet<PrescriptionItem>();
+        public ICollection<PrescriptionItem> PrescriptionItems { get; set; } = new HashSet<PrescriptionItem>();
     }
 }

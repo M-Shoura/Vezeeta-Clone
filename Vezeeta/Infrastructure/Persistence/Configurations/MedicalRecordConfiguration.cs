@@ -49,7 +49,7 @@ namespace Infrastructure.Persistence.Configurations
             builder.HasOne(mr => mr.Patient)
                 .WithMany(p => p.MedicalRecords) 
                 .HasForeignKey(mr => mr.PatientId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
