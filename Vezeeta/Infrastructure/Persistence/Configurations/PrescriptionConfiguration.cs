@@ -24,10 +24,10 @@ namespace Infranstructure.Persistence.Configurations
             // Relationships
 
             // Prescription -> Appointment
-            // builder.HasOne(p => p.Appointment)
-            //        .WithOne(a => a.Prescription)
-            //        .HasForeignKey(p => p.AppointmentId)
-            //        .OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(p => p.Appointment)
+                   .WithOne(a => a.Prescription)
+                   .HasForeignKey<Prescription>(p => p.AppointmentId)
+                   .OnDelete(DeleteBehavior.SetNull);
 
             // Prescription -> PrescriptionItems
             builder.HasMany(p => p.Items)
