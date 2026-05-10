@@ -32,10 +32,10 @@ namespace Infrastructure.Persistence.Configurations
                 .HasForeignKey(dc => dc.DoctorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //builder.HasOne(dc => dc.Clinic)
-            //    .WithMany(c => c.DoctorClinics) // Ensure this property exists in Clinic
-            //    .HasForeignKey(dc => dc.ClinicId)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(dc => dc.Clinic)
+                .WithMany(c => c.DoctorClinics) // Ensure this property exists in Clinic
+                .HasForeignKey(dc => dc.ClinicId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
         }
