@@ -12,13 +12,8 @@ namespace Domain.Entities
         public DateTime PrescriptionDate { get; set; }
         public string? Notes { get; set; }
         public int AppointmentId { get; set; }
-        //public int DoctorId { get; set; }
-        //public int PatientId { get; set; }
         
         public Appointment Appointment { get; set; } = null!;
-        //public DoctorProfile Doctor { get; set; } = null!;
-        //public PatientProfile Patient { get; set; } = null!;
-        
         public ICollection<PrescriptionItem> Items { get; set; } = new HashSet<PrescriptionItem>();
     }
 }

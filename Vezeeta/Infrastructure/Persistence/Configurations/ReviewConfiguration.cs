@@ -27,10 +27,23 @@ namespace Infranstructure.Persistence.Configurations
 
             // Relationships
 
-            // builder.HasOne(r => r.Appointment)
-            //        .WithOne(a => a.Review)
-            //        .HasForeignKey(r => r.AppointmentId)
-            //        .OnDelete(DeleteBehavior.Cascade);
+            // Review -> Appointment
+            builder.HasOne(r => r.Appointment)
+                   .WithOne(a => a.Review)
+                   .HasForeignKey<Review>(r => r.AppointmentId)
+                   .OnDelete(DeleteBehavior.SetNull);
+
+            // Review -> Patient
+            builder.HasOne(r => r.Patient)
+                   .WithMany(p => p.Reviews)
+                   .HasForeignKey(r => r.PatientId)
+                   .OnDelete(DeleteBehavior.SetNull);
+                   
+            // Review -> Doctor
+            builder.HasOne(r => r.Doctor)
+                   .WithMany(d => d.Reviews)
+                   .HasForeignKey(r => r.DoctorId)
+                   .OnDelete(DeleteBehavior.SetNull);
 
             // Indexes
             builder.HasIndex(r => r.AppointmentId);
