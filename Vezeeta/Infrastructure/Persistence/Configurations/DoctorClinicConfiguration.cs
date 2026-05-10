@@ -27,20 +27,18 @@ namespace Infrastructure.Persistence.Configurations
                 .HasDefaultValue(true);
 
             // Relationships
-            // DoctorClinic is the DEPENDENT entity (has composite FK: DoctorId + ClinicId)
-            // So all relationships are configured HERE as the principal-dependent endpoints.
 
+            // DoctorClinic -> Doctor
             builder.HasOne(dc => dc.Doctor)
-                .WithMany(d => d.DoctorClinics) // Ensure this property exists in DoctorProfile
+                .WithMany(d => d.DoctorClinics) 
                 .HasForeignKey(dc => dc.DoctorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
 
+            // DoctorClinic -> Clinic
             builder.HasOne(dc => dc.Clinic)
-                .WithMany(c => c.DoctorClinics) // Ensure this property exists in Clinic
+                .WithMany(c => c.DoctorClinics)
                 .HasForeignKey(dc => dc.ClinicId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

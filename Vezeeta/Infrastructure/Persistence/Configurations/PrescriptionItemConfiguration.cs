@@ -32,11 +32,14 @@ namespace Infrastructure.Persistence.Configurations
 
 
             // Relationships
-            //builder.HasOne(x => x.Prescription)
-            //.WithMany(x => x.Items)
-            //.HasForeignKey(x => x.PrescriptionId)
-            //.OnDelete(DeleteBehavior.SetNull);
+            
+            // PrescriptionItem -> Prescription
+            builder.HasOne(x => x.Prescription)
+                .WithMany(x => x.PrescriptionItems)
+                .HasForeignKey(x => x.PrescriptionId)
+                .OnDelete(DeleteBehavior.SetNull);
 
+            // PrescriptionItem -> Drug
             builder.HasOne(x => x.Drug)
                 .WithMany(x => x.PrescriptionItems)
                 .HasForeignKey(x => x.DrugId)
