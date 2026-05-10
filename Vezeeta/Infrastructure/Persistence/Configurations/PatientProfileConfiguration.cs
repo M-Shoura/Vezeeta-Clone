@@ -47,14 +47,22 @@ namespace Infranstructure.Persistence.Configurations
 
             // Relationships
 
+            // Patient -> Appointments
             builder.HasMany(p => p.Appointments)
                    .WithOne(a => a.Patient)
                    .HasForeignKey(a => a.PatientId)
                    .OnDelete(DeleteBehavior.SetNull);
 
+            // Patient -> MedicalRecords
             builder.HasMany(p => p.MedicalRecords)
                    .WithOne(m => m.Patient)
                    .HasForeignKey(m => m.PatientId)
+                   .OnDelete(DeleteBehavior.SetNull);
+
+            // Patient -> Reviews
+            builder.HasMany(p => p.Reviews)
+                   .WithOne(r => r.Patient)
+                   .HasForeignKey(r => r.PatientId)
                    .OnDelete(DeleteBehavior.SetNull);
         }
     }

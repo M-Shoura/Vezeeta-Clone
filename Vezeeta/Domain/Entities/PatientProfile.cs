@@ -18,5 +18,6 @@ namespace Domain.Entities
 
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<MedicalRecord> MedicalRecords { get; set; } = new HashSet<MedicalRecord>();
+        public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
     }
 }
