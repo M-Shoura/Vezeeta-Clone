@@ -17,6 +17,7 @@ namespace Domain.Entities
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
         public int ClinicId { get; set; }
+        public int? PaymentId { get; set; }
 
         public DoctorProfile Doctor { get; set; } = null!;
         public PatientProfile Patient { get; set; } = null!; 
