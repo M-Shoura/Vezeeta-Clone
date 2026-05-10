@@ -37,20 +37,26 @@ namespace Infrastructure.Persistence.Configurations
                    .HasForeignKey(a => a.ClinicId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(a => a.Payment)
-                  .WithOne(p => p.Appointment)
-                  .HasForeignKey<Appointment>(a => a.PaymentId)
-                  .OnDelete(DeleteBehavior.SetNull);
+            // NOTE: Payment, Review, and Prescription are ONE-TO-ONE relationships.
+            // These should be configured ONLY in their dependent entity configurations
+            // (PaymentConfiguration, ReviewConfiguration, PrescriptionConfiguration)
+            // to avoid duplicate/conflicting relationship mappings.
+            // See Fluent API Best Practice: Configure relationships on the DEPENDENT entity (the one with the FK).
 
-            builder.HasOne(a => a.Review)
-                   .WithOne(r => r.Appointment)
-                   .HasForeignKey<Review>(r => r.AppointmentId)
-                   .OnDelete(DeleteBehavior.Restrict);
+            // builder.HasOne(a => a.Payment)
+            //      .WithOne(p => p.Appointment)
+            //      .HasForeignKey<Payment>(p => p.AppointmentId)
+            //      .OnDelete(DeleteBehavior.SetNull);
 
-             builder.HasOne(a => a.Prescription)
-                   .WithOne(p => p.Appointment)
-                   .HasForeignKey<Prescription>(p => p.AppointmentId)
-                   .OnDelete(DeleteBehavior.Restrict);
+            // builder.HasOne(a => a.Review)
+            //        .WithOne(r => r.Appointment)
+            //        .HasForeignKey<Review>(r => r.AppointmentId)
+            //        .OnDelete(DeleteBehavior.Restrict);
+
+            // builder.HasOne(a => a.Prescription)
+            //        .WithOne(p => p.Appointment)
+            //        .HasForeignKey<Prescription>(p => p.AppointmentId)
+            //        .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -22,17 +22,18 @@ namespace Infrastructure.Persistence.Configurations
             .HasColumnType("decimal(18,2)").IsRequired();
 
             // Relationships
-            builder.HasOne(x => x.Appointment)
-            .WithOne(x => x.Payment)
-            .HasForeignKey<Payment>(x => x.AppointmentId)
-            .OnDelete(DeleteBehavior.Cascade);
+            // Payment is the DEPENDENT entity (has FK: AppointmentId)
+            // So the relationship is configured HERE as the dependent endpoint.
 
+            builder.HasOne(p => p.Appointment)
+                   .WithOne(a => a.Payment)
+                   .HasForeignKey<Payment>(p => p.AppointmentId)
+                   .OnDelete(DeleteBehavior.Restrict);
+            
             // Index
             //builder.HasIndex(p => p.TransactionReference)
             //    .IsUnique()
             //    .HasFilter("[TransactionReference] IS NOT NULL");
-
-
         }
     }
 }
