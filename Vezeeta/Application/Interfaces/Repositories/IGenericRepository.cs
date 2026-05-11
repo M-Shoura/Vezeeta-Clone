@@ -1,3 +1,4 @@
+using Application.Consts;
 using Domain.Entities.Common;
 using System;
 using System.Collections.Generic;
@@ -6,23 +7,42 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : class
     {
-        // CREATE
-        Task<T> AddAsync(T entity);
+        T GetById(int id);
+        Task<T> GetByIdAsync(int id);
+        T GetById(string id);
+        Task<T> GetByIdAsync(string id);
 
-        // READ
-        Task<T?> GetByIdAsync(int id);
+        IEnumerable<T> GetAll();
         Task<IEnumerable<T>> GetAllAsync();
-        Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> predicate);
+        T Find(Expression<Func<T, bool>> criteria, string[]? includes = null);
+        Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[]? includes = null);
+        IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null);
+        IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int take, int skip);
+        IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int? take, int? skip,
+            Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending);
+        IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int? take, int? skip,
+            Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending, string[]? includes = null);
 
-        // UPDATE
-        Task UpdateAsync(T entity);
-
-        // DELETE
-        Task DeleteAsync(int id);
-
-        // SAVE
-        Task<bool> SaveAsync();
+        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[]? includes = null);
+        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, int skip, int take);
+        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, int? skip, int? take,
+            Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending);
+        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, int? skip, int? take,
+            Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending, string[]? includes = null);
+        T Add(T entity);
+        Task<T> AddAsync(T entity);
+        IEnumerable<T> AddRange(IEnumerable<T> entities);
+        Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
+        T Update(T entity);
+        void Delete(T entity);
+        void DeleteRange(IEnumerable<T> entities);
+        void Attach(T entity);
+        void AttachRange(IEnumerable<T> entities);
+        int Count();
+        int Count(Expression<Func<T, bool>> criteria);
+        Task<int> CountAsync();
+        Task<int> CountAsync(Expression<Func<T, bool>> criteria);
     }
 }
