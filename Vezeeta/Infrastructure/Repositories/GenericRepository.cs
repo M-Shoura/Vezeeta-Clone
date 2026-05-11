@@ -155,11 +155,11 @@ namespace Infrastructure.Repositories
         {
             IQueryable<T> query = _context.Set<T>().Where(criteria);
 
-            if (take.HasValue)
-                query = query.Take(take.Value);
-
             if (skip.HasValue)
                 query = query.Skip(skip.Value);
+
+            if (take.HasValue)
+                query = query.Take(take.Value);
 
             if (orderBy != null)
             {
@@ -180,11 +180,11 @@ namespace Infrastructure.Repositories
                 foreach (var include in includes)
                     query = query.Include(include);
 
-            if (take.HasValue)
-                query = query.Take(take.Value);
-
             if (skip.HasValue)
                 query = query.Skip(skip.Value);
+
+            if (take.HasValue)
+                query = query.Take(take.Value);
 
             if (orderBy != null)
             {
