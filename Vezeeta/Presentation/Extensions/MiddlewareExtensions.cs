@@ -6,8 +6,8 @@ namespace Presentation.Extensions
     {
         public static IApplicationBuilder UseSharedMiddleware(this IApplicationBuilder app)
         {
-            app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
             app.UseMiddleware<RequestLoggingMiddleware>();
+            app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
             return app;
         }
