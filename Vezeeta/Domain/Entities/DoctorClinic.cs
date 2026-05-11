@@ -7,8 +7,8 @@ namespace Domain.Entities
 {
     public class DoctorClinic : AuditableEntity
     {
-        public int DoctorId { get; set; }
-        public int ClinicId { get; set; }
+        public string DoctorId { get; set; } = null!;
+        public int ClinicId { get; set; } 
         public decimal ConsultationFee { get; set; }
         public bool IsAvailable { get; set; } = true;
         public DoctorProfile Doctor { get; set; } = null!;

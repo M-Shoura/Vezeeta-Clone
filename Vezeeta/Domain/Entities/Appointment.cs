@@ -14,17 +14,20 @@ namespace Domain.Entities
         public AppointmentStatus Status { get; set; } = AppointmentStatus.Pending;
         public string? Notes { get; set; }
 
-        public int DoctorId { get; set; }
-        public int PatientId { get; set; }
-        public int ClinicId { get; set; }
-        public int? PaymentId { get; set; }
+        public string? DoctorId { get; set; } = null!;
+        public string? PatientId { get; set; } = null!;
+
+        public int ClinicId { get; set; } 
+        public int PaymentId { get; set; }
+        public int PrescriptionId { get; set; }
+        public int ReviewId { get; set; }
 
         public DoctorProfile Doctor { get; set; } = null!;
         public PatientProfile Patient { get; set; } = null!; 
         public Clinic Clinic { get; set; } = null!;
-        
-        public Review? Review { get; set; }
-        public Payment? Payment { get; set; }
-        public Prescription Prescription { get; set; } = null!;
+
+        public Review? Review { get; set; } 
+        public Payment? Payment { get; set; } 
+        public Prescription? Prescription { get; set; } 
     }
 }

@@ -110,3 +110,5 @@ appsettings.Development.json
 # Generated Files
 # =========================
 Generated/
+
+**/Migrations/

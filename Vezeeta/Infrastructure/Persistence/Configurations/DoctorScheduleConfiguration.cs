@@ -35,14 +35,12 @@ namespace Infrastructure.Persistence.Configurations
             // DoctorSchedule -> Doctor
             builder.HasOne(ds => ds.Doctor)
                 .WithMany(d => d.DoctorSchedules) 
-                .HasForeignKey(ds => ds.DoctorId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(ds => ds.DoctorId);
 
             // DoctorSchedule -> Clinic
             builder.HasOne(ds => ds.Clinic)
                 .WithMany(c => c.DoctorSchedules) 
-                .HasForeignKey(ds => ds.ClinicId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(ds => ds.ClinicId);
         }
     }
 }
