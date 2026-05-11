@@ -7,7 +7,7 @@ namespace Presentation.Controllers
     public class MiddlewareTestController : Controller
     {
         [HttpGet("ok")]
-        public IActionResult Ok()
+        public IActionResult OK()
         {
             return Json(new { message = "Middleware pipeline is working." });
         }
