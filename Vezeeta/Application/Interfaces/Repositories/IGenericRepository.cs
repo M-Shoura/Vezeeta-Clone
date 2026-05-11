@@ -23,6 +23,6 @@ namespace Application.Interfaces.Repositories
         Task DeleteAsync(int id);
 
         // SAVE
-        Task<bool> SaveChangesAsync();
+        Task<int> SaveChangesAsync();
     }
 }

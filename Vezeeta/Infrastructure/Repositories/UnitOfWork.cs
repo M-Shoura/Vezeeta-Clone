@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IGenericRepository<T> Repository<T>() where T : BaseEntity
+        public IGenericRepository<T> Repository<T>() where T : class
         {
             var type = typeof(T);
             if (_repositories.TryGetValue(type, out var repository))
@@ -33,9 +33,9 @@ namespace Infrastructure.Repositories
             return newRepository;
         }
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public Task<int> SaveChangesAsync()
         {
-            return _context.SaveChangesAsync(cancellationToken);
+            return _context.SaveChangesAsync();
         }
 
         public void Dispose()

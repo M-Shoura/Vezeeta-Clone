@@ -45,7 +45,7 @@ namespace Infrastructure.Repositories
             if (id <= 0)
                 throw new ArgumentException("Id must be greater than 0", nameof(id));
 
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            return await _dbSet.FindAsync(id);
         }
 
         /// <summary>
@@ -119,12 +119,12 @@ namespace Infrastructure.Repositories
         /// <summary>
         /// Save all changes to the database
         /// </summary>
-        public async Task<bool> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
             try
             {
                 var result = await _context.SaveChangesAsync();
-                return result > 0;
+                return result;
             }
             catch (DbUpdateException ex)
             {
