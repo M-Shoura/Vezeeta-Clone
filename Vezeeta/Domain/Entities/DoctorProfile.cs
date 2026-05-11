@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class DoctorProfile : AuditableEntity
+    public class DoctorProfile
     {
         public string ApplicationUserId { get; set; } = null!;
         public string Specialization { get; set; } = null!;
@@ -13,7 +13,6 @@ namespace Domain.Entities
         public string? Bio { get; set; }
         public string Qualification { get; set; } = null!;
         public bool IsAvailable { get; set; } = true;
-        public string? ProfileImage { get; set; }
         public string? LicenseNumber { get; set; }
 
         public ICollection<DoctorClinic> DoctorClinics { get; set; } = new HashSet<DoctorClinic>();

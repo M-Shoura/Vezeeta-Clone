@@ -12,11 +12,9 @@ namespace Infranstructure.Persistence.Configurations
             builder.ToTable("DoctorProfiles");
 
             // Primary Key
-            builder.HasKey(d => d.Id);
+            builder.HasKey(d => d.ApplicationUserId);
 
             // Properties
-            builder.Property(d => d.ApplicationUserId)
-                   .IsRequired();
 
             builder.Property(d => d.Specialization)
                    .IsRequired()
@@ -35,9 +33,6 @@ namespace Infranstructure.Persistence.Configurations
             builder.Property(d => d.IsAvailable)
                    .HasDefaultValue(true);
 
-            builder.Property(d => d.ProfileImage)
-                   .HasMaxLength(500);
-
             builder.Property(d => d.LicenseNumber)
                    .HasMaxLength(100);
 
@@ -52,26 +47,24 @@ namespace Infranstructure.Persistence.Configurations
             // DoctorProfile -> DoctorClinic
             builder.HasMany(d => d.DoctorClinics)
                    .WithOne(dc => dc.Doctor)
-                   .HasForeignKey(dc => dc.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(dc => dc.DoctorId);
 
             // DoctorProfile -> Appointment
             builder.HasMany(d => d.Appointments)
                    .WithOne(a => a.Doctor)
-                   .HasForeignKey(a => a.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(a => a.DoctorId);
 
             // DoctorProfile -> DoctorSchedule
             builder.HasMany(d => d.DoctorSchedules)
                    .WithOne(s => s.Doctor)
-                   .HasForeignKey(s => s.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(s => s.DoctorId);
                    
             // DoctorProfile -> Review
             builder.HasMany(d => d.Reviews)
                    .WithOne(r => r.Doctor)
-                   .HasForeignKey(r => r.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(r => r.DoctorId);
+
+            
         }
     }
 }

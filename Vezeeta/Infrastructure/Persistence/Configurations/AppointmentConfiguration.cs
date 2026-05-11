@@ -33,18 +33,15 @@ namespace Infrastructure.Persistence.Configurations
             // Relationships
             builder.HasOne(a => a.Doctor)
                    .WithMany(d => d.Appointments)
-                   .HasForeignKey(a => a.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(a => a.DoctorId);
 
             builder.HasOne(a => a.Patient)
                    .WithMany(p => p.Appointments)
-                   .HasForeignKey(a => a.PatientId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(a => a.PatientId);
 
             builder.HasOne(a => a.Clinic)
                    .WithMany(c => c.Appointments)
-                   .HasForeignKey(a => a.ClinicId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(a => a.ClinicId);
         }
     }
 }

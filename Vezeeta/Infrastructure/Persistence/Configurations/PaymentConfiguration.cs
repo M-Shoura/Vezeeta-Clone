@@ -26,8 +26,7 @@ namespace Infrastructure.Persistence.Configurations
             // Payment -> Appointment
             builder.HasOne(p => p.Appointment)
                    .WithOne(a => a.Payment)
-                   .HasForeignKey<Payment>(p => p.AppointmentId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey<Payment>(p => p.AppointmentId);
             
             // Index
             //builder.HasIndex(p => p.TransactionReference)

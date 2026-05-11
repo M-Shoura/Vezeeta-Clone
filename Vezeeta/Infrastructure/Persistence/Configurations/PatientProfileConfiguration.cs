@@ -12,11 +12,9 @@ namespace Infranstructure.Persistence.Configurations
             builder.ToTable("PatientProfiles");
 
             // Primary Key
-            builder.HasKey(p => p.Id);
+            builder.HasKey(p => p.ApplicationUserId);
 
             // Properties
-            builder.Property(p => p.ApplicationUserId)
-                   .IsRequired();
 
             builder.Property(p => p.DateOfBirth)
                    .IsRequired();
@@ -50,20 +48,17 @@ namespace Infranstructure.Persistence.Configurations
             // Patient -> Appointments
             builder.HasMany(p => p.Appointments)
                    .WithOne(a => a.Patient)
-                   .HasForeignKey(a => a.PatientId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(a => a.PatientId);
 
             // Patient -> MedicalRecords
             builder.HasMany(p => p.MedicalRecords)
                    .WithOne(m => m.Patient)
-                   .HasForeignKey(m => m.PatientId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(m => m.PatientId);
 
             // Patient -> Reviews
             builder.HasMany(p => p.Reviews)
                    .WithOne(r => r.Patient)
-                   .HasForeignKey(r => r.PatientId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .HasForeignKey(r => r.PatientId);
         }
     }
 }

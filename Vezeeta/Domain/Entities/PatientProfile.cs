@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class PatientProfile : AuditableEntity
+    public class PatientProfile
     {
         public string ApplicationUserId { get; set; } = null!;
         public DateTime DateOfBirth { get; set; }
@@ -15,6 +15,7 @@ namespace Domain.Entities
         public string? BloodType { get; set; }
         public string EmergencyContactName { get; set; } = null!;
         public string EmergencyContactPhone { get; set; } = null!;
+
 
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<MedicalRecord> MedicalRecords { get; set; } = new HashSet<MedicalRecord>();

@@ -48,8 +48,7 @@ namespace Infrastructure.Persistence.Configurations
             // Relationships
             builder.HasOne(mr => mr.Patient)
                 .WithMany(p => p.MedicalRecords) 
-                .HasForeignKey(mr => mr.PatientId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(mr => mr.PatientId);
         }
     }
 }
