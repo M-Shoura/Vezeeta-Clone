@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;
@@ -119,7 +119,7 @@ namespace Infrastructure.Repositories
         /// <summary>
         /// Save all changes to the database
         /// </summary>
-        public async Task<bool> SaveAsync()
+        public async Task<bool> SaveChangesAsync()
         {
             try
             {

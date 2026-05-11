@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : class
     {
         // CREATE
         Task<T> AddAsync(T entity);
@@ -23,6 +23,6 @@ namespace Application.Interfaces.Repositories
         Task DeleteAsync(int id);
 
         // SAVE
-        Task<bool> SaveAsync();
+        Task<bool> SaveChangesAsync();
     }
 }

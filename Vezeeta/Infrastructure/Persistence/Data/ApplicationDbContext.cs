@@ -35,19 +35,21 @@ namespace Infranstructure.Persistence.Data
             // Automatically exclude soft-deleted entities from all queries
             // This applies to all entities that inherit from AuditableEntity
 
-            var auditableEntityTypes = modelBuilder.Model
+            var auditableEntityClrTypes = modelBuilder.Model
                 .GetEntityTypes()
-                .Where(et => typeof(Domain.Entities.Common.AuditableEntity).IsAssignableFrom(et.ClrType));
+                .Where(entityType => typeof(Domain.Entities.Common.AuditableEntity).IsAssignableFrom(entityType.ClrType))
+                .Select(entityType => entityType.ClrType)
+                .ToList();
 
-            foreach (var entityType in auditableEntityTypes)
+            foreach (var clrType in auditableEntityClrTypes)
             {
-                var parameter = System.Linq.Expressions.Expression.Parameter(entityType.ClrType, "e");
+                var parameter = System.Linq.Expressions.Expression.Parameter(clrType, "e");
                 var isDeletedProperty = System.Linq.Expressions.Expression.Property(parameter, "IsDeleted");
                 var filter = System.Linq.Expressions.Expression.Lambda(
                     System.Linq.Expressions.Expression.Equal(isDeletedProperty, System.Linq.Expressions.Expression.Constant(false)),
                     parameter);
 
-                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+                modelBuilder.Entity(clrType).HasQueryFilter(filter);
             }
         }
     }

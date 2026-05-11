@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Presentation
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -20,6 +20,7 @@ namespace Presentation
             // ==================== DEPENDENCY INJECTION ====================
             // Register Generic Repository
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
