@@ -2,6 +2,7 @@ using Infranstructure.Persistence.Data;
 using Infrastructure.Repositories;
 using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Presentation.Extensions;
 
 namespace Presentation
 {
@@ -12,15 +13,9 @@ namespace Presentation
             var builder = WebApplication.CreateBuilder(args);
 
             // ==================== DATABASE CONFIGURATION ====================
-            // Add DbContext
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
 
-            // ==================== DEPENDENCY INJECTION ====================
-            // Register Generic Repository
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // Configure services for the application.
+            builder.Services.AddUserServices(builder.Configuration);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -36,6 +31,7 @@ namespace Presentation
             }
 
             app.UseHttpsRedirection();
+            app.UseSharedMiddleware();
             app.UseRouting();
 
             app.UseAuthorization();
@@ -45,6 +41,7 @@ namespace Presentation
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
+
 
             app.Run();
         }
