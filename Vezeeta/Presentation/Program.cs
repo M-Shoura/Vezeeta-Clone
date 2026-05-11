@@ -1,6 +1,5 @@
 using Infranstructure.Persistence.Data;
-using Infrastructure.Repositories;
-using Application.Interfaces.Repositories;
+using Application.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Presentation
@@ -11,16 +10,9 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ==================== DATABASE CONFIGURATION ====================
-            // Add DbContext
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
 
             // ==================== DEPENDENCY INJECTION ====================
-            // Register Generic Repository
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddUserServices(builder.Configuration);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -30,12 +22,12 @@ namespace Presentation
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
+            app.UseSharedMiddlewares();
             app.UseRouting();
 
             app.UseAuthorization();
