@@ -15,7 +15,7 @@ namespace Domain.Entities
 
         public bool IsActive { get; set; } = true;
 
-        public string DoctorId { get; set; } = null!;
+        public int DoctorId { get; set; }
         public int ClinicId { get; set; }
 
         public DoctorProfile Doctor { get; set; } = null!;

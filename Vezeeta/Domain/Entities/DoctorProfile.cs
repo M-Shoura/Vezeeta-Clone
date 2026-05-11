@@ -7,7 +7,7 @@ namespace Domain.Entities
 {
     public class DoctorProfile
     {
-        public string ApplicationUserId { get; set; } = null!;
+        public int ApplicationUserId { get; set; } = null!;
         public string Specialization { get; set; } = null!;
         public int YearsOfExperience { get; set; }
         public string? Bio { get; set; }

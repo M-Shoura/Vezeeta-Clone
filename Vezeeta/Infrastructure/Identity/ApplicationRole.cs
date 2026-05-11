@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Infrastructure.Identity
 {
-    public class ApplicationRole : IdentityRole
+    public class ApplicationRole : IdentityRole<int>
     {
     }
 }

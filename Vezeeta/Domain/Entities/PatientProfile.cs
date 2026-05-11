@@ -8,7 +8,7 @@ namespace Domain.Entities
 {
     public class PatientProfile
     {
-        public string ApplicationUserId { get; set; } = null!;
+        public int ApplicationUserId { get; set; }
         public DateTime DateOfBirth { get; set; }
         public int Age => DateTime.Today.Year - DateOfBirth.Year - (DateTime.Today.DayOfYear < DateOfBirth.DayOfYear ? 1 : 0);
         public Gender Gender { get; set; }

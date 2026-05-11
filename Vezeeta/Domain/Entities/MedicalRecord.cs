@@ -7,7 +7,7 @@ namespace Domain.Entities
 {
     public class MedicalRecord : AuditableEntity
     {
-        public string PatientId { get; set; } = null!;
+        public int PatientId { get; set; }
         public string Condition { get; set; } = null!;
         public string? Description { get; set; }
         public string? DiagnosisCode { get; set; }

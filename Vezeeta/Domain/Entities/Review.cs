@@ -12,8 +12,8 @@ namespace Domain.Entities
         public int Rating { get; set; }
         public string? Comment { get; set; }
         public int AppointmentId { get; set; }
-        public string DoctorId { get; set; } = null!;
-        public string PatientId { get; set; } = null!;
+        public int DoctorId { get; set; }
+        public int PatientId { get; set; }
 
         public Appointment Appointment { get; set; } = null!;
         public DoctorProfile Doctor { get; set; } = null!;

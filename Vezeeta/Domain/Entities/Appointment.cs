@@ -14,8 +14,8 @@ namespace Domain.Entities
         public AppointmentStatus Status { get; set; } = AppointmentStatus.Pending;
         public string? Notes { get; set; }
 
-        public string? DoctorId { get; set; } = null!;
-        public string? PatientId { get; set; } = null!;
+        public int? DoctorId { get; set; } = null!;
+        public int? PatientId { get; set; } = null!;
 
         public int ClinicId { get; set; } 
         public int PaymentId { get; set; }
