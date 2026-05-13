@@ -18,6 +18,8 @@ namespace Presentation.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IReviewService,  ReviewService>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
             return services;
         }
     }
