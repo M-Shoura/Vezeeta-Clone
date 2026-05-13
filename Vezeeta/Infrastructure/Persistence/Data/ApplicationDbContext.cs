@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Infrastructure.Identity;
+
+using Domain.Identity;
 
 namespace Infranstructure.Persistence.Data
 {
