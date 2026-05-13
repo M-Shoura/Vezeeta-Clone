@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Infranstructure.Persistence.Data;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Presentation.Extensions
@@ -14,7 +16,8 @@ namespace Presentation.Extensions
                 options.UseSqlServer(connectionString));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IReviewService,  ReviewService>();
             return services;
         }
     }
