@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ViewModels;
 
 namespace Presentation.Controllers
 {
@@ -17,28 +18,49 @@ namespace Presentation.Controllers
         #region Doctor CRUD
 
         // GET: /Doctor
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+    string? name,
+    string? specialization)
         {
             var doctors =
                 await _doctorService
-                    .GetAllDoctorsAsync();
+                    .SearchDoctorsAsync(
+                        name,
+                        specialization);
+
+            var clinics =
+                await _doctorService
+                    .GetAllClinicsAsync();
+
+            ViewBag.Clinics = clinics;
+
+            ViewBag.Name = name;
+            ViewBag.Specialization = specialization;
 
             return View(doctors);
         }
 
-        // GET: /Doctor/Details/id
         public async Task<IActionResult> Details(
-            string id)
+    string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
 
             var doctor =
                 await _doctorService
-                    .GetDoctorByIdAsync(id);
+                    .GetDoctorDetailsAsync(id);
 
             if (doctor == null)
                 return NotFound();
+
+            var availableSlots =
+        await _doctorService
+            .GetAvailableSlotsAsync(
+                id,
+                DateTime.Today);
+
+            ViewBag.AvailableSlots =
+        availableSlots;
 
             return View(doctor);
         }
@@ -67,9 +89,7 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Doctor/Edit/id
-        public async Task<IActionResult> Edit(
-            string id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
@@ -81,21 +101,44 @@ namespace Presentation.Controllers
             if (doctor == null)
                 return NotFound();
 
-            return View(doctor);
+            var model = new EditDoctorViewModel
+            {
+                ApplicationUserId = doctor.Id,
+                FullName = doctor.FullName,
+                ProfilePicture = doctor.ProfilePicture,
+                Specialization = doctor.Specialization,
+                YearsOfExperience = doctor.YearsOfExperience,
+                Bio = doctor.Bio,
+                Qualification = doctor.Qualification,
+                IsAvailable = doctor.IsAvailable,
+                LicenseNumber = doctor.LicenseNumber
+            };
+
+            return View(model);
         }
 
-        // POST: /Doctor/Edit/id
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
-            string id,
-            DoctorProfile doctor)
+    string id,
+    EditDoctorViewModel model)
         {
-            if (id != doctor.ApplicationUserId)
+            if (id != model.ApplicationUserId)
                 return BadRequest();
 
             if (!ModelState.IsValid)
-                return View(doctor);
+                return View(model);
+
+            var doctor = new DoctorProfile
+            {
+                ApplicationUserId = model.ApplicationUserId,
+                Specialization = model.Specialization,
+                YearsOfExperience = model.YearsOfExperience,
+                Bio = model.Bio,
+                Qualification = model.Qualification,
+                IsAvailable = model.IsAvailable,
+                LicenseNumber = model.LicenseNumber
+            };
 
             await _doctorService
                 .UpdateDoctorAsync(doctor);
@@ -352,5 +395,6 @@ namespace Presentation.Controllers
         }
 
         #endregion
+
     }
 }

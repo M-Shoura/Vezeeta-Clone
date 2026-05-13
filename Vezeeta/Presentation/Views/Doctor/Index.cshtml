@@ -2,61 +2,210 @@
 
 @{
     ViewData["Title"] = "Doctors";
+    var clinics = ViewBag.Clinics as IEnumerable<Domain.Entities.Clinic>;
 }
 
-<h2 class="mb-4">Doctors List</h2>
+<div class="container mt-4">
 
-<a class="btn btn-primary mb-3" href="/Doctor/Create">+ Add Doctor</a>
+    <!-- HERO -->
+    <div class="bg-primary text-white p-5 rounded-4 mb-5 shadow">
+        <h1 class="display-5 fw-bold">
+            Find The Best Doctors
+        </h1>
 
-<table class="table table-striped table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Doctor</th>
-            <th>Specialization</th>
-            <th>Experience</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+        <p class="lead">
+            Search by doctor name or specialization
+        </p>
 
-    <tbody>
-        @foreach (var doc in Model)
+        <!-- SEARCH -->
+        <form method="get"
+              asp-action="Index"
+              class="row g-3 mt-3">
+
+            <div class="col-md-5">
+                <input type="text"
+                       name="name"
+                       value="@ViewBag.Name"
+                       class="form-control form-control-lg"
+                       placeholder="Search by doctor name..." />
+            </div>
+
+            <div class="col-md-5">
+                <input type="text"
+                       name="specialization"
+                       value="@ViewBag.Specialization"
+                       class="form-control form-control-lg"
+                       placeholder="Search by specialization..." />
+            </div>
+
+            <div class="col-md-2 d-grid">
+                <button type="submit"
+                        class="btn btn-warning btn-lg fw-bold">
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- DOCTORS -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">
+            Doctors
+        </h2>
+
+        <a asp-action="Create"
+           class="btn btn-success">
+            Add Doctor
+        </a>
+    </div>
+
+    <div class="row">
+
+        @if (Model.Any())
         {
-            <tr>
-                <td>
-                    <div class="d-flex align-items-center gap-2">
-                        <img src="@doc.ProfilePicture"
-                             width="40" height="40"
-                             class="rounded-circle" />
-                        <strong>@doc.FullName</strong>
+            @foreach (var doctor in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+
+                    <div class="card border-0 shadow-lg h-100 rounded-4">
+
+                        <div class="card-body text-center p-4">
+
+                            <!-- IMAGE -->
+                            
+                            <img src="~/images/doc2.jpg"
+                                 class="rounded-circle mb-3 shadow"
+                                 width="120"
+                                 height="120"
+                                 style="object-fit:cover;" />
+
+                            <!-- NAME -->
+                            <h4 class="fw-bold">
+                                @doctor.FullName
+                            </h4>
+
+                            <!-- SPECIALIZATION -->
+                            <span class="badge bg-primary mb-3">
+                                @doctor.Specialization
+                            </span>
+
+                            <!-- EXPERIENCE -->
+                            <p class="text-muted mb-2">
+                                @doctor.YearsOfExperience Years Experience
+                            </p>
+
+                            <!-- AVAILABILITY -->
+                            @if (doctor.IsAvailable)
+                            {
+                                <span class="badge bg-success">
+                                    Available
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    Not Available
+                                </span>
+                            }
+
+                            <hr />
+
+                            <!-- ACTIONS -->
+                            <div class="d-flex justify-content-center gap-2">
+
+                                <a asp-action="Details"
+                                   asp-route-id="@doctor.Id"
+                                   class="btn btn-outline-primary">
+                                    Details
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@doctor.Id"
+                                   class="btn btn-outline-warning">
+                                    Edit
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@doctor.Id"
+                                   class="btn btn-outline-danger">
+                                    Delete
+                                </a>
+
+                                <!-- NEW -->
+                                <a asp-controller="Review"
+                                   asp-action="Create"
+                                   asp-route-doctorId="@doctor.Id"
+                                   class="btn btn-review">
+                                    Add Review
+                                </a>
+
+                                <a asp-action="AddSchedule"
+                                   asp-route-doctorId="@doctor.Id"
+                                   class="btn btn-primary">
+                                    Add Schedule
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </td>
-
-                <td>@doc.Specialization</td>
-                <td>@doc.YearsOfExperience years</td>
-
-                <td>
-                    @if (doc.IsAvailable)
-                    {
-                        <span class="badge bg-success">Available</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">Unavailable</span>
-                    }
-                </td>
-
-                <td>
-                    <a class="btn btn-sm btn-info"
-                       href="/Doctor/Details/@doc.Id">Details</a>
-
-                    <a class="btn btn-sm btn-warning"
-                       href="/Doctor/Edit/@doc.Id">Edit</a>
-
-                    <a class="btn btn-sm btn-danger"
-                       href="/Doctor/Delete/@doc.Id">Delete</a>
-                </td>
-            </tr>
+                </div>
+            }
         }
-    </tbody>
-</table>
+        else
+        {
+            <div class="alert alert-warning">
+                No doctors found.
+            </div>
+        }
+
+    </div>
+
+    <!-- CLINICS -->
+    <div class="mt-5">
+
+        <h2 class="fw-bold mb-4">
+            Clinics
+        </h2>
+
+        <div class="row">
+
+            @if (clinics != null && clinics.Any())
+            {
+                @foreach (var clinic in clinics)
+                {
+                    <div class="col-md-4 mb-4">
+
+                        <div class="card shadow border-0 rounded-4 h-100">
+
+                            <div class="card-body">
+
+                                <h4 class="fw-bold">
+                                    @clinic.Name
+                                </h4>
+
+                                <p class="text-muted">
+                                    @clinic.Address
+                                </p>
+
+                                <p>
+                                    <strong>Phone:</strong>
+                                    @clinic.PhoneNumber
+                                </p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    No clinics available.
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

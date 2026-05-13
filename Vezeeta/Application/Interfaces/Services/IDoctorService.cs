@@ -1,12 +1,19 @@
-﻿using Application.DTOs.Doctors;
+﻿using Application.DTOs.Appointments;
+using Application.DTOs.Doctors;
 using Domain.Entities;
 
 namespace Application.Interfaces.Services
 {
     public interface IDoctorService
     {
-        #region Doctor Queries
+        Task<IEnumerable<AvailableSlotDto>>
+    GetAvailableSlotsAsync(
+        string doctorId,
+        DateTime date);
 
+        #region Doctor Queries
+        Task<DoctorDetailsDto?>
+    GetDoctorDetailsAsync(string doctorId);
         Task<IEnumerable<DoctorDto>>
             GetAllDoctorsAsync();
 
@@ -70,5 +77,14 @@ namespace Application.Interfaces.Services
                 int scheduleId);
 
         #endregion
+
+
+        Task<IEnumerable<DoctorDto>>
+    SearchDoctorsAsync(
+        string? name,
+        string? specialization);
+
+        Task<IEnumerable<Clinic>>
+            GetAllClinicsAsync();
     }
 }

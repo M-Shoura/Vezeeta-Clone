@@ -1,32 +1,209 @@
-﻿@model Application.DTOs.Doctors.DoctorDto
+﻿@model Application.DTOs.Doctors.DoctorDetailsDto
 
-<h2>Doctor Details</h2>
+@{
+    ViewData["Title"] = "Doctor Details";
+}
 
-<div class="card p-3">
-    <div class="d-flex align-items-center gap-3">
-        <img src="@Model.ProfilePicture"
-             width="80" height="80"
-             class="rounded-circle" />
+<div class="container mt-5">
 
-        <div>
-            <h3>@Model.FullName</h3>
-            <p>@Model.Specialization</p>
+    <!-- TOP CARD -->
+
+    <div class="card shadow-lg border-0 rounded-4 mb-5">
+
+        <div class="card-body p-5">
+
+            <div class="row align-items-center">
+
+                <!-- IMAGE -->
+
+                <div class="col-md-3 text-center">
+
+                    <img src="@(string.IsNullOrEmpty(Model.ProfilePicture)
+                                                             ? "https://via.placeholder.com/200"
+                                                             : Model.ProfilePicture)"
+                         class="rounded-circle shadow"
+                         width="200"
+                         height="200"
+                         style="object-fit:cover;" />
+
+                </div>
+
+                <!-- INFO -->
+
+                <div class="col-md-9">
+
+                    <h1 class="fw-bold">
+                        Dr. @Model.FullName
+                    </h1>
+
+                    <span class="badge bg-primary fs-6 mb-3">
+                        @Model.Specialization
+                    </span>
+
+                    <p class="text-muted">
+                        @Model.YearsOfExperience Years Experience
+                    </p>
+
+                    <p>
+                        @Model.Bio
+                    </p>
+
+                    <p>
+                        <strong>Qualification:</strong>
+                        @Model.Qualification
+                    </p>
+
+                    @if (Model.IsAvailable)
+                    {
+                        <span class="badge bg-success fs-6">
+                            Available
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger fs-6">
+                            Not Available
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 
-    <hr />
+    <!-- AVAILABLE APPOINTMENTS -->
 
-    <p><strong>Experience:</strong> @Model.YearsOfExperience years</p>
-    <p><strong>Qualification:</strong> @Model.Qualification</p>
+    <div class="card shadow border-0 rounded-4 mb-5">
 
-    <p>
-        <strong>Status:</strong>
-        @(Model.IsAvailable ? "Available" : "Unavailable")
-    </p>
+        <div class="card-header bg-success text-white p-3">
 
-    <a class="btn btn-primary"
-       href="/Doctor/Edit/@Model.Id">Edit</a>
+            <h3 class="mb-0">
+                Available Appointments
+            </h3>
 
-    <a class="btn btn-secondary"
-       href="/Doctor/Schedules/@Model.Id">Schedules</a>
+        </div>
+
+        <div class="card-body">
+
+            @if (Model.AvailableDates.Any())
+            {
+                <div class="row">
+
+                    @foreach (var slot in
+    (IEnumerable<Application.DTOs.Appointments.AvailableSlotDto>)
+    ViewBag.AvailableSlots)
+                    {
+                        <div class="card mb-3 shadow-sm">
+
+                            <div class="card-body d-flex
+                                justify-content-between
+                                align-items-center">
+
+                                <div>
+                                    <strong>
+                                        @slot.StartTime
+                                    </strong>
+                                    -
+                                    <strong>
+                                        @slot.EndTime
+                                    </strong>
+                                </div>
+
+                                <form asp-controller="Appointment"
+                                      asp-action="Book"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="DoctorId"
+                                           value="@Model.Id" />
+
+                                    <input type="hidden"
+                                           name="AppointmentDate"
+                                           value="@slot.Date" />
+
+                                    <input type="hidden"
+                                           name="StartTime"
+                                           value="@slot.StartTime" />
+
+                                    <input type="hidden"
+                                           name="EndTime"
+                                           value="@slot.EndTime" />
+
+                                    <button class="btn btn-success">
+                                        Book Appointment
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    No available appointments.
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- REVIEWS -->
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-dark text-white p-3">
+
+            <h3 class="mb-0">
+                Reviews
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (Model.Reviews.Any())
+            {
+                @foreach (var review in Model.Reviews)
+                {
+                    <div class="card mb-3 shadow-sm">
+
+                        <div class="card-body">
+
+                            <h5>
+                                Rating: @review.Rating ⭐
+                            </h5>
+
+                            <p>
+                                @review.Comment
+                            </p>
+
+                            <small class="text-muted">
+                                @review.CreatedAt
+                            </small>
+
+                        </div>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    No reviews yet.
+                </div>
+            }
+
+        </div>
+
+    </div>
+
 </div>
