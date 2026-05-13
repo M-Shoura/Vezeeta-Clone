@@ -1,5 +1,5 @@
 ﻿using Domain.Entities.Common;
-using Infrastructure.Identity;
+using Domain.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
