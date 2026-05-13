@@ -1,0 +1,32 @@
+﻿@model Application.DTOs.Doctors.DoctorDto
+
+<h2>Doctor Details</h2>
+
+<div class="card p-3">
+    <div class="d-flex align-items-center gap-3">
+        <img src="@Model.ProfilePicture"
+             width="80" height="80"
+             class="rounded-circle" />
+
+        <div>
+            <h3>@Model.FullName</h3>
+            <p>@Model.Specialization</p>
+        </div>
+    </div>
+
+    <hr />
+
+    <p><strong>Experience:</strong> @Model.YearsOfExperience years</p>
+    <p><strong>Qualification:</strong> @Model.Qualification</p>
+
+    <p>
+        <strong>Status:</strong>
+        @(Model.IsAvailable ? "Available" : "Unavailable")
+    </p>
+
+    <a class="btn btn-primary"
+       href="/Doctor/Edit/@Model.Id">Edit</a>
+
+    <a class="btn btn-secondary"
+       href="/Doctor/Schedules/@Model.Id">Schedules</a>
+</div>

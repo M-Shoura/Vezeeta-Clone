@@ -1,0 +1,33 @@
+﻿@model Domain.Entities.DoctorProfile
+
+<h1>Doctor Dashboard</h1>
+
+<p>
+    <strong>Specialization:</strong>
+    @Model.Specialization
+</p>
+
+<p>
+    <strong>Qualification:</strong>
+    @Model.Qualification
+</p>
+
+<p>
+    <strong>Total Appointments:</strong>
+    @Model.Appointments.Count
+</p>
+
+<p>
+    <strong>Total Reviews:</strong>
+    @Model.Reviews.Count
+</p>
+
+<p>
+    <strong>Total Clinics:</strong>
+    @Model.DoctorClinics.Count
+</p>
+
+<a asp-action="Details"
+       asp-route-id="@Model.ApplicationUserId">
+    View Details
+</a>
