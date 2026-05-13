@@ -1,0 +1,29 @@
+@model Presentation.ViewModels.Reviews.ReviewCreateViewModel
+
+@{
+    ViewData["Title"] = "Add Review";
+}
+
+<h2>Add Review</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Rating"></label>
+        <input asp-for="Rating" class="form-control" type="number" min="1" max="5" />
+        <span asp-validation-for="Rating" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Comment"></label>
+        <textarea asp-for="Comment" class="form-control"></textarea>
+        <span asp-validation-for="Comment" class="text-danger"></span>
+    </div>
+
+    <input asp-for="AppointmentId" type="hidden" />
+    <input asp-for="DoctorId" type="hidden" />
+    <input asp-for="PatientId" type="hidden" />
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
