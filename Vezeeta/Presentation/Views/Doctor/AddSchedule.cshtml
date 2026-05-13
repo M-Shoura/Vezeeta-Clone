@@ -1,0 +1,41 @@
+﻿@model Domain.Entities.DoctorSchedule
+
+<h1>Add Schedule</h1>
+
+<form asp-action="AddSchedule" method="post">
+
+    <input type="hidden"
+           asp-for="DoctorId"
+           value="@ViewBag.DoctorId" />
+
+    <div>
+        <label>Clinic Id</label>
+        <input asp-for="ClinicId" />
+    </div>
+
+    <div>
+        <label>Day</label>
+        <select asp-for="Day"
+                asp-items="Html.GetEnumSelectList<System.DayOfWeek>()">
+        </select>
+    </div>
+
+    <div>
+        <label>Start Time</label>
+        <input asp-for="StartTime"
+               type="time" />
+    </div>
+
+    <div>
+        <label>End Time</label>
+        <input asp-for="EndTime"
+               type="time" />
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Add Schedule
+    </button>
+
+</form>
