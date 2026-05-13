@@ -1,0 +1,28 @@
+﻿<h1>Assign Clinic</h1>
+
+<form asp-action="AssignClinic" method="post">
+
+    <input type="hidden"
+           name="doctorId"
+           value="@ViewBag.DoctorId" />
+
+    <div>
+        <label>Clinic Id</label>
+        <input type="number"
+               name="clinicId" />
+    </div>
+
+    <div>
+        <label>Consultation Fee</label>
+        <input type="number"
+               step="0.01"
+               name="consultationFee" />
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Assign
+    </button>
+
+</form>

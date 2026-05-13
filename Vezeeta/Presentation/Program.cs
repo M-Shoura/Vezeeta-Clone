@@ -1,6 +1,8 @@
+using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
+using Application.Services;
 using Infranstructure.Persistence.Data;
 using Infrastructure.Repositories;
-using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Extensions;
 
@@ -13,6 +15,13 @@ namespace Presentation
             var builder = WebApplication.CreateBuilder(args);
 
             // ==================== DATABASE CONFIGURATION ====================
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
+
+
+
 
             // Configure services for the application.
             builder.Services.AddUserServices(builder.Configuration);
@@ -39,7 +48,7 @@ namespace Presentation
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Doctor}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
 

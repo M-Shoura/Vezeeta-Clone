@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Domain.Entities.DoctorProfile>
+
+<h1>Available Doctors</h1>
+
+<table border="1" cellpadding="10">
+
+    <thead>
+        <tr>
+            <th>Specialization</th>
+            <th>Experience</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var doctor in Model)
+        {
+            <tr>
+                <td>@doctor.Specialization</td>
+                <td>@doctor.YearsOfExperience</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
