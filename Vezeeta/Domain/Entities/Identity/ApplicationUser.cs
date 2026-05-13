@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Identity
+namespace Domain.Identity
 {
     public class ApplicationUser : IdentityUser
     {
