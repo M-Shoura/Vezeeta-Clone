@@ -39,12 +39,12 @@ namespace Presentation
                 app.UseHsts();
             }
 
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseSharedMiddleware();
             app.UseRouting();
 
             app.UseAuthorization();
-
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",

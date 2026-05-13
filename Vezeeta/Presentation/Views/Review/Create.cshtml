@@ -1,0 +1,70 @@
+﻿@model Application.DTOs.Reviews.CreateReviewDto
+
+@{
+    ViewData["Title"] = "Add Review";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-header bg-warning text-dark">
+            <h3>Add Review</h3>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <input type="hidden"
+                       asp-for="DoctorId"
+                       value="@ViewBag.DoctorId" />
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Patient Id
+                    </label>
+
+                    <input asp-for="PatientId"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Rating
+                    </label>
+
+                    <select asp-for="Rating"
+                            class="form-select">
+
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Comment
+                    </label>
+
+                    <textarea asp-for="Comment"
+                              class="form-control"
+                              rows="5">
+                    </textarea>
+                </div>
+
+                <button class="btn btn-warning">
+                    Submit Review
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

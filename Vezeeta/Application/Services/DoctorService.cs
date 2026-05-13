@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Doctors;
+﻿using Application.DTOs.Appointments;
+using Application.DTOs.Doctors;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
@@ -10,6 +11,77 @@ namespace Application.Services
         private readonly IDoctorRepository _doctorRepository;
         private readonly IUnitOfWork _unitOfWork;
 
+
+        public async Task<IEnumerable<AvailableSlotDto>>
+    GetAvailableSlotsAsync(
+        string doctorId,
+        DateTime date)
+        {
+            var day = date.DayOfWeek;
+
+            // doctor schedules
+            var schedules = await _unitOfWork
+                .Repository<DoctorSchedule>()
+                .FindAllAsync(
+                    s =>
+                        s.DoctorId == doctorId
+                        &&
+                        s.Day == day
+                        &&
+                        s.IsActive);
+
+            // booked appointments
+            var appointments = await _unitOfWork
+                .Repository<Appointment>()
+                .FindAllAsync(
+                    a =>
+                        a.DoctorId == doctorId
+                        &&
+                        a.AppointmentDate.Date
+                            == date.Date);
+
+            var availableSlots =
+                new List<AvailableSlotDto>();
+
+            foreach (var schedule in schedules)
+            {
+                var current =
+                    schedule.StartTime;
+
+                while (current
+                       < schedule.EndTime)
+                {
+                    var slotEnd =
+                        current.Add(
+                            TimeSpan.FromMinutes(
+                                schedule
+                                .SlotDurationMinutes));
+
+                    bool isBooked =
+                        appointments.Any(a =>
+                            a.StartTime == current
+                            &&
+                            a.EndTime == slotEnd);
+
+                    if (!isBooked)
+                    {
+                        availableSlots.Add(
+                            new AvailableSlotDto
+                            {
+                                Date = date,
+                                StartTime = current,
+                                EndTime = slotEnd,
+                                ClinicId =
+                                    schedule.ClinicId
+                            });
+                    }
+
+                    current = slotEnd;
+                }
+            }
+
+            return availableSlots;
+        }
         public DoctorService(
             IDoctorRepository doctorRepository,
             IUnitOfWork unitOfWork)
@@ -17,6 +89,67 @@ namespace Application.Services
             _doctorRepository = doctorRepository;
             _unitOfWork = unitOfWork;
         }
+
+        public async Task<DoctorDetailsDto?>
+    GetDoctorDetailsAsync(string doctorId)
+        {
+            var doctor = await _unitOfWork
+                .Repository<DoctorProfile>()
+                .FindAsync(
+                    d => d.ApplicationUserId == doctorId,
+                    includes: new[]
+                    {
+                "ApplicationUser",
+                "Reviews",
+                "DoctorSchedules",
+                "DoctorSchedules.Clinic"
+                    });
+
+            if (doctor == null)
+                return null;
+
+            // Generate next available dates
+            var availableDates = new List<DateTime>();
+
+            foreach (var schedule in doctor.DoctorSchedules)
+            {
+                for (int i = 0; i < 14; i++)
+                {
+                    var date = DateTime.Today.AddDays(i);
+
+                    if (date.DayOfWeek.ToString()
+                        == schedule.Day.ToString())
+                    {
+                        availableDates.Add(
+                            date.Date
+                            + schedule.StartTime);
+                    }
+                }
+            }
+
+            return new DoctorDetailsDto
+            {
+                Id = doctor.ApplicationUserId,
+                FullName = doctor.ApplicationUser.FullName,
+                ProfilePicture =
+                    doctor.ApplicationUser.ProfilePicture,
+                Specialization = doctor.Specialization,
+                YearsOfExperience =
+                    doctor.YearsOfExperience,
+                Bio = doctor.Bio,
+                Qualification = doctor.Qualification,
+                IsAvailable = doctor.IsAvailable,
+
+                Reviews = doctor.Reviews,
+                Schedules = doctor.DoctorSchedules,
+
+                AvailableDates = availableDates
+                    .OrderBy(d => d)
+            };
+        }
+
+
+
 
         #region Doctor Queries
 
@@ -285,5 +418,45 @@ namespace Application.Services
         }
 
         #endregion
+
+        public async Task<IEnumerable<DoctorDto>>
+    SearchDoctorsAsync(
+        string? name,
+        string? specialization)
+        {
+            var doctors = await _unitOfWork
+                .Repository<DoctorProfile>()
+                .FindAllAsync(
+                    d =>
+                        (string.IsNullOrEmpty(name)
+                            || d.ApplicationUser.FullName.Contains(name))
+                        &&
+                        (string.IsNullOrEmpty(specialization)
+                            || d.Specialization.Contains(specialization)),
+                    includes: new[]
+                    {
+                "ApplicationUser"
+                    });
+
+            return doctors.Select(d => new DoctorDto
+            {
+                Id = d.ApplicationUserId,
+                FullName = d.ApplicationUser.FullName,
+                ProfilePicture = d.ApplicationUser.ProfilePicture,
+                Specialization = d.Specialization,
+                YearsOfExperience = d.YearsOfExperience,
+                IsAvailable = d.IsAvailable,
+                Qualification = d.Qualification,
+                Bio = d.Bio
+            });
+        }
+
+        public async Task<IEnumerable<Clinic>>
+            GetAllClinicsAsync()
+        {
+            return await _unitOfWork
+                .Repository<Clinic>()
+                .GetAllAsync();
+        }
     }
 }
