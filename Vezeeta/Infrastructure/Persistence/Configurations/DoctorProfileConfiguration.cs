@@ -8,13 +8,15 @@ namespace Infranstructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<DoctorProfile> builder)
         {
-            // Table Name
             builder.ToTable("DoctorProfiles");
 
-            // Primary Key
             builder.HasKey(d => d.ApplicationUserId);
 
-            // Properties
+            builder.HasOne(d => d.ApplicationUser)
+                .WithOne(u => u.DoctorProfile)
+                .HasForeignKey<DoctorProfile>(
+                    d => d.ApplicationUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(d => d.Specialization)
                    .IsRequired()
@@ -36,35 +38,29 @@ namespace Infranstructure.Persistence.Configurations
             builder.Property(d => d.LicenseNumber)
                    .HasMaxLength(100);
 
-            // Indexes (important for search performance)
-            builder.HasIndex(d => d.ApplicationUserId);
             builder.HasIndex(d => d.LicenseNumber)
                    .IsUnique()
                    .HasFilter("[LicenseNumber] IS NOT NULL");
 
-            // Relationships
-
-            // DoctorProfile -> DoctorClinic
             builder.HasMany(d => d.DoctorClinics)
                    .WithOne(dc => dc.Doctor)
                    .HasForeignKey(dc => dc.DoctorId);
 
-            // DoctorProfile -> Appointment
             builder.HasMany(d => d.Appointments)
                    .WithOne(a => a.Doctor)
                    .HasForeignKey(a => a.DoctorId);
 
-            // DoctorProfile -> DoctorSchedule
             builder.HasMany(d => d.DoctorSchedules)
                    .WithOne(s => s.Doctor)
                    .HasForeignKey(s => s.DoctorId);
-                   
-            // DoctorProfile -> Review
+
             builder.HasMany(d => d.Reviews)
                    .WithOne(r => r.Doctor)
                    .HasForeignKey(r => r.DoctorId);
 
-            
+            builder.HasIndex(d => d.ApplicationUserId); 
+            builder.HasIndex(d => d.LicenseNumber).IsUnique().HasFilter("[LicenseNumber] IS NOT NULL");
+
         }
     }
 }

@@ -8,11 +8,18 @@ namespace Infranstructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<PatientProfile> builder)
         {
-            // Table Name
+            // Table
             builder.ToTable("PatientProfiles");
 
             // Primary Key
             builder.HasKey(p => p.ApplicationUserId);
+
+            // One-to-One with ApplicationUser
+            builder.HasOne(p => p.ApplicationUser)
+                .WithOne(u => u.PatientProfile)
+                .HasForeignKey<PatientProfile>(
+                    p => p.ApplicationUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Properties
 
@@ -20,7 +27,8 @@ namespace Infranstructure.Persistence.Configurations
                    .IsRequired();
 
             builder.Property(p => p.Gender)
-                   .IsRequired();
+                   .IsRequired()
+                   .HasConversion<string>();
 
             builder.Property(p => p.BloodType)
                    .HasMaxLength(10);
@@ -33,32 +41,28 @@ namespace Infranstructure.Persistence.Configurations
                    .IsRequired()
                    .HasMaxLength(20);
 
-            // Store enum as string (more readable in DB)
-            builder.Property(p => p.Gender)
-                   .HasConversion<string>();
-
-            // Not mapped (computed property)
+            // Ignore computed property
             builder.Ignore(p => p.Age);
-
-            // Indexes
-            builder.HasIndex(p => p.ApplicationUserId);
 
             // Relationships
 
             // Patient -> Appointments
             builder.HasMany(p => p.Appointments)
                    .WithOne(a => a.Patient)
-                   .HasForeignKey(a => a.PatientId);
+                   .HasForeignKey(a => a.PatientId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
             // Patient -> MedicalRecords
             builder.HasMany(p => p.MedicalRecords)
                    .WithOne(m => m.Patient)
-                   .HasForeignKey(m => m.PatientId);
+                   .HasForeignKey(m => m.PatientId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             // Patient -> Reviews
             builder.HasMany(p => p.Reviews)
                    .WithOne(r => r.Patient)
-                   .HasForeignKey(r => r.PatientId);
+                   .HasForeignKey(r => r.PatientId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
