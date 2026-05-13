@@ -1,0 +1,27 @@
+﻿@model Domain.Entities.DoctorProfile
+
+<h2>Create Doctor</h2>
+
+<form method="post">
+    <div class="mb-2">
+        <label>Application User Id</label>
+        <input asp-for="ApplicationUserId" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Specialization</label>
+        <input asp-for="Specialization" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Years of Experience</label>
+        <input asp-for="YearsOfExperience" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Qualification</label>
+        <input asp-for="Qualification" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">Create</button>
+</form>

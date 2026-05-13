@@ -1,0 +1,33 @@
+﻿@model Domain.Entities.DoctorSchedule
+
+<h1>Delete Schedule</h1>
+
+<h3>
+    Are you sure you want to delete this schedule?
+</h3>
+
+<p>
+    <strong>Day:</strong>
+    @Model.Day
+</p>
+
+<p>
+    <strong>Start:</strong>
+    @Model.StartTime
+</p>
+
+<p>
+    <strong>End:</strong>
+    @Model.EndTime
+</p>
+
+<form asp-action="DeleteSchedule" method="post">
+
+    <input type="hidden"
+           asp-for="Id" />
+
+    <button type="submit">
+        Delete
+    </button>
+
+</form>

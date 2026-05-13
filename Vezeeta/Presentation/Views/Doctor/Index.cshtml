@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Application.DTOs.Doctors.DoctorDto>
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<h2 class="mb-4">Doctors List</h2>
+
+<a class="btn btn-primary mb-3" href="/Doctor/Create">+ Add Doctor</a>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Doctor</th>
+            <th>Specialization</th>
+            <th>Experience</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var doc in Model)
+        {
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="@doc.ProfilePicture"
+                             width="40" height="40"
+                             class="rounded-circle" />
+                        <strong>@doc.FullName</strong>
+                    </div>
+                </td>
+
+                <td>@doc.Specialization</td>
+                <td>@doc.YearsOfExperience years</td>
+
+                <td>
+                    @if (doc.IsAvailable)
+                    {
+                        <span class="badge bg-success">Available</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Unavailable</span>
+                    }
+                </td>
+
+                <td>
+                    <a class="btn btn-sm btn-info"
+                       href="/Doctor/Details/@doc.Id">Details</a>
+
+                    <a class="btn btn-sm btn-warning"
+                       href="/Doctor/Edit/@doc.Id">Edit</a>
+
+                    <a class="btn btn-sm btn-danger"
+                       href="/Doctor/Delete/@doc.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

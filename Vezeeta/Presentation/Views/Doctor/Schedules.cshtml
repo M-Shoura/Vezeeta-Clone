@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Domain.Entities.DoctorSchedule>
+
+<h2>Schedules</h2>
+
+<a class="btn btn-primary"
+       href="/Doctor/AddSchedule/@ViewBag.DoctorId">
+    Add Schedule
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Start</th>
+            <th>End</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Day</td>
+                <td>@s.StartTime</td>
+                <td>@s.EndTime</td>
+                <td>
+                    <a href="/Doctor/DeleteSchedule/@s.Id"
+                       class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

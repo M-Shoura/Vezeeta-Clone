@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Domain.Entities.DoctorProfile>
+
+<h1>Search Doctors</h1>
+
+<form method="get">
+
+    <input type="text"
+           name="specialization"
+           placeholder="Enter specialization" />
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+<br />
+
+<table border="1" cellpadding="10">
+
+    <thead>
+        <tr>
+            <th>Specialization</th>
+            <th>Experience</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var doctor in Model)
+        {
+            <tr>
+                <td>@doctor.Specialization</td>
+                <td>@doctor.YearsOfExperience</td>
+            </tr>
+        }
+    </tbody>
+
+</table>

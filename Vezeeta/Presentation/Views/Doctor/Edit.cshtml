@@ -1,0 +1,24 @@
+﻿@model Domain.Entities.DoctorProfile
+
+<h2>Edit Doctor</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="ApplicationUserId" />
+
+    <div class="mb-2">
+        <label>Specialization</label>
+        <input asp-for="Specialization" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Experience</label>
+        <input asp-for="YearsOfExperience" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Bio</label>
+        <textarea asp-for="Bio" class="form-control"></textarea>
+    </div>
+
+    <button class="btn btn-primary">Save</button>
+</form>
