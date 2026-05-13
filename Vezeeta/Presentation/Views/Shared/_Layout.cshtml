@@ -34,23 +34,35 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end me-5">
 
                 <ul class="navbar-nav align-items-center">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6"
+                            asp-controller="Account"
+                            asp-action="Profile">
+                                @* @User.Identity.Name *@
+                                Profile
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6"
+                            asp-controller="Account"
+                            asp-action="SignUp">
+                                Sign Up
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link text-white fs-6"
-                        asp-controller="Account"
-                        asp-action="SignUp">
-                            Join Now
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-white fs-6"
-                        asp-controller="Home"
-                        asp-action="Index">
-                            Entry
-                        </a>
-                    </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6"
+                            asp-controller="Account"
+                            asp-action="Login">
+                                Login
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item">
                         <a class="nav-link text-white fs-6"
                         href="#">
