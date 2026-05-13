@@ -5,12 +5,13 @@ using Infranstructure.Persistence.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Extensions;
+using Infrastructure.Persistence;
 
 namespace Presentation
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,15 @@ namespace Presentation
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var context = services.GetRequiredService<ApplicationDbContext>();
+
+                await DataSeeder.SeedAsync(context);
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
