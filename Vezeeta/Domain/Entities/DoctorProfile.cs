@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,8 @@ namespace Domain.Entities
         public string Qualification { get; set; } = null!;
         public bool IsAvailable { get; set; } = true;
         public string? LicenseNumber { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; } = null!;
 
         public ICollection<DoctorClinic> DoctorClinics { get; set; } = new HashSet<DoctorClinic>();
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
