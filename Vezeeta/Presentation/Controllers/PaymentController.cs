@@ -1,10 +1,7 @@
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Domain.Enums;
-using Infranstructure.Persistence.Data;
-using Domain.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Presentation.ViewModels.Payments;
 
 namespace Presentation.Controllers
@@ -12,12 +9,10 @@ namespace Presentation.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
-        private readonly ApplicationDbContext _context;
 
-        public PaymentController(IPaymentService paymentService, ApplicationDbContext context)
+        public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
-            _context = context;
         }
 
         // GET: /Payment
