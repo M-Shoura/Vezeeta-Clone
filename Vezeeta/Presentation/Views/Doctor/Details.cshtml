@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Doctor Details";
+    var availableSlots =
+        ViewBag.AvailableSlots as IEnumerable<Application.DTOs.Appointments.AvailableSlotDto>
+        ?? Enumerable.Empty<Application.DTOs.Appointments.AvailableSlotDto>();
+    var isPatient = User.IsInRole("Patient") || User.IsInRole("patient");
 }
 
 <div class="container mt-5">
@@ -89,13 +93,11 @@
 
         <div class="card-body">
 
-            @if (Model.AvailableDates.Any())
+            @if (availableSlots.Any())
             {
                 <div class="row">
 
-                    @foreach (var slot in
-    (IEnumerable<Application.DTOs.Appointments.AvailableSlotDto>)
-    ViewBag.AvailableSlots)
+                    @foreach (var slot in availableSlots)
                     {
                         <div class="card mb-3 shadow-sm">
 
@@ -105,6 +107,10 @@
 
                                 <div>
                                     <strong>
+                                        @slot.Date.ToString("dddd, MMM dd")
+                                    </strong>
+                                    <span class="text-muted mx-2">|</span>
+                                    <strong>
                                         @slot.StartTime
                                     </strong>
                                     -
@@ -113,17 +119,24 @@
                                     </strong>
                                 </div>
 
-                                <form asp-controller="Appointment" asp-action="Book" method="post">
-                                    @Html.AntiForgeryToken()
+                                @if (isPatient)
+                                {
+                                    <form asp-controller="Appointment" asp-action="Book" method="post">
+                                        @Html.AntiForgeryToken()
 
-                                    <input type="hidden" name="DoctorId" value="@Model.Id" />
-                                    <input type="hidden" name="AppointmentDate" value="@slot.Date" />
-                                    <input type="hidden" name="StartTime" value="@slot.StartTime" />
-                                    <input type="hidden" name="EndTime" value="@slot.EndTime" />
-                                    <input type="hidden" name="ClinicId" value="@slot.ClinicId" />
+                                        <input type="hidden" name="DoctorId" value="@Model.Id" />
+                                        <input type="hidden" name="AppointmentDate" value="@(slot.Date.ToString("yyyy-MM-dd"))" />
+                                        <input type="hidden" name="StartTime" value="@slot.StartTime" />
+                                        <input type="hidden" name="EndTime" value="@slot.EndTime" />
+                                        <input type="hidden" name="ClinicId" value="@slot.ClinicId" />
 
-                                    <button class="btn btn-success">Book Appointment</button>
-                                </form>
+                                        <button class="btn btn-success">Book Appointment</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Login as patient to book</span>
+                                }
 
                             </div>
 
