@@ -12,37 +12,37 @@
     <input asp-for="Id" type="hidden" />
 
     <div class="form-group">
-        <label asp-for="Amount"></label>
+        <label asp-for="Amount">Amount</label>
         <input asp-for="Amount" class="form-control" type="number" step="0.01" min="0.01" />
         <span asp-validation-for="Amount" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="PaymentMethod"></label>
+        <label asp-for="PaymentMethod">Payment Method</label>
         <select asp-for="PaymentMethod" class="form-control" asp-items="Html.GetEnumSelectList<PaymentMethod>()"></select>
         <span asp-validation-for="PaymentMethod" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Status"></label>
-        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<PaymentStatus>()"></select>
+        <label asp-for="Status">Status</label>
+        <input asp-for="Status" class="form-control" readonly />
         <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="AppointmentId"></label>
+        <label asp-for="AppointmentId">Appointment Id</label>
         <input asp-for="AppointmentId" class="form-control" />
         <span asp-validation-for="AppointmentId" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="TransactionReference"></label>
+        <label asp-for="TransactionReference">Transaction Reference</label>
         <input asp-for="TransactionReference" class="form-control" />
         <span asp-validation-for="TransactionReference" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="FailureReason"></label>
+        <label asp-for="FailureReason">Failure Reason</label>
         <textarea asp-for="FailureReason" class="form-control"></textarea>
         <span asp-validation-for="FailureReason" class="text-danger"></span>
     </div>
