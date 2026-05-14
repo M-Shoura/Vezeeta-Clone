@@ -1,0 +1,271 @@
+﻿@model DashboardVm
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Statistics -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="stat-card doctors">
+
+            <div>
+
+                <p>Total Doctors</p>
+
+                <h2>@Model.DoctorsCount</h2>
+
+                <span>+12% this month</span>
+
+            </div>
+
+            <i class="fa-solid fa-user-doctor"></i>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="stat-card patients">
+
+            <div>
+
+                <p>Total Patients</p>
+
+                <h2>@Model.PatientsCount</h2>
+
+                <span>+18% this month</span>
+
+            </div>
+
+            <i class="fa-solid fa-users"></i>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="stat-card clinics">
+
+            <div>
+
+                <p>Total Clinics</p>
+
+                <h2>@Model.ClinicsCount</h2>
+
+                <span>+5% this month</span>
+
+            </div>
+
+            <i class="fa-solid fa-hospital"></i>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="stat-card appointments">
+
+            <div>
+
+                <p>Appointments Today</p>
+
+                <h2>@Model.TodayAppointments</h2>
+
+                <span>Today's Bookings</span>
+
+            </div>
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Charts -->
+
+<div class="row g-4">
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between mb-4">
+
+                    <h5 class="fw-bold">
+                        Appointments Analytics
+                    </h5>
+
+                    <select class="form-select w-auto">
+
+                        <option>This Year</option>
+                        <option>This Month</option>
+
+                    </select>
+
+                </div>
+
+                <canvas id="appointmentsChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-4">
+                    Clinics Distribution
+                </h5>
+
+                <canvas id="clinicChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Recent Appointments -->
+
+<div class="card border-0 shadow-sm rounded-4 mt-4">
+
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between mb-4">
+
+            <h5 class="fw-bold">
+                Recent Appointments
+            </h5>
+
+            <a class="btn btn-primary btn-sm">
+                View All
+            </a>
+
+        </div>
+
+        <table class="table align-middle">
+
+            <thead>
+
+                <tr>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Clinic</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>Ahmed Mohamed</td>
+
+                    <td>Dr. Ali Hassan</td>
+
+                    <td>Dental Clinic</td>
+
+                    <td>
+                        <span class="badge bg-success">
+                            Confirmed
+                        </span>
+                    </td>
+
+                    <td>14 May 2026</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Sara Ahmed</td>
+
+                    <td>Dr. Omar Khaled</td>
+
+                    <td>Heart Clinic</td>
+
+                    <td>
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+                    </td>
+
+                    <td>14 May 2026</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        new Chart(document.getElementById('appointmentsChart'), {
+
+            type: 'line',
+
+            data: {
+
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+
+                datasets: [{
+
+                    label: 'Appointments',
+
+                    data: [120, 210, 320, 280, 420, 500],
+
+                    borderWidth: 3,
+
+                    tension: 0.4,
+
+                    fill: true
+
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('clinicChart'), {
+
+            type: 'doughnut',
+
+            data: {
+
+                labels: ['Dental', 'Cardiology', 'Neurology'],
+
+                datasets: [{
+
+                    data: [35, 45, 20]
+
+                }]
+            }
+        });
+
+    </script>
+
+}

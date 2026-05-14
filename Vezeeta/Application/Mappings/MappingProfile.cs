@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Drugs;
+using Application.DTOs.Medical_Records;
 using Application.DTOs.Prescriptions;
 using AutoMapper;
 using Domain.Entities;
@@ -17,6 +18,8 @@ namespace Application.Mappings
 
             CreateMap<Prescription, PrescriptionDto>().ReverseMap();
             CreateMap<PrescriptionItem, PrescriptionItemDto>().ReverseMap();
+
+            CreateMap<MedicalRecord, MedicalRecordDto>().ReverseMap();
         }
     }
 }

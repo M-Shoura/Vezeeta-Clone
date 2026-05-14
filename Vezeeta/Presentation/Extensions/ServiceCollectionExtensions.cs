@@ -4,9 +4,7 @@ using Infranstructure.Persistence.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Application.Interfaces.Services;
 using Application.Services;
-using Infrastructure.Services;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Application.Mappings;
@@ -46,6 +44,7 @@ namespace Presentation.Extensions
             services.AddScoped<IPrescriptionService, PrescriptionService>();
             services.AddScoped<IPrescriptionItemService, PrescriptionItemService>();
             services.AddAutoMapper(typeof(MappingProfile));
+            services.AddScoped<IMedicalRecordService, MedicalRecordService>();
             return services;
         }
     }

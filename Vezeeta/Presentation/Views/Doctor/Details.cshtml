@@ -25,6 +25,7 @@
                     <img src="@(string.IsNullOrEmpty(Model.ProfilePicture)
                                                              ? "https://via.placeholder.com/200"
                                                              : Model.ProfilePicture)"
+                         alt="Doctor profile"
                          class="rounded-circle shadow"
                          width="200"
                          height="200"
@@ -169,37 +170,39 @@
 
         <div class="card-body">
 
-            @if (Model.Reviews.Any())
-            {
-                @foreach (var review in Model.Reviews)
+            <div style="max-height: 280px; overflow-y: auto; padding-right: 6px;">
+                @if (Model.Reviews.Any())
                 {
-                    <div class="card mb-3 shadow-sm">
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="card mb-3 shadow-sm">
 
-                        <div class="card-body">
+                            <div class="card-body">
 
-                            <h5>
-                                Rating: @review.Rating ⭐
-                            </h5>
+                                <h5>
+                                    Rating: @review.Rating ⭐
+                                </h5>
 
-                            <p>
-                                @review.Comment
-                            </p>
+                                <p>
+                                    @review.Comment
+                                </p>
 
-                            <small class="text-muted">
-                                @review.CreatedAt
-                            </small>
+                                <small class="text-muted">
+                                    @review.CreatedAt
+                                </small>
+
+                            </div>
 
                         </div>
-
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info mb-0">
+                        No reviews yet.
                     </div>
                 }
-            }
-            else
-            {
-                <div class="alert alert-info">
-                    No reviews yet.
-                </div>
-            }
+            </div>
 
         </div>
 
