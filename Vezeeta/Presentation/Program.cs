@@ -5,6 +5,10 @@ using Infranstructure.Persistence.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Extensions;
+using Vezeeta.Domain.Interfaces.Repositories;
+using Vezeeta.Domain.Interfaces.Services;
+using Vezeeta.Application.Services;
+using Vezeeta.Infrastructure.Repositories;
 
 namespace Presentation
 {
@@ -19,6 +23,8 @@ namespace Presentation
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
 
 
