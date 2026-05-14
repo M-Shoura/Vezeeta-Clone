@@ -1,0 +1,81 @@
+﻿@model Application.DTOs.Auth.LoginDto
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="card auth-card shadow-lg">
+
+    <div class="auth-header text-center">
+        <h2>Welcome Back</h2>
+        <p class="mb-0">Login to your account</p>
+    </div>
+
+    <div class="card-body p-4">
+
+        <form asp-action="Login" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger"></div>
+
+            <input type="hidden"
+                   asp-for="ReturnUrl"
+                   value="@ViewData["ReturnUrl"]" />
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+
+                <input asp-for="Email"
+                       class="form-control"
+                       placeholder="Enter your email" />
+
+                <span asp-validation-for="Email"
+                      class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+
+                <input asp-for="Password"
+                       class="form-control"
+                       placeholder="Enter your password" />
+
+                <span asp-validation-for="Password"
+                      class="text-danger small"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input asp-for="RememberMe"
+                       class="form-check-input" />
+
+                <label asp-for="RememberMe"
+                       class="form-check-label"></label>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Login
+            </button>
+
+            <hr />
+
+            <a asp-action="ExternalLogin"
+                   asp-route-provider="Google"
+                   class="btn btn-outline-dark w-100 mb-3">
+                <i class="bi bi-google"></i>
+                Continue with Google
+            </a>
+
+            <div class="text-center">
+                <a asp-action="ForgotPassword">Forgot Password?</a>
+            </div>
+
+            <div class="text-center mt-3">
+                Don't have an account?
+                <a asp-action="Register">Register</a>
+            </div>
+
+        </form>
+    </div>
+</div>

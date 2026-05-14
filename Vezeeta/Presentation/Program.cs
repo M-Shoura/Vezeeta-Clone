@@ -1,10 +1,18 @@
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Application.Interfaces.Services.Auth;
 using Application.Services;
+using Domain.Identity;
 using Infranstructure.Persistence.Data;
+using Infrastructure.Persistence;
 using Infrastructure.Repositories;
+using Infrastructure.Services.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Extensions;
+
 
 namespace Presentation
 {
@@ -14,23 +22,38 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ==================== DATABASE & REPOSITORY/SERVICE CONFIGURATION ====================
-            // ApplicationDbContext and IUnitOfWork are registered in AddUserServices
-            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-            builder.Services.AddScoped<IDoctorService, DoctorService>();
+
+
+
 
 
 
 
             // Configure services for the application.
             builder.Services.AddUserServices(builder.Configuration);
-
+            
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
-            // HTTP context accessor for fetching current user id in controllers
-            builder.Services.AddHttpContextAccessor();
+            
+            builder.Services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+
 
             var app = builder.Build();
+
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var services = scope.ServiceProvider;
+
+            //    var context = services.GetRequiredService<ApplicationDbContext>();
+
+            //    await DataSeeder.SeedAsync(context);
+            //}
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -1,0 +1,230 @@
+﻿@model Application.DTOs.Auth.RegisterDto
+
+@using Domain.Enums
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="card auth-card shadow-lg">
+
+    <div class="auth-header text-center">
+        <h2>Create Account</h2>
+        <p class="mb-0">Join the medical platform</p>
+    </div>
+
+    <div class="card-body p-4">
+
+        <form asp-action="Register"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger"></div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FullName"></label>
+
+                    <input asp-for="FullName"
+                           class="form-control" />
+
+                    <span asp-validation-for="FullName"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email"></label>
+
+                    <input asp-for="Email"
+                           class="form-control" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PhoneNumber"></label>
+
+                    <input asp-for="PhoneNumber"
+                           class="form-control" />
+
+                    <span asp-validation-for="PhoneNumber"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Role"></label>
+
+                    <select asp-for="Role"
+                            class="form-select"
+                            id="roleSelect"
+                            asp-items="Html.GetEnumSelectList<UserRole>()">
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Password"></label>
+
+                    <input asp-for="Password"
+                           class="form-control" />
+
+                    <span asp-validation-for="Password"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ConfirmPassword"></label>
+
+                    <input asp-for="ConfirmPassword"
+                           class="form-control" />
+
+                    <span asp-validation-for="ConfirmPassword"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label asp-for="Address"></label>
+
+                    <textarea asp-for="Address"
+                              class="form-control"></textarea>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label asp-for="ProfilePicture"></label>
+
+                    <input asp-for="ProfilePicture"
+                           class="form-control" />
+                </div>
+
+            </div>
+
+            <!-- Doctor Section -->
+            <div id="doctorFields" class="border rounded p-3 mb-4 d-none">
+
+                <h5 class="mb-3">Doctor Information</h5>
+
+                <div class="mb-3">
+                    <label asp-for="Specialization"></label>
+
+                    <input asp-for="Specialization"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Qualification"></label>
+
+                    <input asp-for="Qualification"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="YearsOfExperience"></label>
+
+                    <input asp-for="YearsOfExperience"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Bio"></label>
+
+                    <textarea asp-for="Bio"
+                              class="form-control"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LicenseNumber"></label>
+
+                    <input asp-for="LicenseNumber"
+                           class="form-control" />
+                </div>
+
+            </div>
+
+            <!-- Patient Section -->
+            <div id="patientFields" class="border rounded p-3 mb-4 d-none">
+
+                <h5 class="mb-3">Patient Information</h5>
+
+                <div class="mb-3">
+                    <label asp-for="DateOfBirth"></label>
+
+                    <input asp-for="DateOfBirth"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Gender"></label>
+
+                    <select asp-for="Gender"
+                            class="form-select"
+                            asp-items="Html.GetEnumSelectList<Gender>()">
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="BloodType"></label>
+
+                    <input asp-for="BloodType"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="EmergencyContactName"></label>
+
+                    <input asp-for="EmergencyContactName"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="EmergencyContactPhone"></label>
+
+                    <input asp-for="EmergencyContactPhone"
+                           class="form-control" />
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Create Account
+            </button>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        const roleSelect = document.getElementById('roleSelect');
+        const doctorFields = document.getElementById('doctorFields');
+        const patientFields = document.getElementById('patientFields');
+
+        function toggleRoleFields() {
+
+            const roleText =
+                roleSelect.options[roleSelect.selectedIndex].text;
+
+            doctorFields.classList.add('d-none');
+            patientFields.classList.add('d-none');
+
+            if (roleText === 'Doctor') {
+                doctorFields.classList.remove('d-none');
+            }
+
+            if (roleText === 'Patient') {
+                patientFields.classList.remove('d-none');
+            }
+        }
+
+        toggleRoleFields();
+
+        roleSelect.addEventListener('change', toggleRoleFields);
+
+    </script>
+
+}

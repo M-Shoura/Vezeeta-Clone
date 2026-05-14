@@ -1,0 +1,93 @@
+﻿@{
+    var currentController =
+        ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<div class="sidebar">
+
+    <div class="sidebar-header">
+
+        <div class="logo-box">
+
+            <i class="fa-solid fa-hospital"></i>
+
+            <div>
+                <h4>Vezeeta</h4>
+                <span>Admin Panel</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a 
+                   asp-controller="Admin"
+                   asp-action="Index"
+                   class="@(currentController == "Dashboard" ? "active" : "")">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Dashboard
+
+            </a>
+        </li>
+
+        <li>
+            <a asp-area="Admin"
+                   asp-controller="Doctors"
+                   asp-action="Index"
+                   class="@(currentController == "Doctors" ? "active" : "")">
+
+                <i class="fa-solid fa-user-doctor"></i>
+
+                Doctors
+
+            </a>
+        </li>
+
+        <li>
+            <a 
+                   asp-controller="Clinics"
+                   asp-action="Index"
+                   class="@(currentController == "Clinics" ? "active" : "")">
+
+                <i class="fa-solid fa-hospital"></i>
+
+                Clinics
+
+            </a>
+        </li>
+
+        <li>
+            <a 
+                   asp-controller="Patients"
+                   asp-action="Index"
+                   class="@(currentController == "Patients" ? "active" : "")">
+
+                <i class="fa-solid fa-users"></i>
+
+                Patients
+
+            </a>
+        </li>
+
+        <li>
+            <a 
+                   asp-controller="Appointments"
+                   asp-action="Index">
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                Appointments
+
+            </a>
+        </li>
+
+
+
+    </ul>
+
+</div>
