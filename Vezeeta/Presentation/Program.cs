@@ -14,15 +14,6 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ==================== DATABASE CONFIGURATION ====================
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-            builder.Services.AddScoped<IDoctorService, DoctorService>();
-
-
-
-
             // Configure services for the application.
             builder.Services.AddUserServices(builder.Configuration);
 
