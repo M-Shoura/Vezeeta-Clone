@@ -1,33 +1,405 @@
-﻿@model Domain.Entities.DoctorProfile
+@model Presentation.ViewModels.DoctorDashboardViewModel
 
-<h1>Doctor Dashboard</h1>
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+    var doc = Model.Doctor;
+    var pendingCount = Model.Appointments.Count(a => a.Status == Domain.Enums.AppointmentStatus.Pending);
+    var confirmedCount = Model.Appointments.Count(a => a.Status == Domain.Enums.AppointmentStatus.Confirmed);
+    var completedCount = Model.Appointments.Count(a => a.Status == Domain.Enums.AppointmentStatus.Completed);
+    var totalCount = Model.Appointments.Count();
+}
 
-<p>
-    <strong>Specialization:</strong>
-    @Model.Specialization
-</p>
+<style>
+    .dashboard-hero {
+        background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+        border-radius: 20px;
+        padding: 2.5rem;
+        color: white;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
 
-<p>
-    <strong>Qualification:</strong>
-    @Model.Qualification
-</p>
+    .dashboard-hero::after {
+        content: '';
+        position: absolute;
+        right: -60px;
+        top: -60px;
+        width: 250px;
+        height: 250px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 50%;
+    }
 
-<p>
-    <strong>Total Appointments:</strong>
-    @Model.Appointments.Count
-</p>
+    .stat-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-<p>
-    <strong>Total Reviews:</strong>
-    @Model.Reviews.Count
-</p>
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
 
-<p>
-    <strong>Total Clinics:</strong>
-    @Model.DoctorClinics.Count
-</p>
+    .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+    }
 
-<a asp-action="Details"
-       asp-route-id="@Model.ApplicationUserId">
-    View Details
-</a>
+    .section-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .section-card .card-header {
+        padding: 1.2rem 1.5rem;
+        font-weight: 700;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .table th {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #6c757d;
+        border-top: none;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-size: 0.78rem;
+        font-weight: 600;
+    }
+
+    .avatar-sm {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #e9ecef;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #495057;
+    }
+
+    .fee-input-group {
+        max-width: 180px;
+    }
+
+    .schedule-row {
+        transition: background 0.15s;
+    }
+
+    .schedule-row:hover {
+        background: #f8f9fa;
+    }
+
+    .btn-action {
+        padding: 5px 14px;
+        border-radius: 8px;
+        font-size: 0.83rem;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        padding: 3rem;
+        text-align: center;
+        color: #adb5bd;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="container-fluid px-4 py-4">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert">
+            <strong>✅</strong> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 mb-4" role="alert">
+            <strong>❌</strong> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- HERO -->
+    <div class="dashboard-hero">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <img src="@(string.IsNullOrEmpty(doc.ProfilePicture) ? "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(doc.FullName) + "&background=ffffff&color=1a73e8&size=80" : doc.ProfilePicture)"
+                     class="rounded-circle shadow border border-3 border-white"
+                     width="80" height="80"
+                     style="object-fit:cover;" />
+            </div>
+            <div class="col">
+                <h2 class="fw-bold mb-1">Dr. @doc.FullName</h2>
+                <p class="mb-1 opacity-75">@doc.Specialization &bull; @doc.YearsOfExperience Years Experience</p>
+                @if (doc.IsAvailable)
+                {
+                    <span class="badge bg-success bg-opacity-25 text-white border border-success px-3 py-1">
+                        🟢 Available
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger bg-opacity-25 text-white border border-danger px-3 py-1">
+                        🔴 Unavailable
+                    </span>
+                }
+            </div>
+            <div class="col-auto d-flex gap-2">
+                <a asp-action="Edit" asp-route-id="@doc.Id"
+                   class="btn btn-light fw-semibold px-4">
+                    ✏️ Edit Profile
+                </a>
+                <a asp-action="AddSchedule" asp-route-doctorId="@doc.Id"
+                   class="btn btn-warning fw-semibold px-4">
+                    ➕ Add Schedule
+                </a>
+                <a asp-action="AssignClinic" asp-route-id="@doc.Id"
+                   class="btn btn-outline-light fw-semibold px-4">
+                    🏥 Add Clinic
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card p-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary">📅</div>
+                    <div>
+                        <div class="text-muted small">Total Appointments</div>
+                        <div class="fs-3 fw-bold">@totalCount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card p-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon bg-warning bg-opacity-10 text-warning">⏳</div>
+                    <div>
+                        <div class="text-muted small">Pending</div>
+                        <div class="fs-3 fw-bold">@pendingCount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card p-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon bg-success bg-opacity-10 text-success">✅</div>
+                    <div>
+                        <div class="text-muted small">Confirmed</div>
+                        <div class="fs-3 fw-bold">@confirmedCount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card p-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon bg-info bg-opacity-10 text-info">🏁</div>
+                    <div>
+                        <div class="text-muted small">Completed</div>
+                        <div class="fs-3 fw-bold">@completedCount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- APPOINTMENTS TABLE -->
+        <div class="col-lg-8">
+            <div class="card section-card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span>📋 Appointments</span>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Appointments.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">Patient</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Clinic</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appt in Model.Appointments.OrderByDescending(a => a.AppointmentDate))
+                                    {
+                                        <tr>
+                                            <td class="ps-4">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="avatar-sm bg-primary bg-opacity-10 text-primary">
+                                                        @(appt.Patient?.ApplicationUser?.FullName?.Substring(0, 1).ToUpper() ?? "?")
+                                                    </div>
+                                                    <span class="fw-semibold">
+                                                        @(appt.Patient?.ApplicationUser?.FullName ?? "N/A")
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>@appt.AppointmentDate.ToString("MMM dd, yyyy")</td>
+                                            <td>@appt.StartTime.ToString(@"hh\:mm") – @appt.EndTime.ToString(@"hh\:mm")</td>
+                                            <td>@(appt.Clinic?.Name ?? "—")</td>
+                                            <td>
+                                                @switch (appt.Status)
+                                                {
+                                                    case Domain.Enums.AppointmentStatus.Pending:
+                                                        <span class="status-badge bg-warning bg-opacity-15 text-warning">Pending</span>
+                                                        break;
+                                                    case Domain.Enums.AppointmentStatus.Confirmed:
+                                                        <span class="status-badge bg-success bg-opacity-15 text-success">Confirmed</span>
+                                                        break;
+                                                    case Domain.Enums.AppointmentStatus.Completed:
+                                                        <span class="status-badge bg-info bg-opacity-15 text-info">Completed</span>
+                                                        break;
+                                                    default:
+                                                        <span class="status-badge bg-secondary bg-opacity-15 text-secondary">@appt.Status</span>
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <div>📭</div>
+                            <p class="mt-2 mb-0 text-muted">No appointments yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Schedules + Clinics -->
+        <div class="col-lg-4">
+
+            <!-- SCHEDULES -->
+            <div class="card section-card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span>🕐 Schedules</span>
+                    <a asp-action="Schedules" asp-route-id="@doc.Id"
+                       class="btn btn-sm btn-outline-primary btn-action">
+                        Manage
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    @if (doc.Schedules.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var sch in doc.Schedules)
+                            {
+                                <li class="list-group-item schedule-row d-flex justify-content-between align-items-center px-4 py-3">
+                                    <div>
+                                        <div class="fw-semibold">@sch.Day</div>
+                                        <small class="text-muted">
+                                            @sch.StartTime.ToString(@"hh\:mm") – @sch.EndTime.ToString(@"hh\:mm")
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill">
+                                        @sch.SlotDurationMinutes min
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <div>🗓️</div>
+                            <p class="mt-2 mb-0 text-muted">No schedules set.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- CLINICS & FEES -->
+            <div class="card section-card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span>🏥 Clinics & Fees</span>
+                    <a asp-action="AssignClinic" asp-route-id="@doc.Id"
+                       class="btn btn-sm btn-outline-success btn-action">
+                        + Add
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Clinics.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var dc in Model.Clinics)
+                            {
+                                <li class="list-group-item px-4 py-3">
+                                    <div class="fw-semibold mb-2">@(dc.Clinic?.Name ?? "Clinic #" + dc.ClinicId)</div>
+                                    <form asp-action="UpdateConsultationFee" method="post"
+                                          class="d-flex align-items-center gap-2">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="doctorId" value="@doc.Id" />
+                                        <input type="hidden" name="clinicId" value="@dc.ClinicId" />
+                                        <div class="input-group fee-input-group input-group-sm">
+                                            <span class="input-group-text">EGP</span>
+                                            <input type="number"
+                                                   name="consultationFee"
+                                                   step="0.01"
+                                                   min="0"
+                                                   value="@dc.ConsultationFee"
+                                                   class="form-control" />
+                                        </div>
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-primary btn-action">
+                                            Save
+                                        </button>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <div>🏥</div>
+                            <p class="mt-2 mb-0 text-muted">No clinics assigned.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

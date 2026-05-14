@@ -112,30 +112,16 @@
                                     </strong>
                                 </div>
 
-                                <form asp-controller="Appointment"
-                                      asp-action="Book"
-                                      method="post">
+                                <form asp-controller="Appointment" asp-action="Book" method="post">
+                                    @Html.AntiForgeryToken()
 
-                                    <input type="hidden"
-                                           name="DoctorId"
-                                           value="@Model.Id" />
+                                    <input type="hidden" name="DoctorId" value="@Model.Id" />
+                                    <input type="hidden" name="AppointmentDate" value="@slot.Date" />
+                                    <input type="hidden" name="StartTime" value="@slot.StartTime" />
+                                    <input type="hidden" name="EndTime" value="@slot.EndTime" />
+                                    <input type="hidden" name="ClinicId" value="@slot.ClinicId" />
 
-                                    <input type="hidden"
-                                           name="AppointmentDate"
-                                           value="@slot.Date" />
-
-                                    <input type="hidden"
-                                           name="StartTime"
-                                           value="@slot.StartTime" />
-
-                                    <input type="hidden"
-                                           name="EndTime"
-                                           value="@slot.EndTime" />
-
-                                    <button class="btn btn-success">
-                                        Book Appointment
-                                    </button>
-
+                                    <button class="btn btn-success">Book Appointment</button>
                                 </form>
 
                             </div>

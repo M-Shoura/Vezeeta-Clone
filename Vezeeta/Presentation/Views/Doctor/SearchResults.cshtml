@@ -1,0 +1,29 @@
+@model IEnumerable<Application.DTOs.Doctors.DoctorDto>
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<div class="container mt-4">
+    <h2>Search Results for "@ViewBag.Specialization"</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var doctor in Model)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card p-3">
+                        <h5>@doctor.FullName</h5>
+                        <p>@doctor.Specialization</p>
+                        <a asp-action="Details" asp-route-id="@doctor.Id" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">No doctors found.</div>
+    }
+</div>

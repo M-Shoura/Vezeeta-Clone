@@ -1,5 +1,7 @@
-﻿using Application.Interfaces.Services;
+using Application.DTOs;
+using Application.Interfaces.Services;
 using Domain.Entities;
+using Infrastructure.Persistence.Configurations;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels;
 
@@ -127,8 +129,11 @@ namespace Presentation.Controllers
                 return BadRequest();
 
             if (!ModelState.IsValid)
+            {
+                var clinics = await _doctorService.GetAllClinicsAsync();
+                ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(clinics, "Id", "Name");
                 return View(model);
-
+            }
             var doctor = new DoctorProfile
             {
                 ApplicationUserId = model.ApplicationUserId,
@@ -259,10 +264,17 @@ namespace Presentation.Controllers
         #region Doctor Clinics
 
         // GET: /Doctor/AssignClinic/id
-        public IActionResult AssignClinic(
+        public async Task<IActionResult> AssignClinic(
             string id)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest();
+
             ViewBag.DoctorId = id;
+
+            var clinics = await _doctorService.GetAllClinicsAsync();
+            ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(
+                clinics, "Id", "Name");
 
             return View();
         }
@@ -286,8 +298,30 @@ namespace Presentation.Controllers
                 "Clinic assigned successfully";
 
             return RedirectToAction(
-                nameof(Details),
+                nameof(Dashboard),
                 new { id = doctorId });
+        }
+
+        // POST: /Doctor/UpdateConsultationFee
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateConsultationFee(
+            string doctorId,
+            int clinicId,
+            decimal consultationFee)
+        {
+            try
+            {
+                await _doctorService
+                    .UpdateConsultationFeeAsync(doctorId, clinicId, consultationFee);
+                TempData["Success"] = "Consultation fee updated successfully";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Dashboard), new { id = doctorId });
         }
 
         #endregion
@@ -310,13 +344,22 @@ namespace Presentation.Controllers
             return View(schedules);
         }
 
-        // GET: /Doctor/AddSchedule/id
-        public IActionResult AddSchedule(
-            string id)
+        // GET: /Doctor/AddSchedule?doctorId=...
+        public async Task<IActionResult> AddSchedule(
+            string doctorId)
         {
-            ViewBag.DoctorId = id;
+            ViewBag.DoctorId = doctorId;
 
-            return View();
+            var clinics = await _doctorService.GetAllClinicsAsync();
+            ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(clinics, "Id", "Name");
+
+            var model = new Presentation.ViewModels.CreateDoctorScheduleViewModel
+            {
+                DoctorId = doctorId,
+                SlotDurationMinutes = 30
+            };
+
+            return View(model);
         }
 
         // POST: /Doctor/AddSchedule
@@ -324,21 +367,45 @@ namespace Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult>
             AddSchedule(
-                DoctorSchedule schedule)
+                [FromForm] Presentation.ViewModels.CreateDoctorScheduleViewModel schedule)
         {
+            // Ensure DoctorId is preserved for the view when returning
+            ViewBag.DoctorId = schedule?.DoctorId;
+
+            if (schedule == null)
+                return BadRequest();
+
             if (!ModelState.IsValid)
+            {
+                var clinics = await _doctorService.GetAllClinicsAsync();
+                ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(clinics, "Id", "Name");
                 return View(schedule);
+            }
 
-            await _doctorService
-                .CreateDoctorScheduleAsync(
-                    schedule);
+            var doctorSchedule = new DoctorSchedule
+            {
+                ClinicId = schedule.ClinicId,
+                Day = schedule.Day,
+                DoctorId = schedule.DoctorId,
+                EndTime = schedule.EndTime,
+                SlotDurationMinutes = schedule.SlotDurationMinutes,
+                StartTime = schedule.StartTime,
+                IsActive = true
+            };
 
-            TempData["Success"] =
-                "Schedule added successfully";
-
-            return RedirectToAction(
-                nameof(Schedules),
-                new { id = schedule.DoctorId });
+            try
+            {
+                await _doctorService.CreateDoctorScheduleAsync(doctorSchedule);
+                TempData["Success"] = "Schedule added successfully";
+                return RedirectToAction(nameof(Schedules), new { id = schedule.DoctorId });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                var clinics = await _doctorService.GetAllClinicsAsync();
+                ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(clinics, "Id", "Name");
+                return View(schedule);
+            }
         }
 
         // GET: /Doctor/DeleteSchedule/id
@@ -386,12 +453,27 @@ namespace Presentation.Controllers
 
             var doctor =
                 await _doctorService
-                    .GetDoctorByIdAsync(id);
+                    .GetDoctorDetailsAsync(id);
 
             if (doctor == null)
                 return NotFound();
 
-            return View(doctor);
+            var appointments =
+                await _doctorService
+                    .GetDoctorAppointmentsAsync(id);
+
+            var clinics =
+                await _doctorService
+                    .GetDoctorClinicsAsync(id);
+
+            var model = new Presentation.ViewModels.DoctorDashboardViewModel
+            {
+                Doctor = doctor,
+                Appointments = appointments,
+                Clinics = clinics
+            };
+
+            return View(model);
         }
 
         #endregion

@@ -13,53 +13,38 @@
         </div>
 
         <div class="card-body">
-
             <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
 
-                <input type="hidden"
-                       asp-for="DoctorId"
-                       value="@ViewBag.DoctorId" />
+                <input type="hidden" asp-for="DoctorId" value="@ViewBag.DoctorId" />
+
+                <div asp-validation-summary="All" class="alert alert-danger d-none"></div>
 
                 <div class="mb-3">
-                    <label class="form-label">
-                        Patient Id
-                    </label>
-
-                    <input asp-for="PatientId"
-                           class="form-control" />
+                    <label class="form-label">Patient Id</label>
+                    <input asp-for="PatientId" class="form-control" />
+                    <span asp-validation-for="PatientId" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">
-                        Rating
-                    </label>
-
-                    <select asp-for="Rating"
-                            class="form-select">
-
+                    <label class="form-label">Rating</label>
+                    <select asp-for="Rating" class="form-select">
                         <option value="5">5</option>
                         <option value="4">4</option>
                         <option value="3">3</option>
                         <option value="2">2</option>
                         <option value="1">1</option>
-
                     </select>
+                    <span asp-validation-for="Rating" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">
-                        Comment
-                    </label>
-
-                    <textarea asp-for="Comment"
-                              class="form-control"
-                              rows="5">
-                    </textarea>
+                    <label class="form-label">Comment</label>
+                    <textarea asp-for="Comment" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Comment" class="text-danger"></span>
                 </div>
 
-                <button class="btn btn-warning">
-                    Submit Review
-                </button>
+                <button class="btn btn-warning">Submit Review</button>
 
             </form>
 

@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Appointments;
+using Application.DTOs.Appointments;
 using Application.DTOs.Doctors;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -319,8 +319,16 @@ namespace Application.Services
         public async Task CreateDoctorScheduleAsync(
             DoctorSchedule schedule)
         {
-            if (schedule.StartTime
-                >= schedule.EndTime)
+            if (string.IsNullOrWhiteSpace(schedule.DoctorId))
+                throw new Exception("DoctorId is required");
+
+            if (schedule.ClinicId <= 0)
+                throw new Exception("ClinicId must be provided");
+
+            if (schedule.SlotDurationMinutes <= 0)
+                throw new Exception("Slot duration must be greater than zero");
+
+            if (schedule.StartTime >= schedule.EndTime)
             {
                 throw new Exception(
                     "Start time must be before end time");
@@ -415,6 +423,54 @@ namespace Application.Services
                 .SaveChangesAsync();
 
             return doctorId;
+        }
+
+        public async Task<IEnumerable<Appointment>>
+            GetDoctorAppointmentsAsync(string doctorId)
+        {
+            return await _unitOfWork
+                .Repository<Appointment>()
+                .FindAllAsync(
+                    a => a.DoctorId == doctorId,
+                    includes: new[]
+                    {
+                        "Patient",
+                        "Patient.ApplicationUser",
+                        "Clinic"
+                    });
+        }
+
+        public async Task<IEnumerable<DoctorClinic>>
+            GetDoctorClinicsAsync(string doctorId)
+        {
+            return await _unitOfWork
+                .Repository<DoctorClinic>()
+                .FindAllAsync(
+                    dc => dc.DoctorId == doctorId,
+                    includes: new[] { "Clinic" });
+        }
+
+        public async Task UpdateConsultationFeeAsync(
+            string doctorId,
+            int clinicId,
+            decimal newFee)
+        {
+            var doctorClinic = await _unitOfWork
+                .Repository<DoctorClinic>()
+                .FindAsync(
+                    dc => dc.DoctorId == doctorId
+                          && dc.ClinicId == clinicId);
+
+            if (doctorClinic == null)
+                throw new Exception("Doctor-Clinic assignment not found");
+
+            doctorClinic.ConsultationFee = newFee;
+
+            _unitOfWork
+                .Repository<DoctorClinic>()
+                .Update(doctorClinic);
+
+            await _unitOfWork.SaveChangesAsync();
         }
 
         #endregion
