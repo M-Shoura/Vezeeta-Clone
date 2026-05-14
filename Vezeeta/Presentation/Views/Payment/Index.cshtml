@@ -1,0 +1,47 @@
+@model IEnumerable<Application.DTOs.Payments.PaymentDto>
+
+@{
+    ViewData["Title"] = "Payments";
+}
+
+<h2>Payments</h2>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Add Payment</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Status</th>
+            <th>Appointment</th>
+            <th>Doctor</th>
+            <th>Patient</th>
+            <th>Clinic</th>
+            <th>Created</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.Amount.ToString("C")</td>
+            <td>@p.PaymentMethod</td>
+            <td>@p.Status</td>
+            <td>@p.AppointmentId</td>
+            <td>@p.DoctorName</td>
+            <td>@p.PatientName</td>
+            <td>@p.ClinicName</td>
+            <td>@p.CreatedAt.ToLocalTime().ToString("g")</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@p.Id">Details</a> |
+                <a asp-action="Edit" asp-route-id="@p.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@p.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
