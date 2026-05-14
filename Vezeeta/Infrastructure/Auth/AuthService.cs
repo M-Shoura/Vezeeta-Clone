@@ -123,8 +123,8 @@ public sealed class AuthService : IAuthService
         if (user is null || user.IsDeleted)
             return Result.Failure<string>(IdentityErrors.InvalidCredentials);
 
-        if (!user.EmailConfirmed)
-            return Result.Failure<string>(IdentityErrors.EmailNotConfirmed);
+        //if (!user.EmailConfirmed)
+        //    return Result.Failure<string>(IdentityErrors.EmailNotConfirmed);
 
         if (!user.IsActive)
             return Result.Failure<string>(IdentityErrors.AccountUnderReview);
