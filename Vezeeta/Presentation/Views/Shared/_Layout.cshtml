@@ -3,43 +3,216 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Presentation</title>
+    <title>@ViewData["Title"]</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Presentation.styles.css" asp-append-version="true" />
+    <link rel="icon" type="image/png" href="~/Images/icon.png" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Presentation</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+        <nav class="navbar navbar-expand-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/Images/logo.png"
+                    class="mx-5"
+                    alt="Vezeeta Logo" />
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end me-5">
+
+                <ul class="navbar-nav align-items-center">
+                    @if (true || User.Identity != null && User.Identity.IsAuthenticated)
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white fs-6"
+                            asp-controller="Account"
+                            asp-action="Profile">
+                                @* @User.Identity.Name *@
+                                Profile
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6"
+                            asp-controller="Account"
+                            asp-action="SignUp">
+                                Sign Up
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-controller="Doctor" asp-action="Index">Doctors</a>
                         </li>
-                    </ul>
-                </div>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Appointment" asp-action="CreateAvailableSlot">Appointments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Review" asp-action="Create">Reviews</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="MiddlewareTest" asp-action="OK">Middleware</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6"
+                            asp-controller="Account"
+                            asp-action="Login">
+                                Login
+                            </a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link text-white fs-6"
+                        href="#">
+                            Vizeta Doctors
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-white fs-6"
+                        asp-controller="Generic"
+                        asp-action="ContactUs">
+                            Contact Us
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <span class="nav-link text-white fs-6">
+                            English
+                        </span>
+                    </li>
+
+                    <li class="nav-item ms-2">
+                        <img src="~/Images/flag.png"
+                            height="20"
+                            alt="Egypt flag" />
+                    </li>
+
+                </ul>
+
             </div>
-        </nav>
+        </div>
+    </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container vh-100">
+        <main role="main" class="pb-3 flex-grow-1">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Presentation - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="bg-primary text-white pt-5 pb-3">
+        <div class="container mb-0">
+            <div class="row gy-5 mb-0">
+
+                <!-- Logo & About -->
+                <div class="col-md-3">
+                    <img src="~/Images/logo.png"
+                        alt="Vezeeta Logo"
+                        class="img-fluid mb-3"
+                        style="max-width:180px;" />
+
+                    <ul class="list-unstyled gy-2">
+                        <li class="my-3"><a asp-controller="Home" asp-action="About" class="text-white text-decoration-none">About Us</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none">Our Team</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none">Careers</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none">Press</a></li>
+                    </ul>
+                </div>
+
+                <!-- Search By -->
+                <div class="col-md-2">
+                    <h5 class="fw-bold mb-3">Search By</h5>
+
+                    <ul class="list-unstyled">
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none">Speciality</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none">Area</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none">Insurance</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none">Hospital</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none">Center</a></li>
+                    </ul>
+                </div>
+
+                <!-- Doctors -->
+                <div class="col-md-3">
+                    <h5 class="fw-bold mb-3">Are You a Doctor?</h5>
+
+                    <ul class="list-unstyled">
+                        <li class="my-3">
+                            <a href="#" class="text-white text-decoration-none">
+                                Join Vezeeta Doctors
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Help -->
+                <div class="col-md-2">
+                    <h5 class="fw-bold mb-3">Need Help?</h5>
+
+                    <ul class="list-unstyled">
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none my-1">Medical Library</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none my-1">Contact Us</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none my-1">Terms Of Use</a></li>
+                        <li class="my-3"><a href="#" class="text-white text-decoration-none my-1">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Apps & Social -->
+                <div class="col-md-2 d-flex flex-column align-items-center">
+                    <h5 class="fw-bold mb-3">Download App</h5>
+
+                    <div class="d-flex flex-column gap-2 mb-4">
+                        <a href="#">
+                            <img src="~/Images/google-play.png"
+                                alt="Google Play"
+                                class="img-fluid"
+                                style="max-width:160px;">
+                        </a>
+
+                        <a href="#">
+                            <img src="~/Images/app-store.png"
+                                alt="App Store"
+                                class="img-fluid"
+                                style="max-width:160px;">
+                        </a>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white fs-4">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+
+                        <a href="#" class="text-white fs-4">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+
+                        <a href="#" class="text-white fs-4">
+                            <i class="bi bi-twitter-x"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center pd-0 mb-0">
+                <p class="mb-0">
+                    © 2026 Vezeeta Clone. All Rights Reserved.
+                </p>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

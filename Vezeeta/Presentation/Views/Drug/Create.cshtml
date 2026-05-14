@@ -1,0 +1,71 @@
+@model Application.DTOs.Drugs.DrugDto
+
+@{
+    ViewData["Title"] = "Create Drug";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Create Drug</h3>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GenericName" class="form-label"></label>
+                    <input asp-for="GenericName" class="form-control"></input>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Manufacturer" class="form-label"></label>
+                    <input asp-for="Manufacturer" class="form-control"></input>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Strength" class="form-label"></label>
+                    <input asp-for="Strength" class="form-control"></input>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SideEffects" class="form-label"></label>
+                    <input asp-for="SideEffects" class="form-control"></input>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Price" class="form-label"></label>
+                    <input asp-for="Price" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Create
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary">
+                    Back
+                </a>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

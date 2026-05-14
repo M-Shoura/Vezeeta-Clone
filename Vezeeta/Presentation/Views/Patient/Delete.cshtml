@@ -1,0 +1,12 @@
+@model Application.DTOs.Profiles.Patients.PatientProfileDto
+
+<h2>Delete Patient</h2>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete <strong>@Model.FullName</strong>?
+</div>
+
+<form method="post">
+    <button class="btn btn-danger">Yes Delete</button>
+    <a class="btn btn-secondary" href="/Patient">Cancel</a>
+</form>
