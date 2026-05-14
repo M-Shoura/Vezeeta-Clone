@@ -1,11 +1,12 @@
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Application.Mappings;
 using Application.Services;
 using Infranstructure.Persistence.Data;
+using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Extensions;
-using Infrastructure.Persistence;
 
 namespace Presentation
 {
@@ -17,7 +18,7 @@ namespace Presentation
 
             // Configure services for the application.
             builder.Services.AddUserServices(builder.Configuration);
-
+            
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 

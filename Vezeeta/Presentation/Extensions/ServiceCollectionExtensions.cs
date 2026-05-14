@@ -9,6 +9,7 @@ using Application.Services;
 using Infrastructure.Services;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
+using Application.Mappings;
 
 
 namespace Presentation.Extensions
@@ -40,6 +41,9 @@ namespace Presentation.Extensions
             services.AddScoped<IReviewService,  ReviewService>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentService, PaymentService>();
+
+            services.AddScoped<IDrugsService,DrugService>();
+            services.AddAutoMapper(typeof(MappingProfile));
             return services;
         }
     }
