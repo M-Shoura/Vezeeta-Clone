@@ -133,17 +133,47 @@ namespace Presentation.Controllers
         {
             var completed = await _paymentService.FinalizePaymobPaymentAsync(paymentId, transactionId);
             if (!completed)
-                return BadRequest("Payment was not completed.");
+            {
+                return RedirectToAction(nameof(Result), new
+                {
+                    paymentId,
+                    isSuccess = false,
+                    message = "Payment was not completed."
+                });
+            }
 
-            TempData["Success"] = "Payment completed successfully";
-            return RedirectToAction(nameof(Details), new { id = paymentId });
+            return RedirectToAction(nameof(Result), new
+            {
+                paymentId,
+                isSuccess = true,
+                message = "Payment completed successfully."
+            });
         }
 
         // GET: /Payment/Cancel?paymentId=1
         public IActionResult Cancel(int paymentId)
         {
-            TempData["Error"] = "Payment was canceled.";
-            return RedirectToAction(nameof(Details), new { id = paymentId });
+            return RedirectToAction(nameof(Result), new
+            {
+                paymentId,
+                isSuccess = false,
+                message = "Payment was canceled."
+            });
+        }
+
+        // GET: /Payment/Result?paymentId=1&isSuccess=true
+        public IActionResult Result(int paymentId, bool isSuccess, string? message = null)
+        {
+            var vm = new PaymentResultViewModel
+            {
+                PaymentId = paymentId,
+                IsSuccess = isSuccess,
+                Message = string.IsNullOrWhiteSpace(message)
+                    ? (isSuccess ? "Payment completed successfully." : "Payment failed.")
+                    : message
+            };
+
+            return View(vm);
         }
 
         // GET: /Payment/Edit/id
