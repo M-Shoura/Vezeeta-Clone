@@ -50,13 +50,32 @@ namespace Application.Services
             return true;
         }
 
-        public async Task<IEnumerable<DrugDto>> GetAllAsync()
+        public async Task<DrugPagedResultDto> GetAllAsync(string? search, int pageNumber, int pageSize)
         {
-            var drugs = await _unitOfWork
-                .Repository<Drug>()
-                .GetAllAsync();
+            var query = _unitOfWork.Repository<Drug>().GetAll().AsQueryable();
 
-            return _mapper.Map<IEnumerable<DrugDto>>(drugs);
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(d =>
+                    d.Name.Contains(search) ||
+                    (d.GenericName != null && d.GenericName.Contains(search)) ||
+                    (d.Manufacturer != null && d.Manufacturer.Contains(search)));
+            }
+
+            var totalCount = query.Count();
+            var items = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new DrugPagedResultDto
+            {
+                Items = _mapper.Map<IEnumerable<DrugDto>>(items),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                Search = search
+            };
         }
 
         public async Task<DrugDto?> GetByIdAsync(int id)
