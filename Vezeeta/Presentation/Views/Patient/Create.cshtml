@@ -1,0 +1,42 @@
+@model Domain.Entities.PatientProfile
+
+<h2>Create Patient</h2>
+
+<form method="post">
+    <div class="mb-2">
+        <label>Application User Id</label>
+        <input asp-for="ApplicationUserId" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Date of Birth</label>
+        <input asp-for="DateOfBirth" class="form-control" type="date" />
+    </div>
+
+    <div class="mb-2">
+        <label>Gender</label>
+        <select asp-for="Gender" class="form-control">
+            <option value="">Select Gender</option>
+            <option value="0">Male</option>
+            <option value="1">Female</option>
+            <option value="2">Other</option>
+        </select>
+    </div>
+
+    <div class="mb-2">
+        <label>Blood Type</label>
+        <input asp-for="BloodType" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Emergency Contact Name</label>
+        <input asp-for="EmergencyContactName" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Emergency Contact Phone</label>
+        <input asp-for="EmergencyContactPhone" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">Create</button>
+</form>
