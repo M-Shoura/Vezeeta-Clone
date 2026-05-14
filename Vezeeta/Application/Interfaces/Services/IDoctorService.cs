@@ -82,6 +82,9 @@ namespace Application.Interfaces.Services
         Task<IEnumerable<Domain.Entities.DoctorClinic>>
             GetDoctorClinicsAsync(string doctorId);
 
+        Task<IEnumerable<Clinic>>
+            GetClinicsForDoctorAsync(string doctorId);
+
         Task UpdateConsultationFeeAsync(
             string doctorId,
             int clinicId,
@@ -97,5 +100,8 @@ namespace Application.Interfaces.Services
 
         Task<IEnumerable<Clinic>>
             GetAllClinicsAsync();
+
+        Task<IEnumerable<string>>
+            GetAllSpecializationsAsync();
     }
 }

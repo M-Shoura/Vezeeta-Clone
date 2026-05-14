@@ -34,7 +34,7 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end me-5">
 
                 <ul class="navbar-nav align-items-center">
-                    @if (true || User.Identity != null && User.Identity.IsAuthenticated)
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
                             <a class="nav-link text-white fs-6"
@@ -54,19 +54,8 @@
                                 Sign Up
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Doctor" asp-action="Index">Doctors</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Appointment" asp-action="CreateAvailableSlot">Appointments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Review" asp-action="Create">Reviews</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="MiddlewareTest" asp-action="OK">Middleware</a>
-                        </li>
-
+      
+                  
                         <li class="nav-item">
                             <a class="nav-link text-white fs-6"
                             asp-controller="Account"
@@ -108,7 +97,7 @@
         </div>
     </nav>
     </header>
-    <div class="container vh-100">
+    <div class="container">
         <main role="main" class="pb-3 flex-grow-1">
             @RenderBody()
         </main>

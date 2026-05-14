@@ -1,36 +1,23 @@
-using Vezeeta.Application.DTOs.Appointments;
-using Vezeeta.Domain.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Application.Interfaces.Repositories;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace Vezeeta.Presentation.Controllers
 {
     [Authorize]
     public class AppointmentController : Controller
     {
-        private readonly IAppointmentService _appointmentService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AppointmentController(IAppointmentService appointmentService)
+        public AppointmentController(
+            IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
-            _appointmentService = appointmentService;
-        }
-
-        #region Appointment CRUD
-
-        // GET: /Appointment
-        public async Task<IActionResult> Index()
-        {
-            try
-            {
-                var appointments = await _appointmentService.GetAllAppointmentsAsync();
-                return View(appointments);
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = $"Error retrieving appointments: {ex.Message}";
-                return RedirectToAction("Index", "Home");
-            }
+            _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: /Appointment/Details/id
@@ -58,7 +45,7 @@ namespace Vezeeta.Presentation.Controllers
             return View();
         }
 
-        // POST: /Appointment/Create
+        [Authorize(Roles = "Patient,patient")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateAppointmentDto dto)
@@ -117,13 +104,11 @@ namespace Vezeeta.Presentation.Controllers
             }
         }
 
-        // POST: /Appointment/Edit/id
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateAppointmentDto dto)
-        {
-            if (id != dto.Id)
-                return BadRequest();
+            if (string.IsNullOrWhiteSpace(appointment.PatientId))
+                return Challenge();
+
+            await _unitOfWork.Repository<Appointment>().AddAsync(appointment);
+            await _unitOfWork.SaveChangesAsync();
 
             if (!ModelState.IsValid)
                 return View(dto);
