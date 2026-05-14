@@ -60,8 +60,15 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Create
-        public IActionResult Create(int appointmentId = 0)
+        public async Task<IActionResult> Create(int appointmentId = 0)
         {
+            if (appointmentId > 0)
+            {
+                var existingPayment = await _paymentService.GetPaymentByAppointmentIdAsync(appointmentId);
+                if (existingPayment != null)
+                    return RedirectToAction(nameof(Details), new { id = existingPayment.Id });
+            }
+
             var vm = new PaymentCreateViewModel
             {
                 AppointmentId = appointmentId
@@ -79,6 +86,13 @@ namespace Presentation.Controllers
         {
             if (!ModelState.IsValid)
                 return View(vm);
+
+            var existingPayment = await _paymentService.GetPaymentByAppointmentIdAsync(vm.AppointmentId);
+            if (existingPayment != null)
+            {
+                ModelState.AddModelError(nameof(vm.AppointmentId), "A payment already exists for this appointment.");
+                return View(vm);
+            }
 
             var payment = new Payment
             {
@@ -164,16 +178,20 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
+            var currentPayment = await _paymentService.GetPaymentByIdAsync(id);
+            if (currentPayment == null)
+                return NotFound();
+
             var payment = new Payment
             {
                 Id = vm.Id,
                 Amount = vm.Amount,
                 PaymentMethod = vm.PaymentMethod,
-                Status = vm.Status,
+                Status = currentPayment.Status,
                 AppointmentId = vm.AppointmentId,
                 TransactionReference = vm.TransactionReference,
                 FailureReason = vm.FailureReason,
-                PaidAt = vm.Status == PaymentStatus.Completed ? DateTime.UtcNow : null
+                PaidAt = currentPayment.PaidAt
             };
 
             await _paymentService.UpdatePaymentAsync(payment);
