@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Domain.Enums;
 
 namespace Presentation.ViewModels.Payments
 {
@@ -10,16 +9,8 @@ namespace Presentation.ViewModels.Payments
         public decimal Amount { get; set; }
 
         [Required]
-        public PaymentMethod PaymentMethod { get; set; }
-
-        [Required]
-        public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
-
-        [Required]
         public int AppointmentId { get; set; }
 
-        public string? TransactionReference { get; set; }
-
-        public string? FailureReason { get; set; }
+        public string? Description { get; set; }
     }
 }

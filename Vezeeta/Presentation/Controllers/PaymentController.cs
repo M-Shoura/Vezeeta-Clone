@@ -1,7 +1,10 @@
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Domain.Enums;
+using Infranstructure.Persistence.Data;
+using Domain.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Presentation.ViewModels.Payments;
 
 namespace Presentation.Controllers
@@ -9,10 +12,12 @@ namespace Presentation.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
+        private readonly ApplicationDbContext _context;
 
-        public PaymentController(IPaymentService paymentService)
+        public PaymentController(IPaymentService paymentService, ApplicationDbContext context)
         {
             _paymentService = paymentService;
+            _context = context;
         }
 
         // GET: /Payment
@@ -64,12 +69,13 @@ namespace Presentation.Controllers
         {
             var vm = new PaymentCreateViewModel
             {
-                AppointmentId = appointmentId,
-                Status = PaymentStatus.Pending
+                AppointmentId = appointmentId
             };
 
             return View(vm);
         }
+
+        
 
         // POST: /Payment/Create
         [HttpPost]
@@ -82,19 +88,53 @@ namespace Presentation.Controllers
             var payment = new Payment
             {
                 Amount = vm.Amount,
-                PaymentMethod = vm.PaymentMethod,
-                Status = vm.Status,
-                AppointmentId = vm.AppointmentId,
-                TransactionReference = vm.TransactionReference,
-                FailureReason = vm.FailureReason,
-                PaidAt = vm.Status == PaymentStatus.Completed ? DateTime.UtcNow : null
+                PaymentMethod = PaymentMethod.Visa,
+                Status = PaymentStatus.Pending,
+                AppointmentId = vm.AppointmentId
             };
 
             await _paymentService.AddPaymentAsync(payment);
 
-            TempData["Success"] = "Payment added successfully";
+            var successUrl = Url.Action(
+                action: nameof(Success),
+                controller: "Payment",
+                values: new { paymentId = payment.Id },
+                protocol: Request.Scheme);
 
-            return RedirectToAction(nameof(Index));
+            var cancelUrl = Url.Action(
+                action: nameof(Cancel),
+                controller: "Payment",
+                values: new { paymentId = payment.Id },
+                protocol: Request.Scheme);
+
+            if (string.IsNullOrWhiteSpace(successUrl) || string.IsNullOrWhiteSpace(cancelUrl))
+                return StatusCode(500);
+
+            var checkoutUrl = await _paymentService.CreatePaymobCheckoutUrlAsync(
+                payment.Id,
+                successUrl,
+                cancelUrl,
+                vm.Description);
+
+            return Redirect(checkoutUrl);
+        }
+
+        // GET: /Payment/Success?paymentId=1&transactionId=...
+        public async Task<IActionResult> Success(int paymentId, string? transactionId = null)
+        {
+            var completed = await _paymentService.FinalizePaymobPaymentAsync(paymentId, transactionId);
+            if (!completed)
+                return BadRequest("Payment was not completed.");
+
+            TempData["Success"] = "Payment completed successfully";
+            return RedirectToAction(nameof(Details), new { id = paymentId });
+        }
+
+        // GET: /Payment/Cancel?paymentId=1
+        public IActionResult Cancel(int paymentId)
+        {
+            TempData["Error"] = "Payment was canceled.";
+            return RedirectToAction(nameof(Details), new { id = paymentId });
         }
 
         // GET: /Payment/Edit/id
