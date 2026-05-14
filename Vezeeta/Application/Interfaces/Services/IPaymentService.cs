@@ -15,5 +15,7 @@ namespace Application.Interfaces.Services
         Task<Payment> AddPaymentAsync(Payment payment);
         Task<Payment> UpdatePaymentAsync(Payment payment);
         Task<bool> DeletePaymentAsync(int paymentId);
+        Task<string> CreatePaymobCheckoutUrlAsync(int paymentId, string successUrl, string cancelUrl, string? description = null);
+        Task<bool> FinalizePaymobPaymentAsync(int paymentId, string? transactionId = null);
     }
 }
