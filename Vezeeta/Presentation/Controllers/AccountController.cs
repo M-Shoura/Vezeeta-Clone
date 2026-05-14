@@ -96,7 +96,7 @@ public sealed class AccountController : Controller
 
     [HttpGet]
     [Authorize]
-    [ValidateAntiForgeryToken]
+    // [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await _authService.LogoutAsync();

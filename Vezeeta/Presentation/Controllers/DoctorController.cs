@@ -82,6 +82,10 @@ namespace Presentation.Controllers
                     .OrderBy(s => s.Date)
                     .ThenBy(s => s.StartTime);
 
+            ViewBag.Appointments =
+                await _doctorService
+                    .GetDoctorAppointmentsAsync(id);
+
             return View(doctor);
         }
 

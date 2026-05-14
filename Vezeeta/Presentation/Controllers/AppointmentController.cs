@@ -59,7 +59,7 @@ namespace Presentation.Controllers
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
                 ClinicId = model.ClinicId,
-                Status = Domain.Enums.AppointmentStatus.Pending,
+                Status = Domain.Enums.AppointmentStatus.Confirmed,
                 Notes = model.Notes
             };
 
@@ -76,6 +76,8 @@ namespace Presentation.Controllers
 
             await _unitOfWork.Repository<Appointment>().AddAsync(appointment);
             await _unitOfWork.SaveChangesAsync();
+
+            TempData["success"] = "Successfully Booked";
 
             return RedirectToAction("Details", "Doctor", new { id = model.DoctorId });
         }
