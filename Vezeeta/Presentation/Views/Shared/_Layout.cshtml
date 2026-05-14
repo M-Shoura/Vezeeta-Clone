@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Vezeeta</title>
+    <title>@ViewData["Title"]</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -34,7 +34,7 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end me-5">
 
                 <ul class="navbar-nav align-items-center">
-                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    @if (true || User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
                             <a class="nav-link text-white fs-6"
@@ -99,12 +99,10 @@
     <div class="container">
         <main role="main" class="pb-3 flex-grow-1">
             @RenderBody()
-
-            <div class="vh-100"></div>
         </main>
     </div>
 
-    <footer class="bg-primary text-white pt-5 pb-3 mt-5">
+    <footer class="bg-primary text-white pt-5 pb-3">
         <div class="container mb-0">
             <div class="row gy-5 mb-0">
 
