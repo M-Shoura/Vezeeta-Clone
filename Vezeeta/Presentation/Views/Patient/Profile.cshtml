@@ -1,0 +1,23 @@
+@model Application.DTOs.Profiles.Patients.PatientProfileDto
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h2>My Profile</h2>
+
+<div class="card p-4">
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Full Name:</strong> @Model.FullName</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+            <p><strong>Birth Date:</strong> @Model.BirthDate.ToString("dd/MM/yyyy")</p>
+        </div>
+    </div>
+
+    <hr />
+
+    <a class="btn btn-primary" href="/Patient/EditProfile">Edit Profile</a>
+    <a class="btn btn-secondary" href="/Home">Back</a>
+</div>
