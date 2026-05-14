@@ -7,6 +7,10 @@ using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Extensions;
+using Vezeeta.Domain.Interfaces.Repositories;
+using Vezeeta.Domain.Interfaces.Services;
+using Vezeeta.Application.Services;
+using Vezeeta.Infrastructure.Repositories;
 
 namespace Presentation
 {
