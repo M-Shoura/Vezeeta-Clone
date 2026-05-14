@@ -1,0 +1,289 @@
+@model Application.DTOs.Prescriptions.PrescriptionDto
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">@(Model?.Id == 0 ? "Create Prescription" : "Edit Prescription")</h5>
+    </div>
+    <div class="card-body">
+        <form id="prescriptionForm">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="id" value="@Model?.Id" />
+            <input type="hidden" name="appointmentId" value="@Model?.AppointmentId" />
+
+            <!-- Prescription Date -->
+            <div class="mb-3">
+                <label for="prescriptionDate" class="form-label">Prescription Date</label>
+                <input type="date" id="prescriptionDate" name="prescriptionDate" 
+                       value="@Model?.PrescriptionDate.ToString("yyyy-MM-dd")"
+                       class="form-control" required />
+            </div>
+
+            <!-- Notes -->
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Add notes...">@Model?.Notes</textarea>
+            </div>
+
+            <!-- Prescription Items -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Prescription Items</label>
+                <div id="itemsContainer">
+                    @if (Model?.Items != null && Model.Items.Any())
+                    {
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="item-row mb-2 p-3 border rounded" data-item-index="@item.Id">
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control form-control-sm drug-search" 
+                                               placeholder="Search drug..." value="@item.DrugName" />
+                                        <input type="hidden" class="drugId" value="@item.DrugId" />
+                                        <div class="drug-dropdown list-group mt-1" style="display:none; max-height: 200px; overflow-y: auto;"></div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control form-control-sm dosage-input" 
+                                               placeholder="Dosage" value="@item.Dosage" required />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" class="form-control form-control-sm duration-input" 
+                                               placeholder="Days" value="@item.DurationInDays" required />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" class="form-control form-control-sm times-input" 
+                                               placeholder="Times/Day" value="@item.TimesPerDay" required />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-sm btn-danger remove-item">Remove</button>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control form-control-sm mt-2 instructions-input" 
+                                       placeholder="Instructions" value="@item.Instructions" />
+                            </div>
+                        }
+                    }
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary mt-2" id="addItemBtn">+ Add Item</button>
+            </div>
+
+            <!-- Save Button (Smart Button) -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-check-circle"></i> Save Prescription
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+ 
+<script>
+
+    let itemIndex = @(Model?.Items?.Count() ?? 0);
+
+    const container = document.getElementById('itemsContainer');
+
+    // Add Item
+    document.getElementById('addItemBtn')
+        .addEventListener('click', addItem);
+
+    function addItem()
+    {
+        const html = `
+            <div class="item-row mb-2 p-3 border rounded">
+
+                <div class="row g-2">
+
+                    <div class="col-md-4">
+
+                        <input type="text"
+                               class="form-control form-control-sm drug-search"
+                               placeholder="Search drug..." />
+
+                        <input type="hidden"
+                               class="drugId"
+                               value="0" />
+
+                        <div class="drug-dropdown list-group mt-1"
+                             style="display:none;
+                                    max-height:200px;
+                                    overflow-y:auto;">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="text"
+                               class="form-control form-control-sm dosage-input"
+                               placeholder="Dosage" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="number"
+                               class="form-control form-control-sm duration-input"
+                               placeholder="Days" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="number"
+                               class="form-control form-control-sm times-input"
+                               placeholder="Times/Day" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="button"
+                                class="btn btn-danger btn-sm remove-item">
+                            Remove
+                        </button>
+                    </div>
+
+                </div>
+
+                <input type="text"
+                       class="form-control form-control-sm mt-2 instructions-input"
+                       placeholder="Instructions" />
+
+            </div>
+        `;
+
+        container.insertAdjacentHTML('beforeend', html);
+
+        itemIndex++;
+    }
+
+    // Remove Item
+    container.addEventListener('click', function (e)
+    {
+        if (e.target.classList.contains('remove-item'))
+        {
+            e.target.closest('.item-row').remove();
+        }
+    });
+
+    // Drug Search
+    container.addEventListener('input', async function (e)
+    {
+        if (!e.target.classList.contains('drug-search'))
+            return;
+
+        const search = e.target.value;
+
+        const row = e.target.closest('.item-row');
+
+        const dropdown = row.querySelector('.drug-dropdown');
+
+        if (search.length < 2)
+        {
+            dropdown.style.display = 'none';
+            return;
+        }
+
+        const response =
+            await fetch(`/Prescription/GetDrugsBySearch?search=${search}`);
+
+        const drugs = await response.json();
+
+        dropdown.innerHTML = '';
+
+        drugs.forEach(drug =>
+        {
+            dropdown.innerHTML += `
+                <a href="#"
+                   class="list-group-item list-group-item-action drug-option"
+                   data-id="${drug.id}"
+                   data-name="${drug.name}">
+
+                    ${drug.name}
+
+                </a>
+            `;
+        });
+
+        dropdown.style.display =
+            drugs.length ? 'block' : 'none';
+    });
+
+    // Select Drug
+    container.addEventListener('click', function (e)
+    {
+        if (!e.target.classList.contains('drug-option'))
+            return;
+
+        e.preventDefault();
+
+        const row = e.target.closest('.item-row');
+
+        row.querySelector('.drug-search').value =
+            e.target.dataset.name;
+
+        row.querySelector('.drugId').value =
+            e.target.dataset.id;
+
+        row.querySelector('.drug-dropdown').style.display =
+            'none';
+    });
+
+    // Save Prescription
+    document.getElementById('prescriptionForm')
+        .addEventListener('submit', async function (e)
+    {
+        e.preventDefault();
+
+        const items = [];
+
+        document.querySelectorAll('.item-row')
+            .forEach(row =>
+        {
+            const drugId =
+                row.querySelector('.drugId').value;
+
+            if (drugId == 0)
+                return;
+
+            items.push({
+                drugId: parseInt(drugId),
+                dosage: row.querySelector('.dosage-input').value,
+                durationInDays: parseInt(row.querySelector('.duration-input').value),
+                timesPerDay: parseInt(row.querySelector('.times-input').value),
+                instructions: row.querySelector('.instructions-input').value
+            });
+        });
+
+        const data = {
+            id: parseInt(document.querySelector('[name="id"]').value) || 0,
+
+            appointmentId:
+                parseInt(document.querySelector('[name="appointmentId"]').value) || 0,
+
+            prescriptionDate:
+                document.getElementById('prescriptionDate').value,
+
+            notes:
+                document.getElementById('notes').value,
+
+            items: items
+        };
+
+            const response = await fetch('/Prescription/Save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok)
+    {
+        alert("Request Failed");
+        return;
+    }
+
+    const result = await response.json();
+
+    alert(result.message);
+    });
+
+</script>
+
+
