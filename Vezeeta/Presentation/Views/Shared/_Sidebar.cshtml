@@ -23,8 +23,8 @@
     <ul class="sidebar-menu">
 
         <li>
-            <a asp-area="Admin"
-                   asp-controller="Dashboard"
+            <a 
+                   asp-controller="Admin"
                    asp-action="Index"
                    class="@(currentController == "Dashboard" ? "active" : "")">
 
@@ -49,7 +49,7 @@
         </li>
 
         <li>
-            <a asp-area="Admin"
+            <a 
                    asp-controller="Clinics"
                    asp-action="Index"
                    class="@(currentController == "Clinics" ? "active" : "")">
@@ -62,7 +62,7 @@
         </li>
 
         <li>
-            <a asp-area="Admin"
+            <a 
                    asp-controller="Patients"
                    asp-action="Index"
                    class="@(currentController == "Patients" ? "active" : "")">
@@ -75,7 +75,7 @@
         </li>
 
         <li>
-            <a asp-area="Admin"
+            <a 
                    asp-controller="Appointments"
                    asp-action="Index">
 
@@ -86,17 +86,7 @@
             </a>
         </li>
 
-        <li>
-            <a asp-area="Admin"
-                   asp-controller="Roles"
-                   asp-action="Index">
 
-                <i class="fa-solid fa-shield-halved"></i>
-
-                Roles
-
-            </a>
-        </li>
 
     </ul>
 

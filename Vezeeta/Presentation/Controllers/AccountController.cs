@@ -94,7 +94,7 @@ public sealed class AccountController : Controller
 
     public IActionResult UnderReview() => View();
 
-    [HttpPost]
+    [HttpGet]
     [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
