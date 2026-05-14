@@ -1,0 +1,28 @@
+@model Domain.Entities.Clinic
+
+@{
+    ViewData["Title"] = "Delete Clinic";
+}
+
+<div class="container mt-4">
+    <h1 class="fw-bold mb-3">Delete Clinic</h1>
+
+    <div class="alert alert-danger">
+        Are you sure you want to delete <strong>@Model.Name</strong>?
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">Address</dt>
+        <dd class="col-sm-9">@Model.Address</dd>
+
+        <dt class="col-sm-3">Phone</dt>
+        <dd class="col-sm-9">@Model.PhoneNumber</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

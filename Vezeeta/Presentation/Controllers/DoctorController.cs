@@ -3,6 +3,7 @@ using Application.Interfaces.Services;
 using Domain.Entities;
 using Infrastructure.Persistence.Configurations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Presentation.ViewModels;
 
 namespace Presentation.Controllers
@@ -36,6 +37,11 @@ namespace Presentation.Controllers
 
             ViewBag.Clinics = clinics;
 
+            ViewBag.Specializations =
+                new SelectList(
+                    await _doctorService.GetAllSpecializationsAsync(),
+                    specialization);
+
             ViewBag.Name = name;
             ViewBag.Specialization = specialization;
 
@@ -56,13 +62,25 @@ namespace Presentation.Controllers
                 return NotFound();
 
             var availableSlots =
-        await _doctorService
-            .GetAvailableSlotsAsync(
-                id,
-                DateTime.Today);
+                new List<Application.DTOs.Appointments.AvailableSlotDto>();
+
+            for (var i = 0; i < 14; i++)
+            {
+                var date = DateTime.Today.AddDays(i);
+
+                var slotsForDate =
+                    await _doctorService
+                        .GetAvailableSlotsAsync(
+                            id,
+                            date);
+
+                availableSlots.AddRange(slotsForDate);
+            }
 
             ViewBag.AvailableSlots =
-        availableSlots;
+                availableSlots
+                    .OrderBy(s => s.Date)
+                    .ThenBy(s => s.StartTime);
 
             return View(doctor);
         }
@@ -350,8 +368,7 @@ namespace Presentation.Controllers
         {
             ViewBag.DoctorId = doctorId;
 
-            var clinics = await _doctorService.GetAllClinicsAsync();
-            ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(clinics, "Id", "Name");
+            await PopulateDoctorClinicSelectListAsync(doctorId);
 
             var model = new Presentation.ViewModels.CreateDoctorScheduleViewModel
             {
@@ -377,8 +394,7 @@ namespace Presentation.Controllers
 
             if (!ModelState.IsValid)
             {
-                var clinics = await _doctorService.GetAllClinicsAsync();
-                ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(clinics, "Id", "Name");
+                await PopulateDoctorClinicSelectListAsync(schedule.DoctorId, schedule.ClinicId);
                 return View(schedule);
             }
 
@@ -402,8 +418,7 @@ namespace Presentation.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                var clinics = await _doctorService.GetAllClinicsAsync();
-                ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(clinics, "Id", "Name");
+                await PopulateDoctorClinicSelectListAsync(schedule.DoctorId, schedule.ClinicId);
                 return View(schedule);
             }
         }
@@ -477,6 +492,19 @@ namespace Presentation.Controllers
         }
 
         #endregion
+
+        private async Task PopulateDoctorClinicSelectListAsync(
+            string doctorId,
+            int? selectedClinicId = null)
+        {
+            var clinics = await _doctorService.GetClinicsForDoctorAsync(doctorId);
+
+            ViewBag.Clinics = new SelectList(
+                clinics,
+                "Id",
+                "Name",
+                selectedClinicId);
+        }
 
     }
 }

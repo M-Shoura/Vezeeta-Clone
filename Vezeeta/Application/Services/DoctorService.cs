@@ -334,6 +334,17 @@ namespace Application.Services
                     "Start time must be before end time");
             }
 
+            var doctorClinic = await _unitOfWork
+                .Repository<DoctorClinic>()
+                .FindAsync(
+                    dc =>
+                        dc.DoctorId == schedule.DoctorId
+                        && dc.ClinicId == schedule.ClinicId
+                        && dc.IsAvailable);
+
+            if (doctorClinic == null)
+                throw new Exception("Doctor is not assigned to this clinic");
+
             var existingSchedules =
                 await _unitOfWork
                     .Repository<DoctorSchedule>()
@@ -450,6 +461,17 @@ namespace Application.Services
                     includes: new[] { "Clinic" });
         }
 
+        public async Task<IEnumerable<Clinic>>
+            GetClinicsForDoctorAsync(string doctorId)
+        {
+            var doctorClinics = await GetDoctorClinicsAsync(doctorId);
+
+            return doctorClinics
+                .Where(dc => dc.IsAvailable && dc.Clinic != null && dc.Clinic.IsActive)
+                .Select(dc => dc.Clinic)
+                .OrderBy(c => c.Name);
+        }
+
         public async Task UpdateConsultationFeeAsync(
             string doctorId,
             int clinicId,
@@ -513,6 +535,20 @@ namespace Application.Services
             return await _unitOfWork
                 .Repository<Clinic>()
                 .GetAllAsync();
+        }
+
+        public async Task<IEnumerable<string>>
+            GetAllSpecializationsAsync()
+        {
+            var doctors = await _unitOfWork
+                .Repository<DoctorProfile>()
+                .GetAllAsync();
+
+            return doctors
+                .Where(d => !string.IsNullOrWhiteSpace(d.Specialization))
+                .Select(d => d.Specialization)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(s => s);
         }
     }
 }

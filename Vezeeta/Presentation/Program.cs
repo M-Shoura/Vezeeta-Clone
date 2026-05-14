@@ -45,6 +45,7 @@ namespace Presentation
             app.UseSharedMiddleware();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapStaticAssets();
             app.MapControllerRoute(
