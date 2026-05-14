@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Infranstructure.Persistence.Data;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces.Services;
 using Application.Services;
@@ -31,6 +33,10 @@ namespace Presentation.Extensions
 
             services.AddScoped<IPatientProfileService, PatientProfileService>();
 
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IReviewService,  ReviewService>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
             return services;
         }
     }
