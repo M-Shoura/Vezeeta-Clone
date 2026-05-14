@@ -23,6 +23,7 @@ namespace Infrastructure.Repositories
                 .Select(p => new PatientProfileDto
                 {
                     FullName = p.ApplicationUser.FullName ?? string.Empty,
+                    ProfilePicture = p.ApplicationUser.ProfilePicture,
                     Email = p.ApplicationUser.Email ?? string.Empty,
                     PhoneNumber = p.ApplicationUser.PhoneNumber ?? string.Empty,
                     BirthDate = p.DateOfBirth
@@ -40,6 +41,7 @@ namespace Infrastructure.Repositories
                 .Select(p => new PatientProfileDto
                 {
                     FullName = p.ApplicationUser.FullName ?? string.Empty,
+                    ProfilePicture = p.ApplicationUser.ProfilePicture,
                     Email = p.ApplicationUser.Email ?? string.Empty,
                     PhoneNumber = p.ApplicationUser.PhoneNumber ?? string.Empty,
                     BirthDate = p.DateOfBirth
@@ -55,6 +57,7 @@ namespace Infrastructure.Repositories
                 .Select(p => new PatientProfileDto
                 {
                     FullName = p.ApplicationUser.FullName ?? string.Empty,
+                    ProfilePicture = p.ApplicationUser.ProfilePicture,
                     Email = p.ApplicationUser.Email ?? string.Empty,
                     PhoneNumber = p.ApplicationUser.PhoneNumber ?? string.Empty,
                     BirthDate = p.DateOfBirth

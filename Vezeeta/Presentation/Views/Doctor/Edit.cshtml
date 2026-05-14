@@ -42,9 +42,7 @@
 
                         <div class="text-center mb-5">
 
-                            <img src="@(string.IsNullOrEmpty(Model.ProfilePicture)
-                                                                             ? "https://via.placeholder.com/150"
-                                                                             : Model.ProfilePicture)"
+                            <img src="@ProfilePictureHelper.GetUrl(Model.ProfilePicture, Model.FullName, size: 150)"
                                  class="rounded-circle shadow"
                                  width="150"
                                  height="150"

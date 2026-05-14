@@ -3,7 +3,14 @@
 <h2>Delete Patient</h2>
 
 <div class="alert alert-danger">
-    Are you sure you want to delete <strong>@Model.FullName</strong>?
+    <div class="d-flex align-items-center gap-3">
+        <img src="@ProfilePictureHelper.GetUrl(Model.ProfilePicture, Model.FullName, "e74c3c", "fff", 80)"
+             class="rounded-circle"
+             width="50"
+             height="50"
+             style="object-fit:cover;" />
+        <span>Are you sure you want to delete <strong>@Model.FullName</strong>?</span>
+    </div>
 </div>
 
 <form method="post">

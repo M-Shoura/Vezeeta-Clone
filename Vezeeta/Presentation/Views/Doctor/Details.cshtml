@@ -38,9 +38,7 @@
 
                 <div class="col-md-3 text-center">
 
-                    <img src="@(string.IsNullOrEmpty(Model.ProfilePicture)
-                                                             ? "https://via.placeholder.com/200"
-                                                             : Model.ProfilePicture)"
+                    <img src="@ProfilePictureHelper.GetUrl(Model.ProfilePicture, Model.FullName, size: 200)"
                          class="rounded-circle shadow"
                          width="200"
                          height="200"
@@ -209,12 +207,11 @@
                                     <tr>
                                         <td class="ps-4">
                                             <div class="d-flex align-items-center gap-2">
-                                                <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center fw-bold"
-                                                     style="width:38px;height:38px;">
-                                                    @(string.IsNullOrWhiteSpace(appt.Patient?.ApplicationUser?.FullName)
-                                                                                                        ? "?"
-                                                                                                        : appt.Patient.ApplicationUser.FullName.Substring(0, 1).ToUpper())
-                                                </div>
+                                                <img src="@ProfilePictureHelper.GetUrl(appt.Patient?.ApplicationUser?.ProfilePicture, appt.Patient?.ApplicationUser?.FullName, size: 80)"
+                                                     class="rounded-circle"
+                                                     width="38"
+                                                     height="38"
+                                                     style="object-fit:cover;" />
                                                 <span class="fw-semibold">
                                                     @(appt.Patient?.ApplicationUser?.FullName ?? "N/A")
                                                 </span>

@@ -132,6 +132,7 @@ namespace Application.Services
                 return Task.FromResult(new PatientProfileDto
                 {
                     FullName = "John Doe",
+                    ProfilePicture = null,
                     Email = "OgKlC@example.com",
                     PhoneNumber = "1234567890",
                     BirthDate = new DateTime(2000, 1, 1)
@@ -141,6 +142,7 @@ namespace Application.Services
             return Task.FromResult(new PatientProfileDto
             {
                 FullName = patientProfile.ApplicationUser.FullName ?? string.Empty,
+                ProfilePicture = patientProfile.ApplicationUser.ProfilePicture,
                 Email = patientProfile.ApplicationUser.Email ?? string.Empty,
                 PhoneNumber = patientProfile.ApplicationUser.PhoneNumber ?? string.Empty,
                 BirthDate = patientProfile.DateOfBirth
