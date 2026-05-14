@@ -36,8 +36,8 @@
         </li>
 
         <li>
-            <a asp-area="Admin"
-                   asp-controller="Doctors"
+            <a
+                   asp-controller="Doctor"
                    asp-action="Index"
                    class="@(currentController == "Doctors" ? "active" : "")">
 
@@ -50,7 +50,7 @@
 
         <li>
             <a 
-                   asp-controller="Clinics"
+                   asp-controller="Clinic"
                    asp-action="Index"
                    class="@(currentController == "Clinics" ? "active" : "")">
 
@@ -63,7 +63,7 @@
 
         <li>
             <a 
-                   asp-controller="Patients"
+                   asp-controller="Patient"
                    asp-action="Index"
                    class="@(currentController == "Patients" ? "active" : "")">
 
@@ -76,7 +76,7 @@
 
         <li>
             <a 
-                   asp-controller="Appointments"
+                   asp-controller="Appointment"
                    asp-action="Index">
 
                 <i class="fa-solid fa-calendar-check"></i>

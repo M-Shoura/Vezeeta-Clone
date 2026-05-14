@@ -3,7 +3,14 @@
 <h2>Patient Details</h2>
 
 <div class="card p-3">
-    <h3>@Model.FullName</h3>
+    <div class="d-flex align-items-center gap-3">
+        <img src="@ProfilePictureHelper.GetUrl(Model.ProfilePicture, Model.FullName, size: 120)"
+             class="rounded-circle shadow-sm"
+             width="90"
+             height="90"
+             style="object-fit:cover;" />
+        <h3 class="mb-0">@Model.FullName</h3>
+    </div>
 
     <hr />
 

@@ -14,6 +14,11 @@
             {
                 <div class="col-md-4 mb-3">
                     <div class="card p-3">
+                        <img src="@ProfilePictureHelper.GetUrl(doctor.ProfilePicture, doctor.FullName)"
+                             class="rounded-circle mb-3 shadow-sm"
+                             width="90"
+                             height="90"
+                             style="object-fit:cover;" />
                         <h5>@doctor.FullName</h5>
                         <p>@doctor.Specialization</p>
                         <a asp-action="Details" asp-route-id="@doctor.Id" class="btn btn-primary">Details</a>

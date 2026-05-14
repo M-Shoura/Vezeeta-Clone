@@ -1,4 +1,20 @@
-﻿<nav class="navbar navbar-expand bg-white shadow-sm px-4 py-3">
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var currentUser = User.Identity?.IsAuthenticated == true
+        ? await UserManager.GetUserAsync(User)
+        : null;
+    var displayName = currentUser?.FullName ?? User.Identity?.Name ?? "User";
+    var roleName = User.IsInRole("Admin")
+        ? "Administrator"
+        : User.IsInRole("Doctor")
+            ? "Doctor"
+            : User.IsInRole("Patient")
+                ? "Patient"
+                : "User";
+}
+
+<nav class="navbar navbar-expand bg-white shadow-sm px-4 py-3">
 
     <div class="container-fluid">
 
@@ -24,14 +40,15 @@
 
             <div class="d-flex align-items-center gap-2">
 
-                <img src="https://i.pravatar.cc/45"
+                <img src="@ProfilePictureHelper.GetUrl(currentUser?.ProfilePicture, displayName, size: 90)"
                      class="rounded-circle"
                      width="45"
-                     height="45" />
+                     height="45"
+                     style="object-fit:cover;" />
 
                 <div>
-                    <h6 class="mb-0">Admin</h6>
-                    <small class="text-muted">Administrator</small>
+                    <h6 class="mb-0">@displayName</h6>
+                    <small class="text-muted">@roleName</small>
                 </div>
 
             </div>

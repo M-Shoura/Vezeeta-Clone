@@ -36,8 +36,15 @@
         <ul class="list-group col-lg-7">
             @foreach (var doctorClinic in Model.DoctorClinics)
             {
-                <li class="list-group-item d-flex justify-content-between">
-                    <span>@doctorClinic.Doctor.ApplicationUser.FullName</span>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="d-flex align-items-center gap-2">
+                        <img src="@ProfilePictureHelper.GetUrl(doctorClinic.Doctor.ApplicationUser.ProfilePicture, doctorClinic.Doctor.ApplicationUser.FullName, size: 80)"
+                             class="rounded-circle"
+                             width="38"
+                             height="38"
+                             style="object-fit:cover;" />
+                        @doctorClinic.Doctor.ApplicationUser.FullName
+                    </span>
                     <span>@doctorClinic.ConsultationFee.ToString("C")</span>
                 </li>
             }

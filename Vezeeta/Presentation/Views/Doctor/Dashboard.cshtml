@@ -149,7 +149,7 @@
     <div class="dashboard-hero">
         <div class="row align-items-center">
             <div class="col-auto">
-                <img src="@(string.IsNullOrEmpty(doc.ProfilePicture) ? "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(doc.FullName) + "&background=ffffff&color=1a73e8&size=80" : doc.ProfilePicture)"
+                <img src="@ProfilePictureHelper.GetUrl(doc.ProfilePicture, doc.FullName, "ffffff", "1a73e8", 80)"
                      class="rounded-circle shadow border border-3 border-white"
                      width="80" height="80"
                      style="object-fit:cover;" />
@@ -263,9 +263,11 @@
                                         <tr>
                                             <td class="ps-4">
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <div class="avatar-sm bg-primary bg-opacity-10 text-primary">
-                                                        @(appt.Patient?.ApplicationUser?.FullName?.Substring(0, 1).ToUpper() ?? "?")
-                                                    </div>
+                                                    <img src="@ProfilePictureHelper.GetUrl(appt.Patient?.ApplicationUser?.ProfilePicture, appt.Patient?.ApplicationUser?.FullName, size: 80)"
+                                                         class="avatar-sm"
+                                                         width="38"
+                                                         height="38"
+                                                         alt="@(appt.Patient?.ApplicationUser?.FullName ?? "Patient")" />
                                                     <span class="fw-semibold">
                                                         @(appt.Patient?.ApplicationUser?.FullName ?? "N/A")
                                                     </span>
