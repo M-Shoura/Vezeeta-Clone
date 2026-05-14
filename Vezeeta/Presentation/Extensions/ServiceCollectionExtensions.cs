@@ -46,6 +46,7 @@ namespace Presentation.Extensions
             services.AddScoped<IPrescriptionService, PrescriptionService>();
             services.AddScoped<IPrescriptionItemService, PrescriptionItemService>();
             services.AddAutoMapper(typeof(MappingProfile));
+            services.AddScoped<IMedicalRecordService, MedicalRecordService>();
             return services;
         }
     }
