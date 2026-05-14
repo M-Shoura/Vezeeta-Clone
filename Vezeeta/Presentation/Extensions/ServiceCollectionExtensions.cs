@@ -10,7 +10,7 @@ using Infrastructure.Services;
 using Infrastructure.Services.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using AutoMapper;
 
 namespace Presentation.Extensions
 {
@@ -73,7 +73,7 @@ namespace Presentation.Extensions
             services.AddScoped<IDrugsService, DrugService>();
             services.AddScoped<IPrescriptionService, PrescriptionService>();
             services.AddScoped<IPrescriptionItemService, PrescriptionItemService>();
-            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddScoped<IMedicalRecordService, MedicalRecordService>();
             return services;
         }
