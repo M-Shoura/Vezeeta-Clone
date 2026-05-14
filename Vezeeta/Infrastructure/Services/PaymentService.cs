@@ -3,8 +3,6 @@ using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Domain.Enums;
-using Infranstructure.Persistence.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -15,18 +13,15 @@ namespace Infrastructure.Services
     {
         private readonly IPaymentRepository _paymentRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
 
         public PaymentService(
             IPaymentRepository paymentRepository,
             IUnitOfWork unitOfWork,
-            ApplicationDbContext context,
             IConfiguration configuration)
         {
             _paymentRepository = paymentRepository;
             _unitOfWork = unitOfWork;
-            _context = context;
             _configuration = configuration;
         }
 
@@ -69,7 +64,7 @@ namespace Infrastructure.Services
                 payment.PaidAt = DateTime.UtcNow;
             }
 
-            _context.Payments.Add(payment);
+            await _unitOfWork.Repository<Payment>().AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
             return payment;
         }
@@ -83,18 +78,18 @@ namespace Infrastructure.Services
                 payment.PaidAt = DateTime.UtcNow;
             }
 
-            _context.Payments.Update(payment);
+            _unitOfWork.Repository<Payment>().Update(payment);
             await _unitOfWork.SaveChangesAsync();
             return payment;
         }
 
         public async Task<bool> DeletePaymentAsync(int paymentId)
         {
-            var payment = await _context.Payments.FindAsync(paymentId);
+            var payment = await _unitOfWork.Repository<Payment>().GetByIdAsync(paymentId);
             if (payment == null)
                 return false;
 
-            _context.Payments.Remove(payment);
+            _unitOfWork.Repository<Payment>().Delete(payment);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
@@ -116,11 +111,7 @@ namespace Infrastructure.Services
             if (!int.TryParse(integrationIdValue, out var integrationId))
                 throw new InvalidOperationException("Paymob integration id is invalid.");
 
-            var payment = await _context.Payments
-                .Include(p => p.Appointment)
-                    .ThenInclude(a => a.Patient)
-                        .ThenInclude(p => p.ApplicationUser)
-                .FirstOrDefaultAsync(p => p.Id == paymentId);
+            var payment = await _paymentRepository.GetPaymentForCheckoutAsync(paymentId);
 
             if (payment == null)
                 throw new InvalidOperationException("Payment not found.");
@@ -140,7 +131,7 @@ namespace Infrastructure.Services
                 description);
 
             payment.TransactionReference = orderId.ToString();
-            _context.Payments.Update(payment);
+            _unitOfWork.Repository<Payment>().Update(payment);
             await _unitOfWork.SaveChangesAsync();
 
             return $"https://accept.paymob.com/api/acceptance/iframes/{iframeId}?payment_token={Uri.EscapeDataString(paymentToken)}";
@@ -148,7 +139,7 @@ namespace Infrastructure.Services
 
         public async Task<bool> FinalizePaymobPaymentAsync(int paymentId, string? transactionId = null)
         {
-            var payment = await _context.Payments.FirstOrDefaultAsync(p => p.Id == paymentId);
+            var payment = await _unitOfWork.Repository<Payment>().GetByIdAsync(paymentId);
             if (payment == null)
                 return false;
 
@@ -157,7 +148,7 @@ namespace Infrastructure.Services
             payment.TransactionReference = transactionId ?? payment.TransactionReference;
             payment.UpdatedAt = DateTime.UtcNow;
 
-            _context.Payments.Update(payment);
+            _unitOfWork.Repository<Payment>().Update(payment);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }

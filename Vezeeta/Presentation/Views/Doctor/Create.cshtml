@@ -3,25 +3,37 @@
 <h2>Create Doctor</h2>
 
 <form method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All" class="alert alert-danger"></div>
+
     <div class="mb-2">
         <label>Application User Id</label>
         <input asp-for="ApplicationUserId" class="form-control" />
+        <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <label>Specialization</label>
         <input asp-for="Specialization" class="form-control" />
+        <span asp-validation-for="Specialization" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <label>Years of Experience</label>
         <input asp-for="YearsOfExperience" class="form-control" />
+        <span asp-validation-for="YearsOfExperience" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <label>Qualification</label>
         <input asp-for="Qualification" class="form-control" />
+        <span asp-validation-for="Qualification" class="text-danger"></span>
     </div>
 
     <button class="btn btn-success">Create</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

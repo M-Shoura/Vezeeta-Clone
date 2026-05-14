@@ -1,10 +1,7 @@
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Domain.Enums;
-using Infranstructure.Persistence.Data;
-using Domain.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Presentation.ViewModels.Payments;
 
 namespace Presentation.Controllers
@@ -12,12 +9,10 @@ namespace Presentation.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
-        private readonly ApplicationDbContext _context;
 
-        public PaymentController(IPaymentService paymentService, ApplicationDbContext context)
+        public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
-            _context = context;
         }
 
         // GET: /Payment
@@ -65,8 +60,15 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Create
-        public IActionResult Create(int appointmentId = 0)
+        public async Task<IActionResult> Create(int appointmentId = 0)
         {
+            if (appointmentId > 0)
+            {
+                var existingPayment = await _paymentService.GetPaymentByAppointmentIdAsync(appointmentId);
+                if (existingPayment != null)
+                    return RedirectToAction(nameof(Details), new { id = existingPayment.Id });
+            }
+
             var vm = new PaymentCreateViewModel
             {
                 AppointmentId = appointmentId
@@ -84,6 +86,13 @@ namespace Presentation.Controllers
         {
             if (!ModelState.IsValid)
                 return View(vm);
+
+            var existingPayment = await _paymentService.GetPaymentByAppointmentIdAsync(vm.AppointmentId);
+            if (existingPayment != null)
+            {
+                ModelState.AddModelError(nameof(vm.AppointmentId), "A payment already exists for this appointment.");
+                return View(vm);
+            }
 
             var payment = new Payment
             {
@@ -124,17 +133,47 @@ namespace Presentation.Controllers
         {
             var completed = await _paymentService.FinalizePaymobPaymentAsync(paymentId, transactionId);
             if (!completed)
-                return BadRequest("Payment was not completed.");
+            {
+                return RedirectToAction(nameof(Result), new
+                {
+                    paymentId,
+                    isSuccess = false,
+                    message = "Payment was not completed."
+                });
+            }
 
-            TempData["Success"] = "Payment completed successfully";
-            return RedirectToAction(nameof(Details), new { id = paymentId });
+            return RedirectToAction(nameof(Result), new
+            {
+                paymentId,
+                isSuccess = true,
+                message = "Payment completed successfully."
+            });
         }
 
         // GET: /Payment/Cancel?paymentId=1
         public IActionResult Cancel(int paymentId)
         {
-            TempData["Error"] = "Payment was canceled.";
-            return RedirectToAction(nameof(Details), new { id = paymentId });
+            return RedirectToAction(nameof(Result), new
+            {
+                paymentId,
+                isSuccess = false,
+                message = "Payment was canceled."
+            });
+        }
+
+        // GET: /Payment/Result?paymentId=1&isSuccess=true
+        public IActionResult Result(int paymentId, bool isSuccess, string? message = null)
+        {
+            var vm = new PaymentResultViewModel
+            {
+                PaymentId = paymentId,
+                IsSuccess = isSuccess,
+                Message = string.IsNullOrWhiteSpace(message)
+                    ? (isSuccess ? "Payment completed successfully." : "Payment failed.")
+                    : message
+            };
+
+            return View(vm);
         }
 
         // GET: /Payment/Edit/id
@@ -169,16 +208,20 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
+            var currentPayment = await _paymentService.GetPaymentByIdAsync(id);
+            if (currentPayment == null)
+                return NotFound();
+
             var payment = new Payment
             {
                 Id = vm.Id,
                 Amount = vm.Amount,
                 PaymentMethod = vm.PaymentMethod,
-                Status = vm.Status,
+                Status = currentPayment.Status,
                 AppointmentId = vm.AppointmentId,
                 TransactionReference = vm.TransactionReference,
                 FailureReason = vm.FailureReason,
-                PaidAt = vm.Status == PaymentStatus.Completed ? DateTime.UtcNow : null
+                PaidAt = currentPayment.PaidAt
             };
 
             await _paymentService.UpdatePaymentAsync(payment);

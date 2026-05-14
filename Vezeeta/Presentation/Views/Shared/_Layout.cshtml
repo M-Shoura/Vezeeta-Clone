@@ -54,6 +54,18 @@
                                 Sign Up
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Doctor" asp-action="Index">Doctors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Appointment" asp-action="CreateAvailableSlot">Appointments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Review" asp-action="Create">Reviews</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="MiddlewareTest" asp-action="OK">Middleware</a>
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link text-white fs-6"
@@ -96,7 +108,7 @@
         </div>
     </nav>
     </header>
-    <div class="container">
+    <div class="container vh-100">
         <main role="main" class="pb-3 flex-grow-1">
             @RenderBody()
         </main>

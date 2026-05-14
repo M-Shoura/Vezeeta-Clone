@@ -1,41 +1,135 @@
-﻿@model Domain.Entities.DoctorSchedule
+@model Presentation.ViewModels.CreateDoctorScheduleViewModel
 
-<h1>Add Schedule</h1>
+@{
+    ViewData["Title"] = "Add Schedule";
+}
 
-<form asp-action="AddSchedule" method="post">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
 
-    <input type="hidden"
-           asp-for="DoctorId"
-           value="@ViewBag.DoctorId" />
+            <!-- BREADCRUMB -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-action="Index" class="text-decoration-none">Doctors</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-action="Dashboard" asp-route-id="@Model.DoctorId" class="text-decoration-none">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active">Add Schedule</li>
+                </ol>
+            </nav>
 
-    <div>
-        <label>Clinic Id</label>
-        <input asp-for="ClinicId" />
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                <!-- HEADER -->
+                <div class="card-header p-4 text-white"
+                     style="background: linear-gradient(135deg, #1a73e8, #0d47a1);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="font-size:2rem;">🕐</div>
+                        <div>
+                            <h4 class="mb-0 fw-bold">Add Schedule</h4>
+                            <small class="opacity-75">Define working hours for a specific day</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-5">
+
+                    <form asp-action="AddSchedule" method="post" id="scheduleForm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="DoctorId" />
+
+                        <div asp-validation-summary="All" class="alert alert-danger rounded-3 mb-4"></div>
+
+                        <!-- CLINIC -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-dark">
+                                🏥 Clinic <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="ClinicId"
+                                    asp-items="ViewBag.Clinics"
+                                    class="form-select form-select-lg rounded-3">
+                                <option value="">— Select a Clinic —</option>
+                            </select>
+                            <span asp-validation-for="ClinicId" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <!-- DAY -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-dark">
+                                📆 Day of Week <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Day"
+                                    asp-items="Html.GetEnumSelectList<System.DayOfWeek>()"
+                                    class="form-select form-select-lg rounded-3">
+                            </select>
+                            <span asp-validation-for="Day" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <!-- TIME ROW -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold text-dark">
+                                    ⏰ Start Time <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="StartTime"
+                                       type="time"
+                                       class="form-control form-control-lg rounded-3" />
+                                <span asp-validation-for="StartTime" class="text-danger small mt-1 d-block"></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold text-dark">
+                                    ⏰ End Time <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="EndTime"
+                                       type="time"
+                                       class="form-control form-control-lg rounded-3" />
+                                <span asp-validation-for="EndTime" class="text-danger small mt-1 d-block"></span>
+                            </div>
+                        </div>
+
+                        <!-- SLOT DURATION -->
+                        <div class="mb-5">
+                            <label class="form-label fw-semibold text-dark">
+                                ⏱️ Slot Duration <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <input asp-for="SlotDurationMinutes"
+                                       type="number"
+                                       min="5"
+                                       max="120"
+                                       step="5"
+                                       class="form-control rounded-start-3" />
+                                <span class="input-group-text bg-light fw-semibold">minutes</span>
+                            </div>
+                            <span asp-validation-for="SlotDurationMinutes" class="text-danger small mt-1 d-block"></span>
+                            <div class="form-text mt-1">
+                                Recommended: 15, 20, 30, or 45 minutes per appointment.
+                            </div>
+                        </div>
+
+                        <!-- ACTIONS -->
+                        <div class="d-flex gap-3">
+                            <button type="submit"
+                                    class="btn btn-primary btn-lg px-5 fw-semibold rounded-3">
+                                ✅ Save Schedule
+                            </button>
+                            <a asp-action="Dashboard"
+                               asp-route-id="@Model.DoctorId"
+                               class="btn btn-outline-secondary btn-lg px-4 rounded-3">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
     </div>
+</div>
 
-    <div>
-        <label>Day</label>
-        <select asp-for="Day"
-                asp-items="Html.GetEnumSelectList<System.DayOfWeek>()">
-        </select>
-    </div>
-
-    <div>
-        <label>Start Time</label>
-        <input asp-for="StartTime"
-               type="time" />
-    </div>
-
-    <div>
-        <label>End Time</label>
-        <input asp-for="EndTime"
-               type="time" />
-    </div>
-
-    <br />
-
-    <button type="submit">
-        Add Schedule
-    </button>
-
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

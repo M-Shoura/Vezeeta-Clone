@@ -1,0 +1,189 @@
+@using Application.DTOs.Medical_Records
+@model MedicalRecordDto
+
+@{
+    ViewData["Title"] = "Edit Medical Record";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+            <h4>Edit Medical Record</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+                \n\n                <input asp-for="Id" type="hidden" />
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="PatientId" class="form-label"></label>
+
+                        <input asp-for="PatientId"
+                               class="form-control" />
+
+                        <span asp-validation-for="PatientId"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="AppointmentId" class="form-label"></label>
+
+                        <input asp-for="AppointmentId"
+                               class="form-control" />
+
+                        <span asp-validation-for="AppointmentId"
+                              class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Condition" class="form-label"></label>
+
+                    <input asp-for="Condition"
+                           class="form-control" />
+
+                    <span asp-validation-for="Condition"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Description" class="form-label"></label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="3"></textarea>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="DiagnosisCode" class="form-label"></label>
+
+                        <input asp-for="DiagnosisCode"
+                               class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="DiagnosedDate" class="form-label"></label>
+
+                        <input asp-for="DiagnosedDate"
+                               type="date"
+                               class="form-control" />
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="ResolvedDate" class="form-label"></label>
+
+                    <input asp-for="ResolvedDate"
+                           type="date"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Treatment" class="form-label"></label>
+
+                    <textarea asp-for="Treatment"
+                              class="form-control"
+                              rows="3"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Allergies" class="form-label"></label>
+
+                    <textarea asp-for="Allergies"
+                              class="form-control"
+                              rows="3"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Medications" class="form-label"></label>
+
+                    <textarea asp-for="Medications"
+                              class="form-control"
+                              rows="3"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="SurgeryDetails" class="form-label"></label>
+
+                    <textarea asp-for="SurgeryDetails"
+                              class="form-control"
+                              rows="3"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="FamilyHistory" class="form-label"></label>
+
+                    <textarea asp-for="FamilyHistory"
+                              class="form-control"
+                              rows="3"></textarea>
+
+                </div>
+
+                <div class="form-check mb-3">
+
+                    <input asp-for="IsActive"
+                           class="form-check-input" />
+
+                    <label asp-for="IsActive"
+                           class="form-check-label"></label>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-warning">
+
+                    Update
+
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Services;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
+using Application.Mappings;
 
 
 namespace Presentation.Extensions
@@ -26,6 +27,9 @@ namespace Presentation.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<IDoctorRepository, DoctorRepository>();
+            services.AddScoped<IDoctorService, DoctorService>();
+
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
@@ -35,6 +39,12 @@ namespace Presentation.Extensions
             services.AddScoped<IReviewService,  ReviewService>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentService, PaymentService>();
+
+            services.AddScoped<IDrugsService, DrugService>();
+            services.AddScoped<IPrescriptionService, PrescriptionService>();
+            services.AddScoped<IPrescriptionItemService, PrescriptionItemService>();
+            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddScoped<IMedicalRecordService, MedicalRecordService>();
             return services;
         }
     }
