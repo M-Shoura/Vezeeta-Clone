@@ -1,0 +1,2702 @@
+[
+  {
+    "name": "Paracetamol",
+    "description": "Paracetamol medication used in modern treatments",
+    "price": 23.94,
+    "genericName": "Paracetamol",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ibuprofen",
+    "description": "Ibuprofen medication used in modern treatments",
+    "price": 247.48,
+    "genericName": "Ibuprofen",
+    "manufacturer": "GSK",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Aspirin",
+    "description": "Aspirin medication used in modern treatments",
+    "price": 166.62,
+    "genericName": "Aspirin",
+    "manufacturer": "Pfizer",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Diclofenac",
+    "description": "Diclofenac medication used in modern treatments",
+    "price": 374.64,
+    "genericName": "Diclofenac",
+    "manufacturer": "Pfizer",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ketorolac",
+    "description": "Ketorolac medication used in modern treatments",
+    "price": 76.58,
+    "genericName": "Ketorolac",
+    "manufacturer": "Merck",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Meloxicam",
+    "description": "Meloxicam medication used in modern treatments",
+    "price": 51.94,
+    "genericName": "Meloxicam",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Celecoxib",
+    "description": "Celecoxib medication used in modern treatments",
+    "price": 366.55,
+    "genericName": "Celecoxib",
+    "manufacturer": "Roche",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Naproxen",
+    "description": "Naproxen medication used in modern treatments",
+    "price": 412.35,
+    "genericName": "Naproxen",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tramadol",
+    "description": "Tramadol medication used in modern treatments",
+    "price": 146.89,
+    "genericName": "Tramadol",
+    "manufacturer": "Roche",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Morphine",
+    "description": "Morphine medication used in modern treatments",
+    "price": 150.76,
+    "genericName": "Morphine",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Codeine",
+    "description": "Codeine medication used in modern treatments",
+    "price": 200.64,
+    "genericName": "Codeine",
+    "manufacturer": "Novartis",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Fentanyl",
+    "description": "Fentanyl medication used in modern treatments",
+    "price": 335.77,
+    "genericName": "Fentanyl",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oxycodone",
+    "description": "Oxycodone medication used in modern treatments",
+    "price": 439.84,
+    "genericName": "Oxycodone",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Hydromorphone",
+    "description": "Hydromorphone medication used in modern treatments",
+    "price": 136.21,
+    "genericName": "Hydromorphone",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Amoxicillin",
+    "description": "Amoxicillin medication used in modern treatments",
+    "price": 183.05,
+    "genericName": "Amoxicillin",
+    "manufacturer": "GSK",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Augmentin",
+    "description": "Augmentin medication used in modern treatments",
+    "price": 71.07,
+    "genericName": "Augmentin",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ampicillin",
+    "description": "Ampicillin medication used in modern treatments",
+    "price": 145.9,
+    "genericName": "Ampicillin",
+    "manufacturer": "GSK",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Penicillin",
+    "description": "Penicillin medication used in modern treatments",
+    "price": 438.78,
+    "genericName": "Penicillin",
+    "manufacturer": "Roche",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Azithromycin",
+    "description": "Azithromycin medication used in modern treatments",
+    "price": 329.1,
+    "genericName": "Azithromycin",
+    "manufacturer": "Sanofi",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clarithromycin",
+    "description": "Clarithromycin medication used in modern treatments",
+    "price": 458.21,
+    "genericName": "Clarithromycin",
+    "manufacturer": "Novartis",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Erythromycin",
+    "description": "Erythromycin medication used in modern treatments",
+    "price": 75.59,
+    "genericName": "Erythromycin",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ciprofloxacin",
+    "description": "Ciprofloxacin medication used in modern treatments",
+    "price": 409.15,
+    "genericName": "Ciprofloxacin",
+    "manufacturer": "Bayer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Levofloxacin",
+    "description": "Levofloxacin medication used in modern treatments",
+    "price": 251.16,
+    "genericName": "Levofloxacin",
+    "manufacturer": "Sanofi",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Moxifloxacin",
+    "description": "Moxifloxacin medication used in modern treatments",
+    "price": 55.09,
+    "genericName": "Moxifloxacin",
+    "manufacturer": "Roche",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Metronidazole",
+    "description": "Metronidazole medication used in modern treatments",
+    "price": 215.77,
+    "genericName": "Metronidazole",
+    "manufacturer": "GSK",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Vancomycin",
+    "description": "Vancomycin medication used in modern treatments",
+    "price": 260.96,
+    "genericName": "Vancomycin",
+    "manufacturer": "Pfizer",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ceftriaxone",
+    "description": "Ceftriaxone medication used in modern treatments",
+    "price": 286.01,
+    "genericName": "Ceftriaxone",
+    "manufacturer": "AstraZeneca",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Cefuroxime",
+    "description": "Cefuroxime medication used in modern treatments",
+    "price": 233.29,
+    "genericName": "Cefuroxime",
+    "manufacturer": "Merck",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Cefixime",
+    "description": "Cefixime medication used in modern treatments",
+    "price": 325.51,
+    "genericName": "Cefixime",
+    "manufacturer": "Sanofi",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Doxycycline",
+    "description": "Doxycycline medication used in modern treatments",
+    "price": 258.48,
+    "genericName": "Doxycycline",
+    "manufacturer": "AstraZeneca",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tetracycline",
+    "description": "Tetracycline medication used in modern treatments",
+    "price": 140.03,
+    "genericName": "Tetracycline",
+    "manufacturer": "Bayer",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clindamycin",
+    "description": "Clindamycin medication used in modern treatments",
+    "price": 312.52,
+    "genericName": "Clindamycin",
+    "manufacturer": "Sanofi",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Gentamicin",
+    "description": "Gentamicin medication used in modern treatments",
+    "price": 126.05,
+    "genericName": "Gentamicin",
+    "manufacturer": "Roche",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Amikacin",
+    "description": "Amikacin medication used in modern treatments",
+    "price": 268.4,
+    "genericName": "Amikacin",
+    "manufacturer": "GSK",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Meropenem",
+    "description": "Meropenem medication used in modern treatments",
+    "price": 23.81,
+    "genericName": "Meropenem",
+    "manufacturer": "GSK",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Imipenem",
+    "description": "Imipenem medication used in modern treatments",
+    "price": 125.57,
+    "genericName": "Imipenem",
+    "manufacturer": "Pfizer",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Fluconazole",
+    "description": "Fluconazole medication used in modern treatments",
+    "price": 166.29,
+    "genericName": "Fluconazole",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ketoconazole",
+    "description": "Ketoconazole medication used in modern treatments",
+    "price": 425.7,
+    "genericName": "Ketoconazole",
+    "manufacturer": "Merck",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Itraconazole",
+    "description": "Itraconazole medication used in modern treatments",
+    "price": 458.76,
+    "genericName": "Itraconazole",
+    "manufacturer": "Sanofi",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Voriconazole",
+    "description": "Voriconazole medication used in modern treatments",
+    "price": 348.33,
+    "genericName": "Voriconazole",
+    "manufacturer": "Novartis",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Acyclovir",
+    "description": "Acyclovir medication used in modern treatments",
+    "price": 74.6,
+    "genericName": "Acyclovir",
+    "manufacturer": "Bayer",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Valacyclovir",
+    "description": "Valacyclovir medication used in modern treatments",
+    "price": 134.9,
+    "genericName": "Valacyclovir",
+    "manufacturer": "GSK",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oseltamivir",
+    "description": "Oseltamivir medication used in modern treatments",
+    "price": 352.68,
+    "genericName": "Oseltamivir",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Remdesivir",
+    "description": "Remdesivir medication used in modern treatments",
+    "price": 236.63,
+    "genericName": "Remdesivir",
+    "manufacturer": "Pfizer",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Metformin",
+    "description": "Metformin medication used in modern treatments",
+    "price": 130.3,
+    "genericName": "Metformin",
+    "manufacturer": "Sanofi",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Gliclazide",
+    "description": "Gliclazide medication used in modern treatments",
+    "price": 127.68,
+    "genericName": "Gliclazide",
+    "manufacturer": "Novartis",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Glimepiride",
+    "description": "Glimepiride medication used in modern treatments",
+    "price": 282.44,
+    "genericName": "Glimepiride",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Sitagliptin",
+    "description": "Sitagliptin medication used in modern treatments",
+    "price": 339.14,
+    "genericName": "Sitagliptin",
+    "manufacturer": "Merck",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Linagliptin",
+    "description": "Linagliptin medication used in modern treatments",
+    "price": 485.21,
+    "genericName": "Linagliptin",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Empagliflozin",
+    "description": "Empagliflozin medication used in modern treatments",
+    "price": 499.07,
+    "genericName": "Empagliflozin",
+    "manufacturer": "GSK",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Dapagliflozin",
+    "description": "Dapagliflozin medication used in modern treatments",
+    "price": 281.86,
+    "genericName": "Dapagliflozin",
+    "manufacturer": "AstraZeneca",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Canagliflozin",
+    "description": "Canagliflozin medication used in modern treatments",
+    "price": 278.7,
+    "genericName": "Canagliflozin",
+    "manufacturer": "AstraZeneca",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Pioglitazone",
+    "description": "Pioglitazone medication used in modern treatments",
+    "price": 16.96,
+    "genericName": "Pioglitazone",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Insulin Glargine",
+    "description": "Insulin Glargine medication used in modern treatments",
+    "price": 333.97,
+    "genericName": "Insulin Glargine",
+    "manufacturer": "Bayer",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Insulin Aspart",
+    "description": "Insulin Aspart medication used in modern treatments",
+    "price": 424.92,
+    "genericName": "Insulin Aspart",
+    "manufacturer": "Novartis",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Insulin Lispro",
+    "description": "Insulin Lispro medication used in modern treatments",
+    "price": 403.19,
+    "genericName": "Insulin Lispro",
+    "manufacturer": "Pfizer",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Atorvastatin",
+    "description": "Atorvastatin medication used in modern treatments",
+    "price": 187.05,
+    "genericName": "Atorvastatin",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Rosuvastatin",
+    "description": "Rosuvastatin medication used in modern treatments",
+    "price": 246.14,
+    "genericName": "Rosuvastatin",
+    "manufacturer": "Merck",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Simvastatin",
+    "description": "Simvastatin medication used in modern treatments",
+    "price": 136.84,
+    "genericName": "Simvastatin",
+    "manufacturer": "Merck",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Pravastatin",
+    "description": "Pravastatin medication used in modern treatments",
+    "price": 121.86,
+    "genericName": "Pravastatin",
+    "manufacturer": "Novartis",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Fenofibrate",
+    "description": "Fenofibrate medication used in modern treatments",
+    "price": 24.59,
+    "genericName": "Fenofibrate",
+    "manufacturer": "AstraZeneca",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lisinopril",
+    "description": "Lisinopril medication used in modern treatments",
+    "price": 451.67,
+    "genericName": "Lisinopril",
+    "manufacturer": "Merck",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Enalapril",
+    "description": "Enalapril medication used in modern treatments",
+    "price": 353.63,
+    "genericName": "Enalapril",
+    "manufacturer": "Roche",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ramipril",
+    "description": "Ramipril medication used in modern treatments",
+    "price": 368.42,
+    "genericName": "Ramipril",
+    "manufacturer": "Sanofi",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Losartan",
+    "description": "Losartan medication used in modern treatments",
+    "price": 94.72,
+    "genericName": "Losartan",
+    "manufacturer": "Pfizer",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Valsartan",
+    "description": "Valsartan medication used in modern treatments",
+    "price": 464.1,
+    "genericName": "Valsartan",
+    "manufacturer": "Novartis",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Candesartan",
+    "description": "Candesartan medication used in modern treatments",
+    "price": 265.77,
+    "genericName": "Candesartan",
+    "manufacturer": "Sanofi",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Amlodipine",
+    "description": "Amlodipine medication used in modern treatments",
+    "price": 303.24,
+    "genericName": "Amlodipine",
+    "manufacturer": "GSK",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Nifedipine",
+    "description": "Nifedipine medication used in modern treatments",
+    "price": 467.29,
+    "genericName": "Nifedipine",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Verapamil",
+    "description": "Verapamil medication used in modern treatments",
+    "price": 270.31,
+    "genericName": "Verapamil",
+    "manufacturer": "Merck",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Diltiazem",
+    "description": "Diltiazem medication used in modern treatments",
+    "price": 239.27,
+    "genericName": "Diltiazem",
+    "manufacturer": "Sanofi",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Bisoprolol",
+    "description": "Bisoprolol medication used in modern treatments",
+    "price": 396.83,
+    "genericName": "Bisoprolol",
+    "manufacturer": "Novartis",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Metoprolol",
+    "description": "Metoprolol medication used in modern treatments",
+    "price": 208.82,
+    "genericName": "Metoprolol",
+    "manufacturer": "Bayer",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Carvedilol",
+    "description": "Carvedilol medication used in modern treatments",
+    "price": 411.55,
+    "genericName": "Carvedilol",
+    "manufacturer": "Pfizer",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Atenolol",
+    "description": "Atenolol medication used in modern treatments",
+    "price": 67.19,
+    "genericName": "Atenolol",
+    "manufacturer": "Sanofi",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Nebivolol",
+    "description": "Nebivolol medication used in modern treatments",
+    "price": 291.86,
+    "genericName": "Nebivolol",
+    "manufacturer": "Merck",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Hydrochlorothiazide",
+    "description": "Hydrochlorothiazide medication used in modern treatments",
+    "price": 276.02,
+    "genericName": "Hydrochlorothiazide",
+    "manufacturer": "Pfizer",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Furosemide",
+    "description": "Furosemide medication used in modern treatments",
+    "price": 74.77,
+    "genericName": "Furosemide",
+    "manufacturer": "Pfizer",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Spironolactone",
+    "description": "Spironolactone medication used in modern treatments",
+    "price": 275.57,
+    "genericName": "Spironolactone",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Torsemide",
+    "description": "Torsemide medication used in modern treatments",
+    "price": 324.33,
+    "genericName": "Torsemide",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clopidogrel",
+    "description": "Clopidogrel medication used in modern treatments",
+    "price": 373.85,
+    "genericName": "Clopidogrel",
+    "manufacturer": "GSK",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Warfarin",
+    "description": "Warfarin medication used in modern treatments",
+    "price": 100.54,
+    "genericName": "Warfarin",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Heparin",
+    "description": "Heparin medication used in modern treatments",
+    "price": 40.24,
+    "genericName": "Heparin",
+    "manufacturer": "Merck",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Rivaroxaban",
+    "description": "Rivaroxaban medication used in modern treatments",
+    "price": 240.69,
+    "genericName": "Rivaroxaban",
+    "manufacturer": "Sanofi",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Apixaban",
+    "description": "Apixaban medication used in modern treatments",
+    "price": 349.33,
+    "genericName": "Apixaban",
+    "manufacturer": "Merck",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Dabigatran",
+    "description": "Dabigatran medication used in modern treatments",
+    "price": 36.07,
+    "genericName": "Dabigatran",
+    "manufacturer": "Pfizer",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Nitroglycerin",
+    "description": "Nitroglycerin medication used in modern treatments",
+    "price": 394.97,
+    "genericName": "Nitroglycerin",
+    "manufacturer": "Pfizer",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Digoxin",
+    "description": "Digoxin medication used in modern treatments",
+    "price": 332.61,
+    "genericName": "Digoxin",
+    "manufacturer": "Merck",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Amiodarone",
+    "description": "Amiodarone medication used in modern treatments",
+    "price": 430.92,
+    "genericName": "Amiodarone",
+    "manufacturer": "GSK",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Omeprazole",
+    "description": "Omeprazole medication used in modern treatments",
+    "price": 39.08,
+    "genericName": "Omeprazole",
+    "manufacturer": "Merck",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Pantoprazole",
+    "description": "Pantoprazole medication used in modern treatments",
+    "price": 218.43,
+    "genericName": "Pantoprazole",
+    "manufacturer": "Pfizer",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Esomeprazole",
+    "description": "Esomeprazole medication used in modern treatments",
+    "price": 236.51,
+    "genericName": "Esomeprazole",
+    "manufacturer": "AstraZeneca",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lansoprazole",
+    "description": "Lansoprazole medication used in modern treatments",
+    "price": 266.24,
+    "genericName": "Lansoprazole",
+    "manufacturer": "AstraZeneca",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Rabeprazole",
+    "description": "Rabeprazole medication used in modern treatments",
+    "price": 246.8,
+    "genericName": "Rabeprazole",
+    "manufacturer": "Novartis",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Famotidine",
+    "description": "Famotidine medication used in modern treatments",
+    "price": 361.95,
+    "genericName": "Famotidine",
+    "manufacturer": "Novartis",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ranitidine",
+    "description": "Ranitidine medication used in modern treatments",
+    "price": 75.29,
+    "genericName": "Ranitidine",
+    "manufacturer": "GSK",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Sucralfate",
+    "description": "Sucralfate medication used in modern treatments",
+    "price": 24.38,
+    "genericName": "Sucralfate",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Domperidone",
+    "description": "Domperidone medication used in modern treatments",
+    "price": 490.31,
+    "genericName": "Domperidone",
+    "manufacturer": "AstraZeneca",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ondansetron",
+    "description": "Ondansetron medication used in modern treatments",
+    "price": 318.92,
+    "genericName": "Ondansetron",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Metoclopramide",
+    "description": "Metoclopramide medication used in modern treatments",
+    "price": 151.47,
+    "genericName": "Metoclopramide",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Loperamide",
+    "description": "Loperamide medication used in modern treatments",
+    "price": 387.44,
+    "genericName": "Loperamide",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lactulose",
+    "description": "Lactulose medication used in modern treatments",
+    "price": 474.05,
+    "genericName": "Lactulose",
+    "manufacturer": "Sanofi",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Bisacodyl",
+    "description": "Bisacodyl medication used in modern treatments",
+    "price": 167.26,
+    "genericName": "Bisacodyl",
+    "manufacturer": "Merck",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Cetirizine",
+    "description": "Cetirizine medication used in modern treatments",
+    "price": 409.94,
+    "genericName": "Cetirizine",
+    "manufacturer": "AstraZeneca",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Loratadine",
+    "description": "Loratadine medication used in modern treatments",
+    "price": 85.22,
+    "genericName": "Loratadine",
+    "manufacturer": "GSK",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Fexofenadine",
+    "description": "Fexofenadine medication used in modern treatments",
+    "price": 244.42,
+    "genericName": "Fexofenadine",
+    "manufacturer": "Merck",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Desloratadine",
+    "description": "Desloratadine medication used in modern treatments",
+    "price": 348.63,
+    "genericName": "Desloratadine",
+    "manufacturer": "Bayer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Chlorpheniramine",
+    "description": "Chlorpheniramine medication used in modern treatments",
+    "price": 198.28,
+    "genericName": "Chlorpheniramine",
+    "manufacturer": "Pfizer",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Diphenhydramine",
+    "description": "Diphenhydramine medication used in modern treatments",
+    "price": 70.28,
+    "genericName": "Diphenhydramine",
+    "manufacturer": "Bayer",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Montelukast",
+    "description": "Montelukast medication used in modern treatments",
+    "price": 94.55,
+    "genericName": "Montelukast",
+    "manufacturer": "GSK",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Salbutamol",
+    "description": "Salbutamol medication used in modern treatments",
+    "price": 282.57,
+    "genericName": "Salbutamol",
+    "manufacturer": "Bayer",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Budesonide",
+    "description": "Budesonide medication used in modern treatments",
+    "price": 388.06,
+    "genericName": "Budesonide",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Formoterol",
+    "description": "Formoterol medication used in modern treatments",
+    "price": 229.76,
+    "genericName": "Formoterol",
+    "manufacturer": "GSK",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Salmeterol",
+    "description": "Salmeterol medication used in modern treatments",
+    "price": 183.97,
+    "genericName": "Salmeterol",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tiotropium",
+    "description": "Tiotropium medication used in modern treatments",
+    "price": 84.48,
+    "genericName": "Tiotropium",
+    "manufacturer": "AstraZeneca",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ipratropium",
+    "description": "Ipratropium medication used in modern treatments",
+    "price": 425.99,
+    "genericName": "Ipratropium",
+    "manufacturer": "Novartis",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Prednisolone",
+    "description": "Prednisolone medication used in modern treatments",
+    "price": 370.34,
+    "genericName": "Prednisolone",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Dexamethasone",
+    "description": "Dexamethasone medication used in modern treatments",
+    "price": 82.44,
+    "genericName": "Dexamethasone",
+    "manufacturer": "Novartis",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Hydrocortisone",
+    "description": "Hydrocortisone medication used in modern treatments",
+    "price": 324.6,
+    "genericName": "Hydrocortisone",
+    "manufacturer": "Merck",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Methylprednisolone",
+    "description": "Methylprednisolone medication used in modern treatments",
+    "price": 11.0,
+    "genericName": "Methylprednisolone",
+    "manufacturer": "AstraZeneca",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Levothyroxine",
+    "description": "Levothyroxine medication used in modern treatments",
+    "price": 294.28,
+    "genericName": "Levothyroxine",
+    "manufacturer": "Merck",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Carbimazole",
+    "description": "Carbimazole medication used in modern treatments",
+    "price": 70.32,
+    "genericName": "Carbimazole",
+    "manufacturer": "Novartis",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Propylthiouracil",
+    "description": "Propylthiouracil medication used in modern treatments",
+    "price": 180.33,
+    "genericName": "Propylthiouracil",
+    "manufacturer": "Pfizer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Fluoxetine",
+    "description": "Fluoxetine medication used in modern treatments",
+    "price": 424.25,
+    "genericName": "Fluoxetine",
+    "manufacturer": "Merck",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Sertraline",
+    "description": "Sertraline medication used in modern treatments",
+    "price": 129.22,
+    "genericName": "Sertraline",
+    "manufacturer": "Merck",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Escitalopram",
+    "description": "Escitalopram medication used in modern treatments",
+    "price": 275.58,
+    "genericName": "Escitalopram",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Citalopram",
+    "description": "Citalopram medication used in modern treatments",
+    "price": 35.19,
+    "genericName": "Citalopram",
+    "manufacturer": "Roche",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Paroxetine",
+    "description": "Paroxetine medication used in modern treatments",
+    "price": 291.9,
+    "genericName": "Paroxetine",
+    "manufacturer": "Novartis",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Venlafaxine",
+    "description": "Venlafaxine medication used in modern treatments",
+    "price": 116.33,
+    "genericName": "Venlafaxine",
+    "manufacturer": "Bayer",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Duloxetine",
+    "description": "Duloxetine medication used in modern treatments",
+    "price": 452.4,
+    "genericName": "Duloxetine",
+    "manufacturer": "Merck",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Bupropion",
+    "description": "Bupropion medication used in modern treatments",
+    "price": 309.8,
+    "genericName": "Bupropion",
+    "manufacturer": "GSK",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Amitriptyline",
+    "description": "Amitriptyline medication used in modern treatments",
+    "price": 421.48,
+    "genericName": "Amitriptyline",
+    "manufacturer": "AstraZeneca",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Nortriptyline",
+    "description": "Nortriptyline medication used in modern treatments",
+    "price": 219.28,
+    "genericName": "Nortriptyline",
+    "manufacturer": "GSK",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clomipramine",
+    "description": "Clomipramine medication used in modern treatments",
+    "price": 168.07,
+    "genericName": "Clomipramine",
+    "manufacturer": "AstraZeneca",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Alprazolam",
+    "description": "Alprazolam medication used in modern treatments",
+    "price": 345.62,
+    "genericName": "Alprazolam",
+    "manufacturer": "Novartis",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Diazepam",
+    "description": "Diazepam medication used in modern treatments",
+    "price": 296.48,
+    "genericName": "Diazepam",
+    "manufacturer": "Merck",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lorazepam",
+    "description": "Lorazepam medication used in modern treatments",
+    "price": 426.2,
+    "genericName": "Lorazepam",
+    "manufacturer": "Merck",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clonazepam",
+    "description": "Clonazepam medication used in modern treatments",
+    "price": 253.05,
+    "genericName": "Clonazepam",
+    "manufacturer": "AstraZeneca",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Olanzapine",
+    "description": "Olanzapine medication used in modern treatments",
+    "price": 488.6,
+    "genericName": "Olanzapine",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Quetiapine",
+    "description": "Quetiapine medication used in modern treatments",
+    "price": 139.27,
+    "genericName": "Quetiapine",
+    "manufacturer": "Novartis",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Risperidone",
+    "description": "Risperidone medication used in modern treatments",
+    "price": 181.76,
+    "genericName": "Risperidone",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Haloperidol",
+    "description": "Haloperidol medication used in modern treatments",
+    "price": 334.9,
+    "genericName": "Haloperidol",
+    "manufacturer": "GSK",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lithium",
+    "description": "Lithium medication used in modern treatments",
+    "price": 104.58,
+    "genericName": "Lithium",
+    "manufacturer": "AstraZeneca",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Valproic Acid",
+    "description": "Valproic Acid medication used in modern treatments",
+    "price": 346.51,
+    "genericName": "Valproic Acid",
+    "manufacturer": "Novartis",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Carbamazepine",
+    "description": "Carbamazepine medication used in modern treatments",
+    "price": 221.17,
+    "genericName": "Carbamazepine",
+    "manufacturer": "GSK",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lamotrigine",
+    "description": "Lamotrigine medication used in modern treatments",
+    "price": 389.77,
+    "genericName": "Lamotrigine",
+    "manufacturer": "Bayer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Levetiracetam",
+    "description": "Levetiracetam medication used in modern treatments",
+    "price": 149.47,
+    "genericName": "Levetiracetam",
+    "manufacturer": "Sanofi",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Phenytoin",
+    "description": "Phenytoin medication used in modern treatments",
+    "price": 363.77,
+    "genericName": "Phenytoin",
+    "manufacturer": "Novartis",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Gabapentin",
+    "description": "Gabapentin medication used in modern treatments",
+    "price": 136.94,
+    "genericName": "Gabapentin",
+    "manufacturer": "Bayer",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Pregabalin",
+    "description": "Pregabalin medication used in modern treatments",
+    "price": 367.64,
+    "genericName": "Pregabalin",
+    "manufacturer": "GSK",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Baclofen",
+    "description": "Baclofen medication used in modern treatments",
+    "price": 142.66,
+    "genericName": "Baclofen",
+    "manufacturer": "AstraZeneca",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tizanidine",
+    "description": "Tizanidine medication used in modern treatments",
+    "price": 139.89,
+    "genericName": "Tizanidine",
+    "manufacturer": "GSK",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Allopurinol",
+    "description": "Allopurinol medication used in modern treatments",
+    "price": 190.35,
+    "genericName": "Allopurinol",
+    "manufacturer": "AstraZeneca",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Colchicine",
+    "description": "Colchicine medication used in modern treatments",
+    "price": 194.59,
+    "genericName": "Colchicine",
+    "manufacturer": "Sanofi",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Methotrexate",
+    "description": "Methotrexate medication used in modern treatments",
+    "price": 418.34,
+    "genericName": "Methotrexate",
+    "manufacturer": "Roche",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Hydroxychloroquine",
+    "description": "Hydroxychloroquine medication used in modern treatments",
+    "price": 43.39,
+    "genericName": "Hydroxychloroquine",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Sulfasalazine",
+    "description": "Sulfasalazine medication used in modern treatments",
+    "price": 247.1,
+    "genericName": "Sulfasalazine",
+    "manufacturer": "AstraZeneca",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Adalimumab",
+    "description": "Adalimumab medication used in modern treatments",
+    "price": 214.14,
+    "genericName": "Adalimumab",
+    "manufacturer": "Sanofi",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Infliximab",
+    "description": "Infliximab medication used in modern treatments",
+    "price": 406.31,
+    "genericName": "Infliximab",
+    "manufacturer": "Roche",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Etanercept",
+    "description": "Etanercept medication used in modern treatments",
+    "price": 228.4,
+    "genericName": "Etanercept",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Cyclosporine",
+    "description": "Cyclosporine medication used in modern treatments",
+    "price": 494.46,
+    "genericName": "Cyclosporine",
+    "manufacturer": "AstraZeneca",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tacrolimus",
+    "description": "Tacrolimus medication used in modern treatments",
+    "price": 263.54,
+    "genericName": "Tacrolimus",
+    "manufacturer": "Roche",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Mycophenolate",
+    "description": "Mycophenolate medication used in modern treatments",
+    "price": 215.23,
+    "genericName": "Mycophenolate",
+    "manufacturer": "Pfizer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Azathioprine",
+    "description": "Azathioprine medication used in modern treatments",
+    "price": 380.78,
+    "genericName": "Azathioprine",
+    "manufacturer": "Bayer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tamoxifen",
+    "description": "Tamoxifen medication used in modern treatments",
+    "price": 321.43,
+    "genericName": "Tamoxifen",
+    "manufacturer": "Novartis",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Anastrozole",
+    "description": "Anastrozole medication used in modern treatments",
+    "price": 403.61,
+    "genericName": "Anastrozole",
+    "manufacturer": "Merck",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Letrozole",
+    "description": "Letrozole medication used in modern treatments",
+    "price": 66.64,
+    "genericName": "Letrozole",
+    "manufacturer": "GSK",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Docetaxel",
+    "description": "Docetaxel medication used in modern treatments",
+    "price": 150.47,
+    "genericName": "Docetaxel",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Paclitaxel",
+    "description": "Paclitaxel medication used in modern treatments",
+    "price": 355.05,
+    "genericName": "Paclitaxel",
+    "manufacturer": "Pfizer",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Cisplatin",
+    "description": "Cisplatin medication used in modern treatments",
+    "price": 81.64,
+    "genericName": "Cisplatin",
+    "manufacturer": "Bayer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Carboplatin",
+    "description": "Carboplatin medication used in modern treatments",
+    "price": 249.85,
+    "genericName": "Carboplatin",
+    "manufacturer": "Pfizer",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Cyclophosphamide",
+    "description": "Cyclophosphamide medication used in modern treatments",
+    "price": 320.21,
+    "genericName": "Cyclophosphamide",
+    "manufacturer": "GSK",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Doxorubicin",
+    "description": "Doxorubicin medication used in modern treatments",
+    "price": 288.17,
+    "genericName": "Doxorubicin",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Vincristine",
+    "description": "Vincristine medication used in modern treatments",
+    "price": 163.64,
+    "genericName": "Vincristine",
+    "manufacturer": "Merck",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Capecitabine",
+    "description": "Capecitabine medication used in modern treatments",
+    "price": 158.04,
+    "genericName": "Capecitabine",
+    "manufacturer": "Novartis",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Mesalazine",
+    "description": "Mesalazine medication used in modern treatments",
+    "price": 141.4,
+    "genericName": "Mesalazine",
+    "manufacturer": "Roche",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ursodeoxycholic Acid",
+    "description": "Ursodeoxycholic Acid medication used in modern treatments",
+    "price": 395.71,
+    "genericName": "Ursodeoxycholic Acid",
+    "manufacturer": "GSK",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Finasteride",
+    "description": "Finasteride medication used in modern treatments",
+    "price": 149.26,
+    "genericName": "Finasteride",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tamsulosin",
+    "description": "Tamsulosin medication used in modern treatments",
+    "price": 315.6,
+    "genericName": "Tamsulosin",
+    "manufacturer": "GSK",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Sildenafil",
+    "description": "Sildenafil medication used in modern treatments",
+    "price": 284.43,
+    "genericName": "Sildenafil",
+    "manufacturer": "Novartis",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tadalafil",
+    "description": "Tadalafil medication used in modern treatments",
+    "price": 270.88,
+    "genericName": "Tadalafil",
+    "manufacturer": "Sanofi",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oxybutynin",
+    "description": "Oxybutynin medication used in modern treatments",
+    "price": 293.83,
+    "genericName": "Oxybutynin",
+    "manufacturer": "GSK",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Mirabegron",
+    "description": "Mirabegron medication used in modern treatments",
+    "price": 86.29,
+    "genericName": "Mirabegron",
+    "manufacturer": "Bayer",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ferrous Sulfate",
+    "description": "Ferrous Sulfate medication used in modern treatments",
+    "price": 251.82,
+    "genericName": "Ferrous Sulfate",
+    "manufacturer": "Roche",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Folic Acid",
+    "description": "Folic Acid medication used in modern treatments",
+    "price": 221.68,
+    "genericName": "Folic Acid",
+    "manufacturer": "Sanofi",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Vitamin B12",
+    "description": "Vitamin B12 medication used in modern treatments",
+    "price": 333.58,
+    "genericName": "Vitamin B12",
+    "manufacturer": "Bayer",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Vitamin D3",
+    "description": "Vitamin D3 medication used in modern treatments",
+    "price": 61.31,
+    "genericName": "Vitamin D3",
+    "manufacturer": "Pfizer",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Calcium Carbonate",
+    "description": "Calcium Carbonate medication used in modern treatments",
+    "price": 234.51,
+    "genericName": "Calcium Carbonate",
+    "manufacturer": "GSK",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Magnesium Oxide",
+    "description": "Magnesium Oxide medication used in modern treatments",
+    "price": 438.91,
+    "genericName": "Magnesium Oxide",
+    "manufacturer": "AstraZeneca",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Zinc Sulfate",
+    "description": "Zinc Sulfate medication used in modern treatments",
+    "price": 133.86,
+    "genericName": "Zinc Sulfate",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Phenytoin Variant 191",
+    "description": "Phenytoin medication used in modern treatments",
+    "price": 363.77,
+    "genericName": "Phenytoin",
+    "manufacturer": "Novartis",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Glimepiride Variant 192",
+    "description": "Glimepiride medication used in modern treatments",
+    "price": 282.44,
+    "genericName": "Glimepiride",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Valacyclovir Variant 193",
+    "description": "Valacyclovir medication used in modern treatments",
+    "price": 134.9,
+    "genericName": "Valacyclovir",
+    "manufacturer": "GSK",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Bisacodyl Variant 194",
+    "description": "Bisacodyl medication used in modern treatments",
+    "price": 167.26,
+    "genericName": "Bisacodyl",
+    "manufacturer": "Merck",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Sucralfate Variant 195",
+    "description": "Sucralfate medication used in modern treatments",
+    "price": 24.38,
+    "genericName": "Sucralfate",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Apixaban Variant 196",
+    "description": "Apixaban medication used in modern treatments",
+    "price": 349.33,
+    "genericName": "Apixaban",
+    "manufacturer": "Merck",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Fluoxetine Variant 197",
+    "description": "Fluoxetine medication used in modern treatments",
+    "price": 424.25,
+    "genericName": "Fluoxetine",
+    "manufacturer": "Merck",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Propylthiouracil Variant 198",
+    "description": "Propylthiouracil medication used in modern treatments",
+    "price": 180.33,
+    "genericName": "Propylthiouracil",
+    "manufacturer": "Pfizer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Codeine Variant 199",
+    "description": "Codeine medication used in modern treatments",
+    "price": 200.64,
+    "genericName": "Codeine",
+    "manufacturer": "Novartis",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Candesartan Variant 200",
+    "description": "Candesartan medication used in modern treatments",
+    "price": 265.77,
+    "genericName": "Candesartan",
+    "manufacturer": "Sanofi",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clopidogrel Variant 201",
+    "description": "Clopidogrel medication used in modern treatments",
+    "price": 373.85,
+    "genericName": "Clopidogrel",
+    "manufacturer": "GSK",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Digoxin Variant 202",
+    "description": "Digoxin medication used in modern treatments",
+    "price": 332.61,
+    "genericName": "Digoxin",
+    "manufacturer": "Merck",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oseltamivir Variant 203",
+    "description": "Oseltamivir medication used in modern treatments",
+    "price": 352.68,
+    "genericName": "Oseltamivir",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Esomeprazole Variant 204",
+    "description": "Esomeprazole medication used in modern treatments",
+    "price": 236.51,
+    "genericName": "Esomeprazole",
+    "manufacturer": "AstraZeneca",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Atorvastatin Variant 205",
+    "description": "Atorvastatin medication used in modern treatments",
+    "price": 187.05,
+    "genericName": "Atorvastatin",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Domperidone Variant 206",
+    "description": "Domperidone medication used in modern treatments",
+    "price": 490.31,
+    "genericName": "Domperidone",
+    "manufacturer": "AstraZeneca",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Atorvastatin Variant 207",
+    "description": "Atorvastatin medication used in modern treatments",
+    "price": 187.05,
+    "genericName": "Atorvastatin",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Nitroglycerin Variant 208",
+    "description": "Nitroglycerin medication used in modern treatments",
+    "price": 394.97,
+    "genericName": "Nitroglycerin",
+    "manufacturer": "Pfizer",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Bisoprolol Variant 209",
+    "description": "Bisoprolol medication used in modern treatments",
+    "price": 396.83,
+    "genericName": "Bisoprolol",
+    "manufacturer": "Novartis",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Letrozole Variant 210",
+    "description": "Letrozole medication used in modern treatments",
+    "price": 66.64,
+    "genericName": "Letrozole",
+    "manufacturer": "GSK",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lisinopril Variant 211",
+    "description": "Lisinopril medication used in modern treatments",
+    "price": 451.67,
+    "genericName": "Lisinopril",
+    "manufacturer": "Merck",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oxycodone Variant 212",
+    "description": "Oxycodone medication used in modern treatments",
+    "price": 439.84,
+    "genericName": "Oxycodone",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Bisoprolol Variant 209 Variant 213",
+    "description": "Bisoprolol medication used in modern treatments",
+    "price": 396.83,
+    "genericName": "Bisoprolol",
+    "manufacturer": "Novartis",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Quetiapine Variant 214",
+    "description": "Quetiapine medication used in modern treatments",
+    "price": 139.27,
+    "genericName": "Quetiapine",
+    "manufacturer": "Novartis",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Verapamil Variant 215",
+    "description": "Verapamil medication used in modern treatments",
+    "price": 270.31,
+    "genericName": "Verapamil",
+    "manufacturer": "Merck",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Valacyclovir Variant 216",
+    "description": "Valacyclovir medication used in modern treatments",
+    "price": 134.9,
+    "genericName": "Valacyclovir",
+    "manufacturer": "GSK",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Glimepiride Variant 217",
+    "description": "Glimepiride medication used in modern treatments",
+    "price": 282.44,
+    "genericName": "Glimepiride",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Amlodipine Variant 218",
+    "description": "Amlodipine medication used in modern treatments",
+    "price": 303.24,
+    "genericName": "Amlodipine",
+    "manufacturer": "GSK",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oseltamivir Variant 203 Variant 219",
+    "description": "Oseltamivir medication used in modern treatments",
+    "price": 352.68,
+    "genericName": "Oseltamivir",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Paroxetine Variant 220",
+    "description": "Paroxetine medication used in modern treatments",
+    "price": 291.9,
+    "genericName": "Paroxetine",
+    "manufacturer": "Novartis",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oseltamivir Variant 221",
+    "description": "Oseltamivir medication used in modern treatments",
+    "price": 352.68,
+    "genericName": "Oseltamivir",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Imipenem Variant 222",
+    "description": "Imipenem medication used in modern treatments",
+    "price": 125.57,
+    "genericName": "Imipenem",
+    "manufacturer": "Pfizer",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Hydrochlorothiazide Variant 223",
+    "description": "Hydrochlorothiazide medication used in modern treatments",
+    "price": 276.02,
+    "genericName": "Hydrochlorothiazide",
+    "manufacturer": "Pfizer",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Esomeprazole Variant 204 Variant 224",
+    "description": "Esomeprazole medication used in modern treatments",
+    "price": 236.51,
+    "genericName": "Esomeprazole",
+    "manufacturer": "AstraZeneca",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Fenofibrate Variant 225",
+    "description": "Fenofibrate medication used in modern treatments",
+    "price": 24.59,
+    "genericName": "Fenofibrate",
+    "manufacturer": "AstraZeneca",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Meropenem Variant 226",
+    "description": "Meropenem medication used in modern treatments",
+    "price": 23.81,
+    "genericName": "Meropenem",
+    "manufacturer": "GSK",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Omeprazole Variant 227",
+    "description": "Omeprazole medication used in modern treatments",
+    "price": 39.08,
+    "genericName": "Omeprazole",
+    "manufacturer": "Merck",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Verapamil Variant 215 Variant 228",
+    "description": "Verapamil medication used in modern treatments",
+    "price": 270.31,
+    "genericName": "Verapamil",
+    "manufacturer": "Merck",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clomipramine Variant 229",
+    "description": "Clomipramine medication used in modern treatments",
+    "price": 168.07,
+    "genericName": "Clomipramine",
+    "manufacturer": "AstraZeneca",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Hydromorphone Variant 230",
+    "description": "Hydromorphone medication used in modern treatments",
+    "price": 136.21,
+    "genericName": "Hydromorphone",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Mirabegron Variant 231",
+    "description": "Mirabegron medication used in modern treatments",
+    "price": 86.29,
+    "genericName": "Mirabegron",
+    "manufacturer": "Bayer",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clomipramine Variant 229 Variant 232",
+    "description": "Clomipramine medication used in modern treatments",
+    "price": 168.07,
+    "genericName": "Clomipramine",
+    "manufacturer": "AstraZeneca",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Nebivolol Variant 233",
+    "description": "Nebivolol medication used in modern treatments",
+    "price": 291.86,
+    "genericName": "Nebivolol",
+    "manufacturer": "Merck",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lorazepam Variant 234",
+    "description": "Lorazepam medication used in modern treatments",
+    "price": 426.2,
+    "genericName": "Lorazepam",
+    "manufacturer": "Merck",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Propylthiouracil Variant 235",
+    "description": "Propylthiouracil medication used in modern treatments",
+    "price": 180.33,
+    "genericName": "Propylthiouracil",
+    "manufacturer": "Pfizer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Budesonide Variant 236",
+    "description": "Budesonide medication used in modern treatments",
+    "price": 388.06,
+    "genericName": "Budesonide",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Nifedipine Variant 237",
+    "description": "Nifedipine medication used in modern treatments",
+    "price": 467.29,
+    "genericName": "Nifedipine",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Escitalopram Variant 238",
+    "description": "Escitalopram medication used in modern treatments",
+    "price": 275.58,
+    "genericName": "Escitalopram",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oxycodone Variant 239",
+    "description": "Oxycodone medication used in modern treatments",
+    "price": 439.84,
+    "genericName": "Oxycodone",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Enalapril Variant 240",
+    "description": "Enalapril medication used in modern treatments",
+    "price": 353.63,
+    "genericName": "Enalapril",
+    "manufacturer": "Roche",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tadalafil Variant 241",
+    "description": "Tadalafil medication used in modern treatments",
+    "price": 270.88,
+    "genericName": "Tadalafil",
+    "manufacturer": "Sanofi",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Levothyroxine Variant 242",
+    "description": "Levothyroxine medication used in modern treatments",
+    "price": 294.28,
+    "genericName": "Levothyroxine",
+    "manufacturer": "Merck",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Rabeprazole Variant 243",
+    "description": "Rabeprazole medication used in modern treatments",
+    "price": 246.8,
+    "genericName": "Rabeprazole",
+    "manufacturer": "Novartis",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Paroxetine Variant 244",
+    "description": "Paroxetine medication used in modern treatments",
+    "price": 291.9,
+    "genericName": "Paroxetine",
+    "manufacturer": "Novartis",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Digoxin Variant 245",
+    "description": "Digoxin medication used in modern treatments",
+    "price": 332.61,
+    "genericName": "Digoxin",
+    "manufacturer": "Merck",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Penicillin Variant 246",
+    "description": "Penicillin medication used in modern treatments",
+    "price": 438.78,
+    "genericName": "Penicillin",
+    "manufacturer": "Roche",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Pregabalin Variant 247",
+    "description": "Pregabalin medication used in modern treatments",
+    "price": 367.64,
+    "genericName": "Pregabalin",
+    "manufacturer": "GSK",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Augmentin Variant 248",
+    "description": "Augmentin medication used in modern treatments",
+    "price": 71.07,
+    "genericName": "Augmentin",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ipratropium Variant 249",
+    "description": "Ipratropium medication used in modern treatments",
+    "price": 425.99,
+    "genericName": "Ipratropium",
+    "manufacturer": "Novartis",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Gabapentin Variant 250",
+    "description": "Gabapentin medication used in modern treatments",
+    "price": 136.94,
+    "genericName": "Gabapentin",
+    "manufacturer": "Bayer",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Glimepiride Variant 192 Variant 251",
+    "description": "Glimepiride medication used in modern treatments",
+    "price": 282.44,
+    "genericName": "Glimepiride",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oxycodone Variant 212 Variant 252",
+    "description": "Oxycodone medication used in modern treatments",
+    "price": 439.84,
+    "genericName": "Oxycodone",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Budesonide Variant 236 Variant 253",
+    "description": "Budesonide medication used in modern treatments",
+    "price": 388.06,
+    "genericName": "Budesonide",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Escitalopram Variant 238 Variant 254",
+    "description": "Escitalopram medication used in modern treatments",
+    "price": 275.58,
+    "genericName": "Escitalopram",
+    "manufacturer": "Sanofi",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Esomeprazole Variant 204 Variant 255",
+    "description": "Esomeprazole medication used in modern treatments",
+    "price": 236.51,
+    "genericName": "Esomeprazole",
+    "manufacturer": "AstraZeneca",
+    "strength": "20mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Docetaxel Variant 256",
+    "description": "Docetaxel medication used in modern treatments",
+    "price": 150.47,
+    "genericName": "Docetaxel",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Ranitidine Variant 257",
+    "description": "Ranitidine medication used in modern treatments",
+    "price": 75.29,
+    "genericName": "Ranitidine",
+    "manufacturer": "GSK",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tadalafil Variant 258",
+    "description": "Tadalafil medication used in modern treatments",
+    "price": 270.88,
+    "genericName": "Tadalafil",
+    "manufacturer": "Sanofi",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Propylthiouracil Variant 259",
+    "description": "Propylthiouracil medication used in modern treatments",
+    "price": 180.33,
+    "genericName": "Propylthiouracil",
+    "manufacturer": "Pfizer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Warfarin Variant 260",
+    "description": "Warfarin medication used in modern treatments",
+    "price": 100.54,
+    "genericName": "Warfarin",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Moxifloxacin Variant 261",
+    "description": "Moxifloxacin medication used in modern treatments",
+    "price": 55.09,
+    "genericName": "Moxifloxacin",
+    "manufacturer": "Roche",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clonazepam Variant 262",
+    "description": "Clonazepam medication used in modern treatments",
+    "price": 253.05,
+    "genericName": "Clonazepam",
+    "manufacturer": "AstraZeneca",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lisinopril Variant 263",
+    "description": "Lisinopril medication used in modern treatments",
+    "price": 451.67,
+    "genericName": "Lisinopril",
+    "manufacturer": "Merck",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Carbamazepine Variant 264",
+    "description": "Carbamazepine medication used in modern treatments",
+    "price": 221.17,
+    "genericName": "Carbamazepine",
+    "manufacturer": "GSK",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Celecoxib Variant 265",
+    "description": "Celecoxib medication used in modern treatments",
+    "price": 366.55,
+    "genericName": "Celecoxib",
+    "manufacturer": "Roche",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Desloratadine Variant 266",
+    "description": "Desloratadine medication used in modern treatments",
+    "price": 348.63,
+    "genericName": "Desloratadine",
+    "manufacturer": "Bayer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Clopidogrel Variant 201 Variant 267",
+    "description": "Clopidogrel medication used in modern treatments",
+    "price": 373.85,
+    "genericName": "Clopidogrel",
+    "manufacturer": "GSK",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Remdesivir Variant 268",
+    "description": "Remdesivir medication used in modern treatments",
+    "price": 236.63,
+    "genericName": "Remdesivir",
+    "manufacturer": "Pfizer",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Zinc Sulfate Variant 269",
+    "description": "Zinc Sulfate medication used in modern treatments",
+    "price": 133.86,
+    "genericName": "Zinc Sulfate",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Finasteride Variant 270",
+    "description": "Finasteride medication used in modern treatments",
+    "price": 149.26,
+    "genericName": "Finasteride",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oxycodone Variant 212 Variant 271",
+    "description": "Oxycodone medication used in modern treatments",
+    "price": 439.84,
+    "genericName": "Oxycodone",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Oseltamivir Variant 203 Variant 272",
+    "description": "Oseltamivir medication used in modern treatments",
+    "price": 352.68,
+    "genericName": "Oseltamivir",
+    "manufacturer": "Pfizer",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Augmentin Variant 273",
+    "description": "Augmentin medication used in modern treatments",
+    "price": 71.07,
+    "genericName": "Augmentin",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Dabigatran Variant 274",
+    "description": "Dabigatran medication used in modern treatments",
+    "price": 36.07,
+    "genericName": "Dabigatran",
+    "manufacturer": "Pfizer",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Prednisolone Variant 275",
+    "description": "Prednisolone medication used in modern treatments",
+    "price": 370.34,
+    "genericName": "Prednisolone",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Phenytoin Variant 191 Variant 276",
+    "description": "Phenytoin medication used in modern treatments",
+    "price": 363.77,
+    "genericName": "Phenytoin",
+    "manufacturer": "Novartis",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Morphine Variant 277",
+    "description": "Morphine medication used in modern treatments",
+    "price": 150.76,
+    "genericName": "Morphine",
+    "manufacturer": "AstraZeneca",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Infliximab Variant 278",
+    "description": "Infliximab medication used in modern treatments",
+    "price": 406.31,
+    "genericName": "Infliximab",
+    "manufacturer": "Roche",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Erythromycin Variant 279",
+    "description": "Erythromycin medication used in modern treatments",
+    "price": 75.59,
+    "genericName": "Erythromycin",
+    "manufacturer": "Novartis",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Salbutamol Variant 280",
+    "description": "Salbutamol medication used in modern treatments",
+    "price": 282.57,
+    "genericName": "Salbutamol",
+    "manufacturer": "Bayer",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Lamotrigine Variant 281",
+    "description": "Lamotrigine medication used in modern treatments",
+    "price": 389.77,
+    "genericName": "Lamotrigine",
+    "manufacturer": "Bayer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Mirabegron Variant 282",
+    "description": "Mirabegron medication used in modern treatments",
+    "price": 86.29,
+    "genericName": "Mirabegron",
+    "manufacturer": "Bayer",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Warfarin Variant 283",
+    "description": "Warfarin medication used in modern treatments",
+    "price": 100.54,
+    "genericName": "Warfarin",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Itraconazole Variant 284",
+    "description": "Itraconazole medication used in modern treatments",
+    "price": 458.76,
+    "genericName": "Itraconazole",
+    "manufacturer": "Sanofi",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Propylthiouracil Variant 285",
+    "description": "Propylthiouracil medication used in modern treatments",
+    "price": 180.33,
+    "genericName": "Propylthiouracil",
+    "manufacturer": "Pfizer",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Prednisolone Variant 275 Variant 286",
+    "description": "Prednisolone medication used in modern treatments",
+    "price": 370.34,
+    "genericName": "Prednisolone",
+    "manufacturer": "Roche",
+    "strength": "500mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Vincristine Variant 287",
+    "description": "Vincristine medication used in modern treatments",
+    "price": 163.64,
+    "genericName": "Vincristine",
+    "manufacturer": "Merck",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Carbimazole Variant 288",
+    "description": "Carbimazole medication used in modern treatments",
+    "price": 70.32,
+    "genericName": "Carbimazole",
+    "manufacturer": "Novartis",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Tramadol Variant 289",
+    "description": "Tramadol medication used in modern treatments",
+    "price": 146.89,
+    "genericName": "Tramadol",
+    "manufacturer": "Roche",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Zinc Sulfate Variant 269 Variant 290",
+    "description": "Zinc Sulfate medication used in modern treatments",
+    "price": 133.86,
+    "genericName": "Zinc Sulfate",
+    "manufacturer": "GSK",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Apixaban Variant 196 Variant 291",
+    "description": "Apixaban medication used in modern treatments",
+    "price": 349.33,
+    "genericName": "Apixaban",
+    "manufacturer": "Merck",
+    "strength": "100mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Meropenem Variant 292",
+    "description": "Meropenem medication used in modern treatments",
+    "price": 23.81,
+    "genericName": "Meropenem",
+    "manufacturer": "GSK",
+    "strength": "250mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Domperidone Variant 293",
+    "description": "Domperidone medication used in modern treatments",
+    "price": 490.31,
+    "genericName": "Domperidone",
+    "manufacturer": "AstraZeneca",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Augmentin Variant 273 Variant 294",
+    "description": "Augmentin medication used in modern treatments",
+    "price": 71.07,
+    "genericName": "Augmentin",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Vincristine Variant 287 Variant 295",
+    "description": "Vincristine medication used in modern treatments",
+    "price": 163.64,
+    "genericName": "Vincristine",
+    "manufacturer": "Merck",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Methylprednisolone Variant 296",
+    "description": "Methylprednisolone medication used in modern treatments",
+    "price": 11.0,
+    "genericName": "Methylprednisolone",
+    "manufacturer": "AstraZeneca",
+    "strength": "50mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Fluconazole Variant 297",
+    "description": "Fluconazole medication used in modern treatments",
+    "price": 166.29,
+    "genericName": "Fluconazole",
+    "manufacturer": "Roche",
+    "strength": "10mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Infliximab Variant 298",
+    "description": "Infliximab medication used in modern treatments",
+    "price": 406.31,
+    "genericName": "Infliximab",
+    "manufacturer": "Roche",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Nebivolol Variant 233 Variant 299",
+    "description": "Nebivolol medication used in modern treatments",
+    "price": 291.86,
+    "genericName": "Nebivolol",
+    "manufacturer": "Merck",
+    "strength": "5mg",
+    "sideEffects": "Nausea, dizziness"
+  },
+  {
+    "name": "Baclofen Variant 300",
+    "description": "Baclofen medication used in modern treatments",
+    "price": 142.66,
+    "genericName": "Baclofen",
+    "manufacturer": "AstraZeneca",
+    "strength": "1g",
+    "sideEffects": "Nausea, dizziness"
+  }
+]
