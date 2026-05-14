@@ -1,0 +1,22 @@
+@model Presentation.ViewModels.Payments.PaymentResultViewModel
+
+@{
+    ViewData["Title"] = "Payment Result";
+    var alertClass = Model.IsSuccess ? "alert-success" : "alert-danger";
+    var heading = Model.IsSuccess ? "Payment Successful" : "Payment Failed";
+}
+
+<h2>@heading</h2>
+
+<div class="alert @alertClass" role="alert">
+    @Model.Message
+</div>
+
+<p>
+    <strong>Payment ID:</strong> @Model.PaymentId
+</p>
+
+<p>
+    <a class="btn btn-primary" asp-action="Details" asp-route-id="@Model.PaymentId">View Payment Details</a>
+    <a class="btn btn-secondary" asp-action="Index">Back to Payments</a>
+</p>
