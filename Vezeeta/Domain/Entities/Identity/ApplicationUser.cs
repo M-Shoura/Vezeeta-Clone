@@ -14,6 +14,7 @@ namespace Domain.Identity
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
+        public bool IsActive { get; set; } = true;
 
         // Optional navigation
         public DoctorProfile? DoctorProfile { get; set; }

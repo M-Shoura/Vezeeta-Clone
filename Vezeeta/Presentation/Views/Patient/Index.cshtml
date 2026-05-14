@@ -1,0 +1,47 @@
+@model IEnumerable<Application.DTOs.Profiles.Patients.PatientProfileDto>
+
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<h2 class="mb-4">Patients List</h2>
+
+<a class="btn btn-primary mb-3" href="/Patient/Create">+ Add Patient</a>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Patient Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Birth Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var patient in Model)
+        {
+            <tr>
+                <td>
+                    <strong>@patient.FullName</strong>
+                </td>
+
+                <td>@patient.Email</td>
+                <td>@patient.PhoneNumber</td>
+                <td>@patient.BirthDate.ToString("dd/MM/yyyy")</td>
+
+                <td>
+                    <a class="btn btn-sm btn-info"
+                       href="/Patient/Details/@patient.Email">Details</a>
+
+                    <a class="btn btn-sm btn-warning"
+                       href="/Patient/Edit/@patient.Email">Edit</a>
+
+                    <a class="btn btn-sm btn-danger"
+                       href="/Patient/Delete/@patient.Email">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infranstructure.Persistence.Seed
+namespace Domain.Enums
 {
-    internal class Class1
+    public enum UserRole
     {
+        Doctor , Patient , Admin
     }
 }

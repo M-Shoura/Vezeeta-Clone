@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infranstructure.Services
+namespace Domain.Entities.Common.Results
 {
-    internal class Class1
+    internal class Result
     {
     }
 }
