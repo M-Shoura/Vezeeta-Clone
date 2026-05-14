@@ -21,6 +21,8 @@ namespace Presentation
             
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // HTTP context accessor for fetching current user id in controllers
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
@@ -41,12 +43,12 @@ namespace Presentation
                 app.UseHsts();
             }
 
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseSharedMiddleware();
             app.UseRouting();
 
             app.UseAuthorization();
-
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",

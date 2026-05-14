@@ -1,0 +1,170 @@
+﻿@model Domain.Entities.DoctorSchedule
+
+@{
+    ViewData["Title"] = "Add Doctor Schedule";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-header bg-primary text-white py-3">
+                    <h3 class="mb-0">
+                        Add Doctor Schedule
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-action="AddSchedule"
+                          method="post">
+
+                        <input type="hidden"
+                               asp-for="DoctorId"
+                               value="@ViewBag.DoctorId" />
+
+                        <!-- DAY -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="Day"
+                                   class="form-label fw-bold">
+                            </label>
+
+                            <select asp-for="Day"
+                                    class="form-select"
+                                    asp-items="Html.GetEnumSelectList<DayOfWeek>()">
+                            </select>
+
+                            <span asp-validation-for="Day"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <!-- START TIME -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="StartTime"
+                                   class="form-label fw-bold">
+                                Start Time
+                            </label>
+
+                            <input asp-for="StartTime"
+                                   type="time"
+                                   class="form-control" />
+
+                            <span asp-validation-for="StartTime"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <!-- END TIME -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="EndTime"
+                                   class="form-label fw-bold">
+                                End Time
+                            </label>
+
+                            <input asp-for="EndTime"
+                                   type="time"
+                                   class="form-control" />
+
+                            <span asp-validation-for="EndTime"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <!-- SLOT DURATION -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="SlotDurationMinutes"
+                                   class="form-label fw-bold">
+                                Slot Duration (Minutes)
+                            </label>
+
+                            <input asp-for="SlotDurationMinutes"
+                                   class="form-control"
+                                   placeholder="30" />
+
+                            <span asp-validation-for="SlotDurationMinutes"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <!-- CLINIC -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="ClinicId"
+                                   class="form-label fw-bold">
+                                Clinic Id
+                            </label>
+
+                            <input asp-for="ClinicId"
+                                   class="form-control" />
+
+                            <span asp-validation-for="ClinicId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <!-- ACTIVE -->
+
+                        <div class="form-check mb-4">
+
+                            <input asp-for="IsActive"
+                                   class="form-check-input" />
+
+                            <label asp-for="IsActive"
+                                   class="form-check-label">
+                                Active Schedule
+                            </label>
+
+                        </div>
+
+                        <!-- BUTTONS -->
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary px-4">
+                                Save Schedule
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
