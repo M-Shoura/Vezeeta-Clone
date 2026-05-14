@@ -1,0 +1,288 @@
+@model Application.DTOs.Drugs.DrugPagedResultDto
+
+@{
+    ViewData["Title"] = "Drugs";
+}
+<div class="row justify-content-center align-items-center m-3">
+    <form class="row col-10 offset-2" method="get" asp-action="Index">
+        <div class="col-8">
+            <input type="text" name="search" id="SearchInp"
+                   value="@Model?.Search"
+                   placeholder="Search By Name"
+                   class="form-control" />
+        </div>
+        <div class="col-4">
+            <input type="submit" value="Search" class="btn btn-success" />
+        </div>
+    </form>
+</div>
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Drugs</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Add Drug
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Generic Name</th>
+                <th>Description</th>
+                <th>Side Effect</th>
+                <th>Manufacturer</th>
+                <th>Strength</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.GenericName</td>
+                    <td>@item.Description</td>
+                    <td>@item.SideEffects</td>
+                    <td>@item.Manufacturer</td>
+                    <td>@item.Strength</td>
+                    <td>@item.Price.ToString("C")</td>
+
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               class="btn btn-info btn-sm text-white">
+                                Details
+                            </a>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@item.Id"
+                               class="btn btn-warning btn-sm text-dark">
+                                Edit
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    data-id="@item.Id"
+                                    data-name="@item.Name">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+@if (Model.TotalPages > 1)
+{
+    var startPage = Math.Max(1, Model.PageNumber - 2);
+    var endPage = Math.Min(Model.TotalPages, Model.PageNumber + 2);
+
+        <div class="d-flex flex-column align-items-center mt-5">
+
+            <!-- Info Row -->
+            <div class="w-100 d-flex justify-content-between align-items-center mb-3">
+
+                <div class="text-muted">
+                    Showing
+                    <strong>@(((Model.PageNumber - 1) * 10) + 1)</strong>
+                    to
+                    <strong>@Math.Min(Model.PageNumber * 10, Model.TotalCount)</strong>
+                    of
+                    <strong>@Model.TotalCount</strong>
+                    results
+                </div>
+
+                <div>
+                    <select class="form-select">
+                        <option selected>10 per page</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Pagination Buttons -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination shadow-sm">
+
+                    <!-- First -->
+                    <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                        <a class="page-link px-3 py-2"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-pageNumber="1">
+                            &laquo;
+                        </a>
+                    </li>
+
+                    <!-- Prev -->
+                    <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                        <a class="page-link px-3 py-2"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-pageNumber="@(Model.PageNumber - 1)">
+                            &lsaquo;
+                        </a>
+                    </li>
+
+                    <!-- First Page -->
+                    @if (startPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-search="@Model.Search"
+                               asp-route-pageNumber="1">
+                                1
+                            </a>
+                        </li>
+
+                        @if (startPage > 2)
+                        {
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        }
+                    }
+
+                    <!-- Pages -->
+                    @for (int i = startPage; i <= endPage; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link px-3 py-2"
+                               asp-action="Index"
+                               asp-route-search="@Model.Search"
+                               asp-route-pageNumber="@i">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    <!-- Last Page -->
+                    @if (endPage < Model.TotalPages)
+                    {
+                        @if (endPage < Model.TotalPages - 1)
+                        {
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        }
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-search="@Model.Search"
+                               asp-route-pageNumber="@Model.TotalPages">
+                                @Model.TotalPages
+                            </a>
+                        </li>
+                    }
+
+                    <!-- Next -->
+                    <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link px-3 py-2"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-pageNumber="@(Model.PageNumber + 1)">
+                            &rsaquo;
+                        </a>
+                    </li>
+
+                    <!-- Last -->
+                    <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link px-3 py-2"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-pageNumber="@Model.TotalPages">
+                            &raquo;
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+            <!-- Current Page -->
+            <div class="text-muted mt-2">
+                Page @Model.PageNumber of @Model.TotalPages
+            </div>
+
+        </div>
+}
+
+<div class="modal fade"
+     id="deleteModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    Confirm Delete
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Are you sure you want to delete:
+                <strong id="drugName"></strong> ?
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <form asp-action="Delete" method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           id="deleteDrugId"
+                           name="id" />
+
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Delete
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+
+        deleteModal.addEventListener('show.bs.modal', function (event)
+        {
+            const button = event.relatedTarget;
+
+            const drugId = button.getAttribute('data-id');
+            const drugName = button.getAttribute('data-name');
+
+            document.getElementById('deleteDrugId').value = drugId;
+            document.getElementById('drugName').textContent = drugName;
+        });
+    </script>
+}

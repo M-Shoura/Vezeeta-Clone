@@ -1,0 +1,39 @@
+@model IEnumerable<Application.DTOs.Reviews.ReviewDto>
+
+@{
+    ViewData["Title"] = "Patient Reviews";
+}
+
+<h2>Patient Reviews</h2>
+
+<p>
+    <a class="btn btn-secondary" asp-action="Index">Back to all reviews</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Doctor</th>
+            <th>Created</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.Rating</td>
+            <td>@r.Comment</td>
+            <td>@r.DoctorName</td>
+            <td>@r.CreatedAt.ToLocalTime().ToString("g")</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@r.Id">Details</a> |
+                <a asp-action="Edit" asp-route-id="@r.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@r.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
