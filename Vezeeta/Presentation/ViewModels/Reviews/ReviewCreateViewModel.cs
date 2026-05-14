@@ -14,11 +14,5 @@ namespace Presentation.ViewModels.Reviews
 
         [Required]
         public int AppointmentId { get; set; }
-
-        [Required]
-        public string DoctorId { get; set; } = null!;
-
-        [Required]
-        public string PatientId { get; set; } = null!;
     }
 }

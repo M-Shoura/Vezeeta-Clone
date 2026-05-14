@@ -1,6 +1,8 @@
 using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Presentation.ViewModels.Reviews;
 
 namespace Presentation.Controllers
@@ -8,10 +10,12 @@ namespace Presentation.Controllers
     public class ReviewController : Controller
     {
         private readonly IReviewService _reviewService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ReviewController(IReviewService reviewService)
+        public ReviewController(IReviewService reviewService, IUnitOfWork unitOfWork)
         {
             _reviewService = reviewService;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: /Review
@@ -54,13 +58,11 @@ namespace Presentation.Controllers
         }
 
         // GET: /Review/Create
-        public IActionResult Create(int appointmentId = 0, string doctorId = null, string patientId = null)
+        public IActionResult Create(int appointmentId = 0)
         {
             var vm = new ReviewCreateViewModel
             {
                 AppointmentId = appointmentId,
-                DoctorId = doctorId ?? string.Empty,
-                PatientId = patientId ?? string.Empty
             };
 
             return View(vm);
@@ -74,16 +76,39 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
+            var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(vm.AppointmentId);
+            if (appointment == null)
+            {
+                ModelState.AddModelError(nameof(vm.AppointmentId), "Appointment not found.");
+                return View(vm);
+            }
+
+            var existingReview = await _unitOfWork.Repository<Review>()
+                .FindAsync(r => r.AppointmentId == vm.AppointmentId);
+            if (existingReview != null)
+            {
+                ModelState.AddModelError(nameof(vm.AppointmentId), "A review already exists for this appointment.");
+                return View(vm);
+            }
+
             var review = new Review
             {
                 Rating = vm.Rating,
                 Comment = vm.Comment,
                 AppointmentId = vm.AppointmentId,
-                DoctorId = vm.DoctorId,
-                PatientId = vm.PatientId
+                DoctorId = appointment.DoctorId!,
+                PatientId = appointment.PatientId!
             };
 
-            await _reviewService.AddReviewAsync(review);
+            try
+            {
+                await _reviewService.AddReviewAsync(review);
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError(string.Empty, "Unable to save this review. A review may already exist for the appointment.");
+                return View(vm);
+            }
 
             TempData["Success"] = "Review added successfully";
 
@@ -121,14 +146,29 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
+            var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(vm.AppointmentId);
+            if (appointment == null)
+            {
+                ModelState.AddModelError(nameof(vm.AppointmentId), "Appointment not found.");
+                return View(vm);
+            }
+
+            var conflictingReview = await _unitOfWork.Repository<Review>()
+                .FindAsync(r => r.AppointmentId == vm.AppointmentId && r.Id != vm.Id);
+            if (conflictingReview != null)
+            {
+                ModelState.AddModelError(nameof(vm.AppointmentId), "A review already exists for this appointment.");
+                return View(vm);
+            }
+
             var review = new Review
             {
                 Id = vm.Id,
                 Rating = vm.Rating,
                 Comment = vm.Comment,
                 AppointmentId = vm.AppointmentId,
-                DoctorId = vm.DoctorId,
-                PatientId = vm.PatientId
+                DoctorId = appointment.DoctorId!,
+                PatientId = appointment.PatientId!
             };
 
             await _reviewService.UpdateReviewAsync(review);
