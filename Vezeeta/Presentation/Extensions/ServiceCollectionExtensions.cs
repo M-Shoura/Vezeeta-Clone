@@ -42,7 +42,9 @@ namespace Presentation.Extensions
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentService, PaymentService>();
 
-            services.AddScoped<IDrugsService,DrugService>();
+            services.AddScoped<IDrugsService, DrugService>();
+            services.AddScoped<IPrescriptionService, PrescriptionService>();
+            services.AddScoped<IPrescriptionItemService, PrescriptionItemService>();
             services.AddAutoMapper(typeof(MappingProfile));
             return services;
         }
