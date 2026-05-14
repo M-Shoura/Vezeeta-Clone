@@ -1,25 +1,21 @@
 ﻿using Application.Interfaces.Repositories;
-using Application.Interfaces.Services;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 
 namespace Presentation.Controllers
 {
     public class AppointmentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IDoctorService _doctorService;
-
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AppointmentController(
-            IUnitOfWork unitOfWork, IDoctorService doctorService, IHttpContextAccessor httpContextAccessor)
+            IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
-            _doctorService = doctorService;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -38,6 +34,7 @@ namespace Presentation.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Patient,patient")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book([FromForm] Presentation.ViewModels.BookAppointmentViewModel model)
@@ -73,6 +70,9 @@ namespace Presentation.Controllers
                 var uid = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
                 appointment.PatientId = uid;
             }
+
+            if (string.IsNullOrWhiteSpace(appointment.PatientId))
+                return Challenge();
 
             await _unitOfWork.Repository<Appointment>().AddAsync(appointment);
             await _unitOfWork.SaveChangesAsync();

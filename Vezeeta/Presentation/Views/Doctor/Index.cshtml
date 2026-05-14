@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Doctors";
     var clinics = ViewBag.Clinics as IEnumerable<Domain.Entities.Clinic>;
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("admin");
 }
 
 <div class="container mt-4">
@@ -31,11 +32,11 @@
             </div>
 
             <div class="col-md-5">
-                <input type="text"
-                       name="specialization"
-                       value="@ViewBag.Specialization"
-                       class="form-control form-control-lg"
-                       placeholder="Search by specialization..." />
+                <select name="specialization"
+                        asp-items="ViewBag.Specializations"
+                        class="form-select form-select-lg">
+                    <option value="">All specializations</option>
+                </select>
             </div>
 
             <div class="col-md-2 d-grid">
@@ -53,10 +54,13 @@
             Doctors
         </h2>
 
-        <a asp-action="Create"
-           class="btn btn-success">
-            Add Doctor
-        </a>
+        @if (isAdmin)
+        {
+            <a asp-action="Create"
+               class="btn btn-success">
+                Add Doctor
+            </a>
+        }
     </div>
 
     <div class="row">
@@ -113,35 +117,38 @@
                             <!-- ACTIONS -->
                             <div class="d-flex justify-content-center gap-2 flex-wrap">
 
-                                <a asp-action="Dashboard"
-                                   asp-route-id="@doctor.Id"
-                                   class="btn btn-primary">
-                                    Dashboard
-                                </a>
-
                                 <a asp-action="Details"
                                    asp-route-id="@doctor.Id"
                                    class="btn btn-outline-primary">
                                     Details
                                 </a>
 
-                                <a asp-action="Edit"
-                                   asp-route-id="@doctor.Id"
-                                   class="btn btn-outline-warning">
-                                    Edit
-                                </a>
+                                @if (isAdmin)
+                                {
+                                    <a asp-action="Dashboard"
+                                       asp-route-id="@doctor.Id"
+                                       class="btn btn-primary">
+                                        Dashboard
+                                    </a>
 
-                                <a asp-action="Delete"
-                                   asp-route-id="@doctor.Id"
-                                   class="btn btn-outline-danger">
-                                    Delete
-                                </a>
+                                    <a asp-action="Edit"
+                                       asp-route-id="@doctor.Id"
+                                       class="btn btn-outline-warning">
+                                        Edit
+                                    </a>
 
-                                <a asp-action="AddSchedule"
-                                   asp-route-doctorId="@doctor.Id"
-                                   class="btn btn-outline-secondary">
-                                    Add Schedule
-                                </a>
+                                    <a asp-action="Delete"
+                                       asp-route-id="@doctor.Id"
+                                       class="btn btn-outline-danger">
+                                        Delete
+                                    </a>
+
+                                    <a asp-action="AddSchedule"
+                                       asp-route-doctorId="@doctor.Id"
+                                       class="btn btn-outline-secondary">
+                                        Add Schedule
+                                    </a>
+                                }
                             </div>
                         </div>
                     </div>

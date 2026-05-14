@@ -1,0 +1,14 @@
+@model Domain.Entities.Clinic
+
+@{
+    ViewData["Title"] = "Add Clinic";
+}
+
+<div class="container mt-4">
+    <h1 class="fw-bold mb-4">Add Clinic</h1>
+    <partial name="_ClinicForm" model="Model" />
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
