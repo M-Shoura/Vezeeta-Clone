@@ -36,12 +36,20 @@
                 <ul class="navbar-nav align-items-center">
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
+                         <li class="nav-item">
+                            <a class="nav-link text-white fs-6"
+                            asp-controller="Account"
+                            asp-action="Logout">
+                                @* @User.Identity.Name *@
+                                Logout
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-white fs-6"
                             asp-controller="Account"
                             asp-action="Profile">
-                                @* @User.Identity.Name *@
-                                Profile
+                                @User.Identity.Name 
+                                
                             </a>
                         </li>
                     }
@@ -50,7 +58,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-white fs-6"
                             asp-controller="Account"
-                            asp-action="SignUp">
+                            asp-action="Register">
                                 Sign Up
                             </a>
                         </li>

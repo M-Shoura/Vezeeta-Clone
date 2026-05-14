@@ -5,7 +5,23 @@
     var availableSlots =
         ViewBag.AvailableSlots as IEnumerable<Application.DTOs.Appointments.AvailableSlotDto>
         ?? Enumerable.Empty<Application.DTOs.Appointments.AvailableSlotDto>();
+    var appointments =
+        ViewBag.Appointments as IEnumerable<Domain.Entities.Appointment>
+        ?? Enumerable.Empty<Domain.Entities.Appointment>();
     var isPatient = User.IsInRole("Patient") || User.IsInRole("patient");
+    var canManageDoctor =
+        User.IsInRole("Admin")
+        || User.IsInRole("admin")
+        || User.IsInRole("Doctor")
+        || User.IsInRole("doctor");
+    var availabilityButtonClass =
+        Model.IsAvailable
+            ? "btn-outline-danger"
+            : "btn-outline-success";
+    var availabilityButtonText =
+        Model.IsAvailable
+            ? "Mark Unavailable"
+            : "Mark Available";
 }
 
 <div class="container mt-5">
@@ -77,6 +93,168 @@
         </div>
 
     </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 mb-4" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (canManageDoctor)
+    {
+        <!-- DOCTOR ACTIONS -->
+        <div class="card shadow border-0 rounded-4 mb-5">
+            <div class="card-header bg-primary text-white p-3">
+                <h3 class="mb-0">
+                    Doctor Actions
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2">
+                    <a asp-action="Dashboard"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-primary">
+                        Dashboard
+                    </a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-warning">
+                        Edit Profile
+                    </a>
+
+                    <a asp-action="Schedules"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-primary">
+                        Manage Schedules
+                    </a>
+
+                    <a asp-action="AddSchedule"
+                       asp-route-doctorId="@Model.Id"
+                       class="btn btn-outline-success">
+                        Add Schedule
+                    </a>
+
+                    <a asp-action="AssignClinic"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-secondary">
+                        Assign Clinic
+                    </a>
+
+                    <a asp-controller="Review"
+                       asp-action="DoctorReviews"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-dark">
+                        Reviews
+                    </a>
+
+                    <a asp-controller="Payment"
+                       asp-action="DoctorPayments"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-info">
+                        Payments
+                    </a>
+
+                    <form asp-action="ToggleAvailability" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="isAvailable" value="@(!Model.IsAvailable)" />
+                        <button type="submit"
+                                class="btn @availabilityButtonClass">
+                            @availabilityButtonText
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOOKED APPOINTMENTS -->
+        <div class="card shadow border-0 rounded-4 mb-5">
+            <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">
+                    Appointments
+                </h3>
+                <span class="badge bg-primary rounded-pill">
+                    @appointments.Count()
+                </span>
+            </div>
+
+            <div class="card-body p-0">
+                @if (appointments.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Patient</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Clinic</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var appt in appointments.OrderByDescending(a => a.AppointmentDate))
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center fw-bold"
+                                                     style="width:38px;height:38px;">
+                                                    @(string.IsNullOrWhiteSpace(appt.Patient?.ApplicationUser?.FullName)
+                                                                                                        ? "?"
+                                                                                                        : appt.Patient.ApplicationUser.FullName.Substring(0, 1).ToUpper())
+                                                </div>
+                                                <span class="fw-semibold">
+                                                    @(appt.Patient?.ApplicationUser?.FullName ?? "N/A")
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>@appt.AppointmentDate.ToString("MMM dd, yyyy")</td>
+                                        <td>@appt.StartTime.ToString(@"hh\:mm") - @appt.EndTime.ToString(@"hh\:mm")</td>
+                                        <td>@(appt.Clinic?.Name ?? "-")</td>
+                                        <td>
+                                            @switch (appt.Status)
+                                            {
+                                                case Domain.Enums.AppointmentStatus.Pending:
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                    break;
+                                                case Domain.Enums.AppointmentStatus.Confirmed:
+                                                    <span class="badge bg-success">Confirmed</span>
+                                                    break;
+                                                case Domain.Enums.AppointmentStatus.Completed:
+                                                    <span class="badge bg-info text-dark">Completed</span>
+                                                    break;
+                                                default:
+                                                    <span class="badge bg-secondary">@appt.Status</span>
+                                                    break;
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="p-4 text-center text-muted">
+                        No appointments yet.
+                    </div>
+                }
+            </div>
+        </div>
+    }
 
     <!-- AVAILABLE APPOINTMENTS -->
 
