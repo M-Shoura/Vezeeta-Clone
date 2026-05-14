@@ -1,12 +1,19 @@
-﻿using Application.DTOs.Doctors;
+using Application.DTOs.Appointments;
+using Application.DTOs.Doctors;
 using Domain.Entities;
 
 namespace Application.Interfaces.Services
 {
     public interface IDoctorService
     {
-        #region Doctor Queries
+        Task<IEnumerable<AvailableSlotDto>>
+    GetAvailableSlotsAsync(
+        string doctorId,
+        DateTime date);
 
+        #region Doctor Queries
+        Task<DoctorDetailsDto?>
+    GetDoctorDetailsAsync(string doctorId);
         Task<IEnumerable<DoctorDto>>
             GetAllDoctorsAsync();
 
@@ -69,6 +76,26 @@ namespace Application.Interfaces.Services
             DeleteScheduleAsync(
                 int scheduleId);
 
+        Task<IEnumerable<Domain.Entities.Appointment>>
+            GetDoctorAppointmentsAsync(string doctorId);
+
+        Task<IEnumerable<Domain.Entities.DoctorClinic>>
+            GetDoctorClinicsAsync(string doctorId);
+
+        Task UpdateConsultationFeeAsync(
+            string doctorId,
+            int clinicId,
+            decimal newFee);
+
         #endregion
+
+
+        Task<IEnumerable<DoctorDto>>
+    SearchDoctorsAsync(
+        string? name,
+        string? specialization);
+
+        Task<IEnumerable<Clinic>>
+            GetAllClinicsAsync();
     }
 }

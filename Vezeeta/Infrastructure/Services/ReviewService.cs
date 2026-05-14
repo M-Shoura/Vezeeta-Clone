@@ -2,7 +2,6 @@ using Application.DTOs.Reviews;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
-using Infranstructure.Persistence.Data;
 
 namespace Infrastructure.Services
 {
@@ -10,16 +9,13 @@ namespace Infrastructure.Services
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ApplicationDbContext _context;
 
         public ReviewService(
             IReviewRepository reviewRepository,
-            IUnitOfWork unitOfWork,
-            ApplicationDbContext context)
+            IUnitOfWork unitOfWork)
         {
             _reviewRepository = reviewRepository;
             _unitOfWork = unitOfWork;
-            _context = context;
         }
 
         public async Task<ReviewDto?> GetReviewByIdAsync(int reviewId)
@@ -55,7 +51,7 @@ namespace Infrastructure.Services
         public async Task<Review> AddReviewAsync(Review review)
         {
             review.CreatedAt = DateTime.UtcNow;
-            _context.Reviews.Add(review);
+            await _unitOfWork.Repository<Review>().AddAsync(review);
             await _unitOfWork.SaveChangesAsync();
             return review;
         }
@@ -63,18 +59,18 @@ namespace Infrastructure.Services
         public async Task<Review> UpdateReviewAsync(Review review)
         {
             review.UpdatedAt = DateTime.UtcNow;
-            _context.Reviews.Update(review);
+            _unitOfWork.Repository<Review>().Update(review);
             await _unitOfWork.SaveChangesAsync();
             return review;
         }
 
         public async Task<bool> DeleteReviewAsync(int reviewId)
         {
-            var review = await _context.Reviews.FindAsync(reviewId);
+            var review = await _unitOfWork.Repository<Review>().GetByIdAsync(reviewId);
             if (review == null)
                 return false;
 
-            _context.Reviews.Remove(review);
+            _unitOfWork.Repository<Review>().Delete(review);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
