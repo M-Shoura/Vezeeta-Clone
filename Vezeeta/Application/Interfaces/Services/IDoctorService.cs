@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Appointments;
+using Application.DTOs.Appointments;
 using Application.DTOs.Doctors;
 using Domain.Entities;
 
@@ -75,6 +75,17 @@ namespace Application.Interfaces.Services
         Task<string>
             DeleteScheduleAsync(
                 int scheduleId);
+
+        Task<IEnumerable<Domain.Entities.Appointment>>
+            GetDoctorAppointmentsAsync(string doctorId);
+
+        Task<IEnumerable<Domain.Entities.DoctorClinic>>
+            GetDoctorClinicsAsync(string doctorId);
+
+        Task UpdateConsultationFeeAsync(
+            string doctorId,
+            int clinicId,
+            decimal newFee);
 
         #endregion
 

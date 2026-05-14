@@ -1,34 +1,197 @@
-﻿@model IEnumerable<Domain.Entities.DoctorSchedule>
+@model IEnumerable<Domain.Entities.DoctorSchedule>
 
-<h2>Schedules</h2>
+@{
+    ViewData["Title"] = "Doctor Schedules";
+}
 
-<a class="btn btn-primary"
-       href="/Doctor/AddSchedule/@ViewBag.DoctorId">
-    Add Schedule
-</a>
+<div class="container mt-5">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Day</th>
-            <th>Start</th>
-            <th>End</th>
-            <th></th>
-        </tr>
-    </thead>
+    <!-- BREADCRUMB -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-action="Index" class="text-decoration-none">Doctors</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-action="Dashboard" asp-route-id="@ViewBag.DoctorId" class="text-decoration-none">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Schedules</li>
+        </ol>
+    </nav>
 
-    <tbody>
-        @foreach (var s in Model)
-        {
-            <tr>
-                <td>@s.Day</td>
-                <td>@s.StartTime</td>
-                <td>@s.EndTime</td>
-                <td>
-                    <a href="/Doctor/DeleteSchedule/@s.Id"
-                       class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">🕐 Working Schedules</h2>
+            <p class="text-muted mb-0">Manage weekly availability and time slots</p>
+        </div>
+        <a asp-action="AddSchedule"
+           asp-route-doctorId="@ViewBag.DoctorId"
+           class="btn btn-primary fw-semibold px-4 rounded-3">
+            ➕ Add Schedule
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert">
+            ✅ @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <!-- SCHEDULE GRID -->
+        <div class="row g-4">
+            @{
+                var days = new[] { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday };
+                var dayColors = new Dictionary<DayOfWeek, string>
+                {
+                    { DayOfWeek.Sunday,    "danger" },
+                    { DayOfWeek.Monday,    "primary" },
+                    { DayOfWeek.Tuesday,   "info" },
+                    { DayOfWeek.Wednesday, "success" },
+                    { DayOfWeek.Thursday,  "warning" },
+                    { DayOfWeek.Friday,    "secondary" },
+                    { DayOfWeek.Saturday,  "dark" }
+                };
+            }
+
+            @foreach (var day in days)
+            {
+                var daySchedules = Model.Where(s => s.Day == day).ToList();
+                if (!daySchedules.Any()) continue;
+
+                var color = dayColors[day];
+
+                <div class="col-md-6 col-xl-4">
+                    <div class="card border-0 shadow rounded-4 h-100 overflow-hidden">
+                        <div class="card-header fw-bold py-3 px-4 text-white bg-@color">
+                            @day
+                        </div>
+                        <div class="list-group list-group-flush">
+                            @foreach (var sch in daySchedules)
+                            {
+                                <div class="list-group-item py-3 px-4">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="fw-semibold">
+                                                @sch.StartTime.ToString(@"hh\:mm")
+                                                <span class="text-muted mx-1">→</span>
+                                                @sch.EndTime.ToString(@"hh\:mm")
+                                            </div>
+                                            <small class="text-muted">
+                                                @if (sch.Clinic != null)
+                                                {
+                                                    <span>🏥 @sch.Clinic.Name</span>
+                                                }
+                                            </small>
+                                            <div class="mt-1">
+                                                <span class="badge bg-@color bg-opacity-15 text-@color rounded-pill">
+                                                    ⏱️ @sch.SlotDurationMinutes min slots
+                                                </span>
+                                                @if (sch.IsActive)
+                                                {
+                                                    <span class="badge bg-success bg-opacity-15 text-success rounded-pill ms-1">
+                                                        Active
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger bg-opacity-15 text-danger rounded-pill ms-1">
+                                                        Inactive
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <a asp-action="DeleteSchedule"
+                                           asp-route-id="@sch.Id"
+                                           class="btn btn-sm btn-outline-danger rounded-3 ms-2"
+                                           title="Delete">
+                                            🗑️
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- SUMMARY TABLE -->
+        <div class="card border-0 shadow rounded-4 mt-5 overflow-hidden">
+            <div class="card-header bg-white fw-bold py-3 px-4">
+                📋 All Schedules — Summary
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Day</th>
+                            <th>Clinic</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Slot</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sch in Model.OrderBy(s => s.Day).ThenBy(s => s.StartTime))
+                        {
+                            <tr>
+                                <td class="ps-4 fw-semibold">@sch.Day</td>
+                                <td>@(sch.Clinic?.Name ?? "—")</td>
+                                <td>@sch.StartTime.ToString(@"hh\:mm")</td>
+                                <td>@sch.EndTime.ToString(@"hh\:mm")</td>
+                                <td>@sch.SlotDurationMinutes min</td>
+                                <td>
+                                    @if (sch.IsActive)
+                                    {
+                                        <span class="badge bg-success bg-opacity-15 text-success rounded-pill px-3">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary bg-opacity-15 text-secondary rounded-pill px-3">Inactive</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="DeleteSchedule"
+                                       asp-route-id="@sch.Id"
+                                       class="btn btn-sm btn-outline-danger rounded-3">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow rounded-4">
+            <div class="card-body py-5 text-center">
+                <div style="font-size:4rem;">🗓️</div>
+                <h4 class="fw-bold mt-3">No schedules yet</h4>
+                <p class="text-muted">Add your first schedule to start accepting appointments.</p>
+                <a asp-action="AddSchedule"
+                   asp-route-doctorId="@ViewBag.DoctorId"
+                   class="btn btn-primary px-5 fw-semibold rounded-3">
+                    ➕ Add First Schedule
+                </a>
+            </div>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-action="Dashboard" asp-route-id="@ViewBag.DoctorId"
+           class="btn btn-outline-secondary rounded-3">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+</div>

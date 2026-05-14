@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Application.DTOs.Doctors.DoctorDto>
+@model IEnumerable<Application.DTOs.Doctors.DoctorDto>
 
 @{
     ViewData["Title"] = "Doctors";
@@ -111,7 +111,13 @@
                             <hr />
 
                             <!-- ACTIONS -->
-                            <div class="d-flex justify-content-center gap-2">
+                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+                                <a asp-action="Dashboard"
+                                   asp-route-id="@doctor.Id"
+                                   class="btn btn-primary">
+                                    Dashboard
+                                </a>
 
                                 <a asp-action="Details"
                                    asp-route-id="@doctor.Id"
@@ -131,17 +137,9 @@
                                     Delete
                                 </a>
 
-                                <!-- NEW -->
-                                <a asp-controller="Review"
-                                   asp-action="Create"
-                                   asp-route-doctorId="@doctor.Id"
-                                   class="btn btn-review">
-                                    Add Review
-                                </a>
-
                                 <a asp-action="AddSchedule"
                                    asp-route-doctorId="@doctor.Id"
-                                   class="btn btn-primary">
+                                   class="btn btn-outline-secondary">
                                     Add Schedule
                                 </a>
                             </div>

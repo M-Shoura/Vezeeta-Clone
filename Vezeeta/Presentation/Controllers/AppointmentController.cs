@@ -2,6 +2,9 @@
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace Presentation.Controllers
 {
@@ -10,11 +13,14 @@ namespace Presentation.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDoctorService _doctorService;
 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         public AppointmentController(
-            IUnitOfWork unitOfWork, IDoctorService doctorService)
+            IUnitOfWork unitOfWork, IDoctorService doctorService, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _doctorService = doctorService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET
@@ -26,34 +32,52 @@ namespace Presentation.Controllers
             return View();
         }
 
-        public IActionResult AddSchedule(
-    string doctorId)
+        public IActionResult AddSchedule(string doctorId)
         {
             ViewBag.DoctorId = doctorId;
-
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>
-    AddSchedule(
-        DoctorSchedule schedule)
+        public async Task<IActionResult> Book([FromForm] Presentation.ViewModels.BookAppointmentViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(schedule);
+                return BadRequest(ModelState);
 
-            await _doctorService
-                .CreateDoctorScheduleAsync(
-                    schedule);
+            // Check for conflicting appointments
+            var existing = await _unitOfWork.Repository<Appointment>().FindAllAsync(a =>
+                a.DoctorId == model.DoctorId && a.AppointmentDate.Date == model.AppointmentDate.Date &&
+                a.StartTime == model.StartTime);
 
-            TempData["Success"] =
-                "Schedule added successfully";
+            if (existing.Any())
+            {
+                return BadRequest("Selected slot is already booked");
+            }
 
-            return RedirectToAction(
-    "Details",
-    "Doctor",
-    new { id = schedule.DoctorId });
+            var appointment = new Appointment
+            {
+                DoctorId = model.DoctorId,
+                AppointmentDate = model.AppointmentDate,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                ClinicId = model.ClinicId,
+                Status = Domain.Enums.AppointmentStatus.Pending,
+                Notes = model.Notes
+            };
+
+            // set patient id from claims if available
+            var user = _httpContextAccessor.HttpContext?.User;
+            if (user?.Identity?.IsAuthenticated == true)
+            {
+                var uid = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                appointment.PatientId = uid;
+            }
+
+            await _unitOfWork.Repository<Appointment>().AddAsync(appointment);
+            await _unitOfWork.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Doctor", new { id = model.DoctorId });
         }
     }
 }

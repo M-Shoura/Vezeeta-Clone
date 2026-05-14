@@ -14,9 +14,8 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ==================== DATABASE CONFIGURATION ====================
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // ==================== DATABASE & REPOSITORY/SERVICE CONFIGURATION ====================
+            // ApplicationDbContext and IUnitOfWork are registered in AddUserServices
             builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
 
@@ -28,6 +27,8 @@ namespace Presentation
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // HTTP context accessor for fetching current user id in controllers
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
