@@ -111,9 +111,7 @@ namespace Infrastructure.Services
             if (!int.TryParse(integrationIdValue, out var integrationId))
                 throw new InvalidOperationException("Paymob integration id is invalid.");
 
-            var payment = await _unitOfWork.Repository<Payment>().FindAsync(
-                p => p.Id == paymentId,
-                new[] { "Appointment.Patient.ApplicationUser" });
+            var payment = await _paymentRepository.GetPaymentForCheckoutAsync(paymentId);
 
             if (payment == null)
                 throw new InvalidOperationException("Payment not found.");

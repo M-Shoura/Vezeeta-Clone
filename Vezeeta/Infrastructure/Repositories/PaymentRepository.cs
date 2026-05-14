@@ -25,6 +25,15 @@ namespace Infrastructure.Repositories
             return ToDto(payment);
         }
 
+        public async Task<Payment?> GetPaymentForCheckoutAsync(int paymentId)
+        {
+            return await _context.Payments
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                        .ThenInclude(p => p.ApplicationUser)
+                .FirstOrDefaultAsync(p => p.Id == paymentId);
+        }
+
         public async Task<PaymentDto?> GetPaymentByAppointmentIdAsync(int appointmentId)
         {
             var payment = await BuildQuery()
