@@ -6,17 +6,65 @@
     var heading = Model.IsSuccess ? "Payment Successful" : "Payment Failed";
 }
 
-<h2>@heading</h2>
+<div class="card shadow-sm border-0 rounded-4 mx-auto" style="max-width: 760px;">
+    <div class="card-body p-4 p-md-5">
+        <div class="d-flex align-items-start justify-content-between gap-3 mb-4">
+            <div>
+                <h2 class="mb-2">@heading</h2>
+                <div class="alert @alertClass mb-0" role="alert">
+                    @Model.Message
+                </div>
+            </div>
 
-<div class="alert @alertClass" role="alert">
-    @Model.Message
+            <span class="badge rounded-pill @(Model.IsSuccess ? "bg-success" : "bg-danger") fs-6 px-3 py-2">
+                @(Model.IsSuccess ? "Completed" : "Failed")
+            </span>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="border rounded-4 p-3 h-100 bg-light">
+                    <h5 class="mb-3">Appointment</h5>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5 text-muted">Doctor</dt>
+                        <dd class="col-sm-7 mb-2">@Model.DoctorName</dd>
+
+                        <dt class="col-sm-5 text-muted">Clinic</dt>
+                        <dd class="col-sm-7 mb-2">@Model.ClinicName</dd>
+
+                        <dt class="col-sm-5 text-muted">Date</dt>
+                        <dd class="col-sm-7 mb-2">@Model.AppointmentDate.ToString("dddd, MMMM d, yyyy")</dd>
+
+                        <dt class="col-sm-5 text-muted">Time</dt>
+                        <dd class="col-sm-7 mb-0">@Model.StartTime.ToString(@"hh\:mm") - @Model.EndTime.ToString(@"hh\:mm")</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="border rounded-4 p-3 h-100 bg-light">
+                    <h5 class="mb-3">Payment</h5>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5 text-muted">Amount</dt>
+                        <dd class="col-sm-7 mb-2">@Model.Amount.ToString("N2") EGP</dd>
+
+                        <dt class="col-sm-5 text-muted">Method</dt>
+                        <dd class="col-sm-7 mb-2">@Model.PaymentMethod</dd>
+
+                        <dt class="col-sm-5 text-muted">Status</dt>
+                        <dd class="col-sm-7 mb-2">@Model.Status</dd>
+
+                        <dt class="col-sm-5 text-muted">Paid at</dt>
+                        <dd class="col-sm-7 mb-0">@(Model.PaidAt?.ToString("dddd, MMMM d, yyyy h:mm tt") ?? "Not available")</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <a class="btn btn-primary px-4" asp-controller="Home" asp-action="Index">
+                Return to Home
+            </a>
+        </div>
+    </div>
 </div>
-
-<p>
-    <strong>Payment ID:</strong> @Model.PaymentId
-</p>
-
-<p>
-    <a class="btn btn-primary" asp-action="Details" asp-route-id="@Model.PaymentId">View Payment Details</a>
-    <a class="btn btn-secondary" asp-action="Index">Back to Payments</a>
-</p>

@@ -77,9 +77,14 @@ namespace Presentation.Controllers
             await _unitOfWork.Repository<Appointment>().AddAsync(appointment);
             await _unitOfWork.SaveChangesAsync();
 
-            TempData["success"] = "Successfully Booked";
-
-            return RedirectToAction("Details", "Doctor", new { id = model.DoctorId });
+            return RedirectToAction(
+                actionName: "Create",
+                controllerName: "Payment",
+                routeValues: new
+                {
+                    appointmentId = appointment.Id,
+                    autoCheckout = true
+                });
         }
     }
 }
