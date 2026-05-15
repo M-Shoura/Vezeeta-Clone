@@ -39,6 +39,7 @@
                 <div class="col-md-3 text-center">
 
                     <img src="~/images/@Model.ProfilePicture"
+                        alt="Dr. @Model.FullName"
                          class="rounded-circle shadow"
                          width="200"
                          height="200"
@@ -208,6 +209,7 @@
                                         <td class="ps-4">
                                             <div class="d-flex align-items-center gap-2">
                                                 <img src="@ProfilePictureHelper.GetUrl(appt.Patient?.ApplicationUser?.ProfilePicture, appt.Patient?.ApplicationUser?.FullName, size: 80)"
+                                                       alt="@(appt.Patient?.ApplicationUser?.FullName ?? "Patient")"
                                                      class="rounded-circle"
                                                      width="38"
                                                      height="38"
@@ -255,62 +257,95 @@
 
     <!-- AVAILABLE APPOINTMENTS -->
 
-    <div class="card shadow border-0 rounded-4 mb-5">
+    <div class="card shadow border-0 rounded-4 mb-5 overflow-hidden reservation-section">
 
-        <div class="card-header bg-success text-white p-3">
+        <div class="card-header reservation-section-header text-white p-4 border-0">
 
-            <h3 class="mb-0">
-                Available Appointments
-            </h3>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+
+                <div>
+                    <p class="text-uppercase small mb-1 reservation-eyebrow">
+                        Appointment booking
+                    </p>
+                    <h3 class="mb-1">
+                        Available Appointment Slots
+                    </h3>
+                    <p class="mb-0 reservation-subtitle">
+                        Choose a time that fits your schedule and reserve your visit in seconds.
+                    </p>
+                </div>
+
+                <div class="reservation-count-badge">
+                    @availableSlots.Count() slots
+                </div>
+
+            </div>
 
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-4 p-lg-5 reservation-section-body">
 
             @if (availableSlots.Any())
             {
-                <div class="row">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
 
                     @foreach (var slot in availableSlots)
                     {
-                        <div class="card mb-3 shadow-sm">
+                        <div class="col">
 
-                            <div class="card-body d-flex
-                                justify-content-between
-                                align-items-center">
+                            <div class="card h-100 border-0 shadow-sm reservation-slot-card">
 
-                                <div>
-                                    <strong>
+                                <div class="card-body d-flex flex-column p-4">
+
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <span class="badge reservation-slot-badge rounded-pill">
+                                            Available
+                                        </span>
+                                        <span class="text-muted small">
+                                            Slot @slot.ClinicId
+                                        </span>
+                                    </div>
+
+                                    <h5 class="mb-2 reservation-slot-date">
                                         @slot.Date.ToString("dddd, MMM dd")
-                                    </strong>
-                                    <span class="text-muted mx-2">|</span>
-                                    <strong>
-                                        @slot.StartTime
-                                    </strong>
-                                    -
-                                    <strong>
-                                        @slot.EndTime
-                                    </strong>
+                                    </h5>
+
+                                    <div class="reservation-slot-time mb-2">
+                                        @slot.StartTime.ToString(@"hh\:mm")
+                                        <span class="mx-2 text-muted">-</span>
+                                        @slot.EndTime.ToString(@"hh\:mm")
+                                    </div>
+
+                                    <p class="text-muted mb-4 small">
+                                        Select this slot to continue with your appointment booking.
+                                    </p>
+
+                                    <div class="mt-auto">
+                                        @if (isPatient)
+                                        {
+                                            <form asp-controller="Appointment" asp-action="Book" method="post" class="d-grid">
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden" name="DoctorId" value="@Model.Id" />
+                                                <input type="hidden" name="AppointmentDate" value="@(slot.Date.ToString("yyyy-MM-dd"))" />
+                                                <input type="hidden" name="StartTime" value="@slot.StartTime" />
+                                                <input type="hidden" name="EndTime" value="@slot.EndTime" />
+                                                <input type="hidden" name="ClinicId" value="@slot.ClinicId" />
+
+                                                <button class="btn btn-slot btn-lg reservation-book-btn">
+                                                    Book Appointment
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-light border mb-0 small text-center reservation-login-note">
+                                                Login as a patient to reserve this slot.
+                                            </div>
+                                        }
+                                    </div>
+
                                 </div>
-
-                                @if (isPatient)
-                                {
-                                    <form asp-controller="Appointment" asp-action="Book" method="post">
-                                        @Html.AntiForgeryToken()
-
-                                        <input type="hidden" name="DoctorId" value="@Model.Id" />
-                                        <input type="hidden" name="AppointmentDate" value="@(slot.Date.ToString("yyyy-MM-dd"))" />
-                                        <input type="hidden" name="StartTime" value="@slot.StartTime" />
-                                        <input type="hidden" name="EndTime" value="@slot.EndTime" />
-                                        <input type="hidden" name="ClinicId" value="@slot.ClinicId" />
-
-                                        <button class="btn btn-success">Book Appointment</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">Login as patient to book</span>
-                                }
 
                             </div>
 
@@ -321,8 +356,12 @@
             }
             else
             {
-                <div class="alert alert-warning">
-                    No available appointments.
+                <div class="reservation-empty-state text-center p-5">
+                    <div class="reservation-empty-icon mb-3">•</div>
+                    <h4 class="mb-2">No available appointments right now</h4>
+                    <p class="text-muted mb-0">
+                        Check back later or browse another doctor if you need an earlier opening.
+                    </p>
                 </div>
             }
 
