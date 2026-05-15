@@ -3,10 +3,12 @@
 # =========================
 bin/
 obj/
+artifacts/
 
 
 **/bin/
 **/obj/
+**/artifacts/
 
 # =========================
 # Visual Studio
@@ -110,5 +112,6 @@ appsettings.Development.json
 # Generated Files
 # =========================
 Generated/
+*.lscache
 
 **/Migrations/
