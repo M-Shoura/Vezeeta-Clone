@@ -5,6 +5,7 @@ using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.Payments;
+using System.Security.Claims;
 
 namespace Presentation.Controllers
 {
@@ -83,9 +84,32 @@ namespace Presentation.Controllers
 
             if (appointmentId > 0)
             {
+                var currentUserId = GetCurrentUserId();
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                    return Forbid();
+
+                var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(appointmentId);
+                if (appointment == null)
+                    return NotFound();
+
+                if (appointment.PatientId != currentUserId)
+                    return Forbid();
+
                 var existingPayment = await _paymentService.GetPaymentByAppointmentIdAsync(appointmentId);
                 if (existingPayment != null)
-                    return RedirectToAction(nameof(Details), new { id = existingPayment.Id });
+                {
+                    var isSuccess = existingPayment.Status == PaymentStatus.Completed;
+                    var message = isSuccess
+                        ? "This appointment is already paid."
+                        : "A payment already exists for this appointment.";
+
+                    return RedirectToAction(nameof(Result), new
+                    {
+                        paymentId = existingPayment.Id,
+                        isSuccess,
+                        message
+                    });
+                }
             }
 
             var vm = new PaymentCreateViewModel
@@ -206,6 +230,20 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
+            var currentUserId = GetCurrentUserId();
+            if (string.IsNullOrWhiteSpace(currentUserId))
+                return Forbid();
+
+            var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(vm.AppointmentId);
+            if (appointment == null)
+            {
+                ModelState.AddModelError(nameof(vm.AppointmentId), "Appointment not found.");
+                return View(vm);
+            }
+
+            if (appointment.PatientId != currentUserId)
+                return Forbid();
+
             var existingPayment = await _paymentService.GetPaymentByAppointmentIdAsync(vm.AppointmentId);
             if (existingPayment != null)
             {
@@ -251,6 +289,9 @@ namespace Presentation.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Success(int paymentId, string? transactionId = null)
         {
+            if (!await IsPaymentOwnedByCurrentPatientAsync(paymentId))
+                return Forbid();
+
             var completed = await _paymentService.FinalizePaymobPaymentAsync(paymentId, transactionId);
             if (!completed)
             {
@@ -272,8 +313,11 @@ namespace Presentation.Controllers
 
         // GET: /Payment/Cancel?paymentId=1
         [Authorize(Roles = "Patient")]
-        public IActionResult Cancel(int paymentId)
+        public async Task<IActionResult> Cancel(int paymentId)
         {
+            if (!await IsPaymentOwnedByCurrentPatientAsync(paymentId))
+                return Forbid();
+
             return RedirectToAction(nameof(Result), new
             {
                 paymentId,
@@ -286,6 +330,9 @@ namespace Presentation.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Result(int paymentId, bool isSuccess, string? message = null)
         {
+            if (!await IsPaymentOwnedByCurrentPatientAsync(paymentId))
+                return Forbid();
+
             var payment = await _paymentService.GetPaymentByIdAsync(paymentId);
             if (payment == null)
                 return NotFound();
@@ -389,6 +436,24 @@ namespace Presentation.Controllers
             TempData["Success"] = "Payment deleted successfully";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private string? GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        private async Task<bool> IsPaymentOwnedByCurrentPatientAsync(int paymentId)
+        {
+            var currentUserId = GetCurrentUserId();
+            if (string.IsNullOrWhiteSpace(currentUserId))
+                return false;
+
+            var payment = await _unitOfWork.Repository<Payment>().FindAsync(
+                p => p.Id == paymentId && p.Appointment.PatientId == currentUserId,
+                includes: new[] { "Appointment" });
+
+            return payment != null;
         }
     }
 }
