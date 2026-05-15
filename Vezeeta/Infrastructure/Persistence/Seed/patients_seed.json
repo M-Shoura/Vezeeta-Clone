@@ -1,0 +1,18 @@
+[
+  {
+    "applicationUserId": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf2001",
+    "dateOfBirth": "1994-04-17T00:00:00",
+    "gender": 1,
+    "bloodType": "A+",
+    "emergencyContactName": "Mona Mostafa",
+    "emergencyContactPhone": "+201100000201"
+  },
+  {
+    "applicationUserId": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf2002",
+    "dateOfBirth": "1988-09-02T00:00:00",
+    "gender": 0,
+    "bloodType": "O-",
+    "emergencyContactName": "Adel Hassan",
+    "emergencyContactPhone": "+201100000202"
+  }
+]

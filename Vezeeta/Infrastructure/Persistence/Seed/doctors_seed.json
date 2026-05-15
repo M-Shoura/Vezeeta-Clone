@@ -1,0 +1,20 @@
+[
+  {
+    "applicationUserId": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf1001",
+    "specialization": "Cardiology",
+    "yearsOfExperience": 12,
+    "qualification": "MBBS, MD Cardiology",
+    "isAvailable": true,
+    "bio": "Focuses on preventive cardiology and chronic heart disease follow-up.",
+    "licenseNumber": "DOC-CARD-1001"
+  },
+  {
+    "applicationUserId": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf1002",
+    "specialization": "Dermatology",
+    "yearsOfExperience": 9,
+    "qualification": "MBBS, MSc Dermatology",
+    "isAvailable": true,
+    "bio": "Treats skin, hair, and cosmetic dermatology cases.",
+    "licenseNumber": "DOC-DERM-1002"
+  }
+]
