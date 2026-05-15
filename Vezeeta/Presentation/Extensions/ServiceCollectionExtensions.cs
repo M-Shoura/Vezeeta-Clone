@@ -69,6 +69,7 @@ namespace Presentation.Extensions
             services.AddScoped<IReviewService,  ReviewService>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             services.AddScoped<IDrugsService, DrugService>();
             services.AddScoped<IPrescriptionService, PrescriptionService>();

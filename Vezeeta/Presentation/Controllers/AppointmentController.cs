@@ -19,7 +19,34 @@ namespace Presentation.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [Authorize(Roles = "Admin,Doctor")]
+        public async Task<IActionResult> Index()
+        {
+            var appointments = await _unitOfWork.Repository<Appointment>().FindAllAsync(
+                a => true,
+                includes: new[]
+                {
+                    "Doctor",
+                    "Doctor.ApplicationUser",
+                    "Patient",
+                    "Patient.ApplicationUser",
+                    "Clinic",
+                    "Payment"
+                });
+
+            if (User.IsInRole("Doctor"))
+            {
+                var userId = _httpContextAccessor.HttpContext?.User
+                    .FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+                appointments = appointments.Where(a => a.DoctorId == userId);
+            }
+
+            return View(appointments.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.StartTime));
+        }
+
         // GET
+        [Authorize(Roles = "Admin,Doctor")]
         public IActionResult CreateAvailableSlot(
             string doctorId)
         {
@@ -28,13 +55,14 @@ namespace Presentation.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin,Doctor")]
         public IActionResult AddSchedule(string doctorId)
         {
             ViewBag.DoctorId = doctorId;
             return View();
         }
 
-        [Authorize(Roles = "Patient,patient")]
+        [Authorize(Roles = "Patient")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book([FromForm] Presentation.ViewModels.BookAppointmentViewModel model)

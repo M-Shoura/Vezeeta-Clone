@@ -1,9 +1,11 @@
 ﻿using Application.DTOs.Drugs;
 using Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
+    [Authorize(Roles = "Admin,Doctor")]
     public class DrugController : Controller
     {
         private readonly IDrugsService _drugService;

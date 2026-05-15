@@ -41,7 +41,7 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" asp-for="DoctorId" />
 
-                        <div asp-validation-summary="All" class="alert alert-danger rounded-3 mb-4"></div>
+                        @* <div asp-validation-summary="All" class="alert alert-danger rounded-3 mb-4"></div> *@
 
                         <!-- CLINIC -->
                         <div class="mb-4">
@@ -51,7 +51,7 @@
                             <select asp-for="ClinicId"
                                     asp-items="ViewBag.Clinics"
                                     class="form-select form-select-lg rounded-3">
-                                <option value="">— Select a Clinic —</option>
+                                <option value="">Select a Clinic</option>
                             </select>
                             <span asp-validation-for="ClinicId" class="text-danger small mt-1 d-block"></span>
                         </div>

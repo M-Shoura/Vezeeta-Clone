@@ -1,0 +1,75 @@
+@model IEnumerable<Domain.Entities.Appointment>
+
+@{
+    ViewData["Title"] = "Appointments";
+}
+
+<div class="app-container">
+    <div class="page-header">
+        <div>
+            <span class="eyebrow"><i class="bi bi-calendar2-check"></i> Scheduling</span>
+            <h1 class="page-title mt-2">Appointments</h1>
+            <p class="page-subtitle">Real appointment records with doctor, patient, clinic, payment, and status.</p>
+        </div>
+        <a asp-controller="Doctor" asp-action="Index" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Book via Doctor
+        </a>
+    </div>
+
+    <div class="section-card p-4">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Clinic</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var appointment in Model)
+                    {
+                        var statusClass = appointment.Status == Domain.Enums.AppointmentStatus.Confirmed
+                            ? "status-success"
+                            : appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted";
+
+                        <tr>
+                            <td>@appointment.AppointmentDate.ToString("dd MMM yyyy")</td>
+                            <td>@appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</td>
+                            <td>@(appointment.Patient?.ApplicationUser?.FullName ?? "N/A")</td>
+                            <td>@(appointment.Doctor?.ApplicationUser?.FullName ?? "N/A")</td>
+                            <td>@(appointment.Clinic?.Name ?? "N/A")</td>
+                            <td><span class="status-badge @statusClass">@appointment.Status</span></td>
+                            <td>
+                                @if (appointment.Payment != null)
+                                {
+                                    <span class="status-badge status-muted">@appointment.Payment.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No payment</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state my-2">
+                                <i class="bi bi-calendar-x"></i>
+                                <p class="mt-2 mb-0">No appointments found.</p>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

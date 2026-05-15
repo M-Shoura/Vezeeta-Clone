@@ -4,44 +4,75 @@
     ViewData["Title"] = "Payments";
 }
 
-<h2>Payments</h2>
+<div class="app-container">
+    <div class="page-header">
+        <div>
+            <span class="eyebrow"><i class="bi bi-credit-card"></i> Revenue operations</span>
+            <h1 class="page-title mt-2">Payments</h1>
+            <p class="page-subtitle">Track appointment payments, methods, and settlement status.</p>
+        </div>
+        <a class="btn btn-primary" asp-action="Create">
+            <i class="bi bi-plus-lg"></i> Add Payment
+        </a>
+    </div>
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Add Payment</a>
-</p>
+    <div class="section-card p-4">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                    <th>Appointment</th>
+                    <th>Doctor</th>
+                    <th>Patient</th>
+                    <th>Clinic</th>
+                    <th>Created</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var payment in Model)
+                    {
+                        var statusClass = payment.Status.ToString().ToLowerInvariant() switch
+                        {
+                            "paid" or "completed" or "success" => "status-success",
+                            "pending" => "status-warning",
+                            "failed" or "cancelled" => "status-danger",
+                            _ => "status-muted"
+                        };
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Status</th>
-            <th>Appointment</th>
-            <th>Doctor</th>
-            <th>Patient</th>
-            <th>Clinic</th>
-            <th>Created</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var p in Model)
-    {
-        <tr>
-            <td>@p.Amount.ToString("C")</td>
-            <td>@p.PaymentMethod</td>
-            <td>@p.Status</td>
-            <td>@p.AppointmentId</td>
-            <td>@p.DoctorName</td>
-            <td>@p.PatientName</td>
-            <td>@p.ClinicName</td>
-            <td>@p.CreatedAt.ToLocalTime().ToString("g")</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@p.Id">Details</a> |
-                <a asp-action="Edit" asp-route-id="@p.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@p.Id">Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+                        <tr>
+                            <td class="fw-bold">@payment.Amount.ToString("C")</td>
+                            <td>@payment.PaymentMethod</td>
+                            <td><span class="status-badge @statusClass">@payment.Status</span></td>
+                            <td>#@payment.AppointmentId</td>
+                            <td>@payment.DoctorName</td>
+                            <td>@payment.PatientName</td>
+                            <td>@payment.ClinicName</td>
+                            <td>@payment.CreatedAt.ToLocalTime().ToString("g")</td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-primary">Details</a>
+                                <a asp-action="Edit" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-warning">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9">
+                            <div class="empty-state my-2">
+                                <i class="bi bi-credit-card"></i>
+                                <p class="mt-2 mb-0">No payments found.</p>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

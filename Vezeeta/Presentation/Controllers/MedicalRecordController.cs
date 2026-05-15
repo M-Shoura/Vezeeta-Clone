@@ -1,10 +1,12 @@
 ﻿using Application.DTOs.Medical_Records;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
+    [Authorize(Roles = "Admin,Doctor,Patient")]
     public class MedicalRecordController : Controller
     {
 
@@ -21,12 +23,15 @@ namespace Presentation.Controllers
 
             return View(records);
         }
+        [Authorize(Roles = "Admin,Doctor")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Create(MedicalRecordDto dto)
         {
             if (!ModelState.IsValid)
@@ -40,6 +45,7 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Edit(int id)
         {
             var record = await _medicalRecordService.GetByIdAsync(id);
@@ -51,6 +57,8 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Edit(
             int id,
             MedicalRecordDto dto)
@@ -66,6 +74,8 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Delete(int id)
         {
             await _medicalRecordService.DeleteAsync(id);

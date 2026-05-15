@@ -2,10 +2,13 @@ using Application.DTOs.Auth;
 using Application.Interfaces.Services.Auth;
 using Application.Results;
 using Domain.Identity;
+using Infranstructure.Persistence.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Presentation.ViewModels.Accounts;
 
 namespace Presentation.Controllers;
 
@@ -14,15 +17,21 @@ public sealed class AccountController : Controller
     private readonly IAuthService _authService;
     private readonly IPasswordService _passwordService;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ApplicationDbContext _context;
 
     public AccountController(
         IAuthService authService,
         IPasswordService passwordService,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager,
+        UserManager<ApplicationUser> userManager,
+        ApplicationDbContext context)
     {
         _authService = authService;
         _passwordService = passwordService;
         _signInManager = signInManager;
+        _userManager = userManager;
+        _context = context;
     }
 
 
@@ -198,6 +207,74 @@ public sealed class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Profile()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+            return Challenge();
+
+        var patient = await _context.PatientProfiles
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.ApplicationUserId == user.Id);
+
+        return View(new ProfileViewModel
+        {
+            FullName = user.FullName,
+            Email = user.Email ?? string.Empty,
+            PhoneNumber = user.PhoneNumber ?? string.Empty,
+            BirthDate = patient?.DateOfBirth ?? DateTime.Today
+        });
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Profile(ProfileViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+            return Challenge();
+
+        user.FullName = model.FullName;
+        user.Email = model.Email;
+        user.UserName = model.Email;
+        user.PhoneNumber = model.PhoneNumber;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+
+            return View(model);
+        }
+
+        var patient = await _context.PatientProfiles
+            .FirstOrDefaultAsync(p => p.ApplicationUserId == user.Id);
+
+        if (patient != null)
+        {
+            patient.DateOfBirth = model.BirthDate;
+            await _context.SaveChangesAsync();
+        }
+
+        TempData["Success"] = "Profile updated successfully.";
+        return RedirectToAction(nameof(Profile));
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
+        return View();
+    }
+
     [AllowAnonymous]
     [HttpGet]
     public IActionResult ExternalLogin(string provider, string? returnUrl = null)
@@ -216,7 +293,7 @@ public sealed class AccountController : Controller
 
     public async Task<IActionResult> ExternalLoginCallback(string? returnUrl = null)
     {
-        returnUrl ??= "/dashboard";
+        returnUrl ??= Url.Action("Index", "Home") ?? "/";
 
         var result = await _authService.ExternalLoginAsync("Google", returnUrl);
 
