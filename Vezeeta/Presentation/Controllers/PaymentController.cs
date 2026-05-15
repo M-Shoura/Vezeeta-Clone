@@ -1,6 +1,8 @@
 using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.Payments;
 
@@ -9,13 +11,16 @@ namespace Presentation.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PaymentController(IPaymentService paymentService)
+        public PaymentController(IPaymentService paymentService, IUnitOfWork unitOfWork)
         {
             _paymentService = paymentService;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: /Payment
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Index()
         {
             var payments = await _paymentService.GetAllPaymentsAsync();
@@ -23,6 +28,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/PatientPayments/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> PatientPayments(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -33,6 +39,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/DoctorPayments/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> DoctorPayments(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -43,6 +50,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Status/status
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Status(PaymentStatus status)
         {
             var payments = await _paymentService.GetPaymentsByStatusAsync(status);
@@ -50,6 +58,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Details/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Details(int id)
         {
             var payment = await _paymentService.GetPaymentByIdAsync(id);
@@ -60,8 +69,18 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Create
-        public async Task<IActionResult> Create(int appointmentId = 0)
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> Create(int appointmentId = 0, bool autoCheckout = false)
         {
+            if (autoCheckout && appointmentId > 0)
+            {
+                var checkoutResult = await CreateCheckoutForAppointmentAsync(appointmentId);
+                if (checkoutResult is not null)
+                {
+                    return checkoutResult;
+                }
+            }
+
             if (appointmentId > 0)
             {
                 var existingPayment = await _paymentService.GetPaymentByAppointmentIdAsync(appointmentId);
@@ -77,9 +96,109 @@ namespace Presentation.Controllers
             return View(vm);
         }
 
+        private async Task<IActionResult?> CreateCheckoutForAppointmentAsync(int appointmentId)
+        {
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            var existingPayment = await _paymentService.GetPaymentByAppointmentIdAsync(appointmentId);
+            if (existingPayment != null)
+            {
+                if (!string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    var currentPaymentAppointment = await _unitOfWork.Repository<Appointment>().FindAsync(
+                        a => a.Id == appointmentId && a.PatientId == currentUserId,
+                        includes: new[]
+                        {
+                            "Doctor.ApplicationUser",
+                            "Patient.ApplicationUser",
+                            "Clinic"
+                        });
+
+                    if (currentPaymentAppointment == null)
+                    {
+                        return Forbid();
+                    }
+                }
+
+                return await RedirectToPaymobAsync(existingPayment.Id, appointmentId);
+            }
+
+            var appointment = await _unitOfWork.Repository<Appointment>().FindAsync(
+                a => a.Id == appointmentId,
+                includes: new[]
+                {
+                    "Doctor.ApplicationUser",
+                    "Patient.ApplicationUser",
+                    "Clinic"
+                });
+
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            if (string.IsNullOrWhiteSpace(currentUserId) || appointment.PatientId != currentUserId)
+            {
+                return Forbid();
+            }
+
+            var doctorClinic = await _unitOfWork.Repository<DoctorClinic>().FindAsync(
+                dc => dc.DoctorId == appointment.DoctorId && dc.ClinicId == appointment.ClinicId,
+                includes: new[] { "Doctor", "Clinic" });
+
+            if (doctorClinic == null)
+            {
+                return BadRequest("No consultation fee is configured for this doctor and clinic.");
+            }
+
+            var payment = new Payment
+            {
+                Amount = doctorClinic.ConsultationFee,
+                PaymentMethod = PaymentMethod.Visa,
+                Status = PaymentStatus.Pending,
+                AppointmentId = appointment.Id
+            };
+
+            await _paymentService.AddPaymentAsync(payment);
+
+            return await RedirectToPaymobAsync(payment.Id, appointmentId);
+        }
+
+        private async Task<IActionResult> RedirectToPaymobAsync(int paymentId, int appointmentId)
+        {
+            var successUrl = Url.Action(
+                action: nameof(Success),
+                controller: "Payment",
+                values: new { paymentId },
+                protocol: Request.Scheme);
+
+            var cancelUrl = Url.Action(
+                action: nameof(Cancel),
+                controller: "Payment",
+                values: new { paymentId },
+                protocol: Request.Scheme);
+
+            if (string.IsNullOrWhiteSpace(successUrl) || string.IsNullOrWhiteSpace(cancelUrl))
+                return StatusCode(500);
+
+            var payment = await _paymentService.GetPaymentByIdAsync(paymentId);
+            var description = payment is null
+                ? $"Appointment payment #{appointmentId}"
+                : $"Appointment payment #{payment.AppointmentId}";
+
+            var checkoutUrl = await _paymentService.CreatePaymobCheckoutUrlAsync(
+                paymentId,
+                successUrl,
+                cancelUrl,
+                description);
+
+            return Redirect(checkoutUrl);
+        }
+
         
 
         // POST: /Payment/Create
+        [Authorize(Roles = "Patient")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PaymentCreateViewModel vm)
@@ -129,6 +248,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Success?paymentId=1&transactionId=...
+        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Success(int paymentId, string? transactionId = null)
         {
             var completed = await _paymentService.FinalizePaymobPaymentAsync(paymentId, transactionId);
@@ -151,6 +271,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Cancel?paymentId=1
+        [Authorize(Roles = "Patient")]
         public IActionResult Cancel(int paymentId)
         {
             return RedirectToAction(nameof(Result), new
@@ -162,21 +283,35 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Result?paymentId=1&isSuccess=true
-        public IActionResult Result(int paymentId, bool isSuccess, string? message = null)
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> Result(int paymentId, bool isSuccess, string? message = null)
         {
+            var payment = await _paymentService.GetPaymentByIdAsync(paymentId);
+            if (payment == null)
+                return NotFound();
+
             var vm = new PaymentResultViewModel
             {
-                PaymentId = paymentId,
                 IsSuccess = isSuccess,
                 Message = string.IsNullOrWhiteSpace(message)
                     ? (isSuccess ? "Payment completed successfully." : "Payment failed.")
-                    : message
+                    : message,
+                Amount = payment.Amount,
+                PaymentMethod = payment.PaymentMethod.ToString(),
+                Status = payment.Status.ToString(),
+                PaidAt = payment.PaidAt,
+                AppointmentDate = payment.AppointmentDate,
+                StartTime = payment.StartTime,
+                EndTime = payment.EndTime,
+                DoctorName = payment.DoctorName,
+                ClinicName = payment.ClinicName
             };
 
             return View(vm);
         }
 
         // GET: /Payment/Edit/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Edit(int id)
         {
             var payment = await _paymentService.GetPaymentByIdAsync(id);
@@ -198,6 +333,7 @@ namespace Presentation.Controllers
         }
 
         // POST: /Payment/Edit/id
+    [Authorize(Roles = "Admin,Doctor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, PaymentEditViewModel vm)
@@ -232,6 +368,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Payment/Delete/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Delete(int id)
         {
             var payment = await _paymentService.GetPaymentByIdAsync(id);
@@ -242,6 +379,7 @@ namespace Presentation.Controllers
         }
 
         // POST: /Payment/Delete/id
+    [Authorize(Roles = "Admin,Doctor")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
