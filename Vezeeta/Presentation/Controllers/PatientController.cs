@@ -1,5 +1,6 @@
 using Application.Interfaces.Services;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
@@ -7,16 +8,23 @@ namespace Presentation.Controllers
     public class PatientController : Controller
     {
         private readonly IPatientProfileService _patientService;
+        private readonly IDashboardService _dashboardService;
+        private readonly ICurrentUserService _currentUserService;
 
         public PatientController(
-            IPatientProfileService patientService)
+            IPatientProfileService patientService,
+            IDashboardService dashboardService,
+            ICurrentUserService currentUserService)
         {
             _patientService = patientService;
+            _dashboardService = dashboardService;
+            _currentUserService = currentUserService;
         }
 
         #region Patient CRUD
 
         // GET: /Patient
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var patients =
@@ -27,6 +35,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Patient/Details/id
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(
             string id)
         {
@@ -44,6 +53,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Patient/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -51,6 +61,7 @@ namespace Presentation.Controllers
 
         // POST: /Patient/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             PatientProfile patient)
@@ -68,6 +79,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Patient/Edit/id
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(
             string id)
         {
@@ -86,6 +98,7 @@ namespace Presentation.Controllers
 
         // POST: /Patient/Edit/id
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             string id,
@@ -107,6 +120,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Patient/Delete/id
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(
             string id)
         {
@@ -125,6 +139,7 @@ namespace Presentation.Controllers
 
         // POST: /Patient/Delete/id
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(
             string id)
@@ -143,6 +158,7 @@ namespace Presentation.Controllers
         #region Patient Profile
 
         // GET: /Patient/Profile
+        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Profile()
         {
             var profile = await _patientService
@@ -152,6 +168,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Patient/EditProfile
+        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> EditProfile()
         {
             var profile = await _patientService
@@ -162,6 +179,7 @@ namespace Presentation.Controllers
 
         // POST: /Patient/EditProfile
         [HttpPost]
+        [Authorize(Roles = "Patient")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProfile(
             Application.DTOs.Profiles.Patients.PatientProfileDto model)
@@ -183,6 +201,7 @@ namespace Presentation.Controllers
         #region Appointments
 
         // GET: /Patient/Appointments
+        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Appointments()
         {
             var appointments =
@@ -193,5 +212,21 @@ namespace Presentation.Controllers
         }
 
         #endregion
+
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> Dashboard(CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(_currentUserService.UserId))
+                return Challenge();
+
+            var dashboard = await _dashboardService.GetPatientDashboardAsync(
+                _currentUserService.UserId,
+                cancellationToken);
+
+            if (dashboard == null)
+                return NotFound();
+
+            return View(dashboard);
+        }
     }
 }

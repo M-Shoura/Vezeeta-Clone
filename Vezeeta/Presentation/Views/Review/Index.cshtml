@@ -4,38 +4,65 @@
     ViewData["Title"] = "Reviews";
 }
 
-<h2>Reviews</h2>
+<div class="app-container">
+    <div class="page-header">
+        <div>
+            <span class="eyebrow"><i class="bi bi-star"></i> Patient feedback</span>
+            <h1 class="page-title mt-2">Reviews</h1>
+            <p class="page-subtitle">Monitor satisfaction signals across doctors and patient visits.</p>
+        </div>
+        <a class="btn btn-primary" asp-action="Create">
+            <i class="bi bi-plus-lg"></i> Add Review
+        </a>
+    </div>
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Add Review</a>
-</p>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Rating</th>
-            <th>Comment</th>
-            <th>Doctor</th>
-            <th>Patient</th>
-            <th>Created</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var r in Model)
-    {
-        <tr>
-            <td>@r.Rating</td>
-            <td>@r.Comment</td>
-            <td>@r.DoctorName</td>
-            <td>@r.PatientName</td>
-            <td>@r.CreatedAt.ToLocalTime().ToString("g")</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@r.Id">Details</a> |
-                <a asp-action="Edit" asp-route-id="@r.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@r.Id">Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+    <div class="section-card p-4">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Doctor</th>
+                    <th>Patient</th>
+                    <th>Created</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var review in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span class="status-badge status-warning">
+                                    <i class="bi bi-star-fill"></i> @review.Rating
+                                </span>
+                            </td>
+                            <td>@review.Comment</td>
+                            <td>@review.DoctorName</td>
+                            <td>@review.PatientName</td>
+                            <td>@review.CreatedAt.ToLocalTime().ToString("g")</td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@review.Id" class="btn btn-sm btn-outline-primary">Details</a>
+                                <a asp-action="Edit" asp-route-id="@review.Id" class="btn btn-sm btn-outline-warning">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@review.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state my-2">
+                                <i class="bi bi-star"></i>
+                                <p class="mt-2 mb-0">No reviews found.</p>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

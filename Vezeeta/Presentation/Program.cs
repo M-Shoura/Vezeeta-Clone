@@ -31,6 +31,11 @@ namespace Presentation
 
             // Configure services for the application.
             builder.Services.AddUserServices(builder.Configuration);
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.LoginPath = "/Account/Login";
+            });
             
             // Add services to the container.
             
@@ -73,7 +78,7 @@ namespace Presentation
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Doctor}/{action=Index}/{id?}")
+                pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
 

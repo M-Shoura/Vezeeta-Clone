@@ -4,15 +4,21 @@
     ViewData["Title"] = "Clinics";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold">Clinics</h1>
-        <a asp-action="Create" class="btn btn-success">Add Clinic</a>
+<div class="app-container">
+    <div class="page-header">
+        <div>
+            <span class="eyebrow"><i class="bi bi-hospital"></i> Clinic network</span>
+            <h1 class="page-title mt-2">Clinics</h1>
+            <p class="page-subtitle">Locations, contact details, and operational status.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Add Clinic
+        </a>
     </div>
 
-    @if (Model.Any())
-    {
-        <div class="table-responsive">
+    <div class="section-card p-4">
+        @if (Model.Any())
+        {
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
@@ -27,32 +33,41 @@
                     @foreach (var clinic in Model)
                     {
                         <tr>
-                            <td class="fw-semibold">@clinic.Name</td>
+                            <td class="fw-semibold">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="icon-box teal" style="width:38px;height:38px;flex-basis:38px;"><i class="bi bi-hospital"></i></span>
+                                    @clinic.Name
+                                </div>
+                            </td>
                             <td>@clinic.Address</td>
                             <td>@clinic.PhoneNumber</td>
                             <td>
-                                @if (clinic.IsActive)
-                                {
-                                    <span class="badge bg-success">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-secondary">Inactive</span>
-                                }
+                                <span class="status-badge @(clinic.IsActive ? "status-success" : "status-muted")">
+                                    @(clinic.IsActive ? "Active" : "Inactive")
+                                </span>
                             </td>
                             <td class="text-end">
-                                <a asp-action="Details" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-primary">Details</a>
-                                <a asp-action="Edit" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-warning">Edit</a>
-                                <a asp-action="Delete" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                                <a asp-action="Details" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Details
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-warning">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-info">No clinics found.</div>
-    }
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-hospital"></i>
+                <p class="mt-2 mb-0">No clinics found.</p>
+            </div>
+        }
+    </div>
 </div>

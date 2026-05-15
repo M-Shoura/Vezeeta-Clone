@@ -1,5 +1,6 @@
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
@@ -13,6 +14,7 @@ namespace Presentation.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var clinics = await _unitOfWork
@@ -22,6 +24,7 @@ namespace Presentation.Controllers
             return View(clinics.OrderBy(c => c.Name));
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var clinic = await _unitOfWork
@@ -41,12 +44,14 @@ namespace Presentation.Controllers
             return View(clinic);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View(new Clinic { IsActive = true });
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Clinic clinic)
         {
@@ -64,6 +69,7 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var clinic = await _unitOfWork
@@ -77,6 +83,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Clinic clinic)
         {
@@ -112,6 +119,7 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var clinic = await _unitOfWork
@@ -125,6 +133,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

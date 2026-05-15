@@ -1,42 +1,57 @@
 @model Domain.Entities.PatientProfile
 
-<h2>Create Patient</h2>
+@{
+    ViewData["Title"] = "Create Patient";
+}
 
-<form method="post">
-    <div class="mb-2">
-        <label>Application User Id</label>
-        <input asp-for="ApplicationUserId" class="form-control" />
-    </div>
+<div class="card p-4">
+    <h3 class="mb-3">Create Patient</h3>
 
-    <div class="mb-2">
-        <label>Date of Birth</label>
-        <input asp-for="DateOfBirth" class="form-control" type="date" />
-    </div>
+    <form method="post">
+        @Html.AntiForgeryToken()
 
-    <div class="mb-2">
-        <label>Gender</label>
-        <select asp-for="Gender" class="form-control">
-            <option value="">Select Gender</option>
-            <option value="0">Male</option>
-            <option value="1">Female</option>
-            <option value="2">Other</option>
-        </select>
-    </div>
+        <div asp-validation-summary="All" class="alert alert-danger"></div>
 
-    <div class="mb-2">
-        <label>Blood Type</label>
-        <input asp-for="BloodType" class="form-control" />
-    </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Application User Id</label>
+                <input asp-for="ApplicationUserId" class="form-control" />
+            </div>
 
-    <div class="mb-2">
-        <label>Emergency Contact Name</label>
-        <input asp-for="EmergencyContactName" class="form-control" />
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">Date of Birth</label>
+                <input asp-for="DateOfBirth" class="form-control" type="date" />
+            </div>
 
-    <div class="mb-2">
-        <label>Emergency Contact Phone</label>
-        <input asp-for="EmergencyContactPhone" class="form-control" />
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">Gender</label>
+                <select asp-for="Gender" class="form-select">
+                    <option value="">Select Gender</option>
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                    <option value="2">Other</option>
+                </select>
+            </div>
 
-    <button class="btn btn-success">Create</button>
-</form>
+            <div class="col-md-6">
+                <label class="form-label">Blood Type</label>
+                <input asp-for="BloodType" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Emergency Contact Name</label>
+                <input asp-for="EmergencyContactName" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Emergency Contact Phone</label>
+                <input asp-for="EmergencyContactPhone" class="form-control" />
+            </div>
+        </div>
+
+        <div class="mt-3 d-flex gap-2">
+            <button class="btn btn-primary">Create</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>

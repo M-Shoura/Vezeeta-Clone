@@ -14,47 +14,64 @@
                 : "User";
 }
 
-<nav class="navbar navbar-expand bg-white shadow-sm px-4 py-3">
-
-    <div class="container-fluid">
-
-        <div>
-
-            <h5 class="mb-0 fw-bold">
-                @ViewData["Title"]
-            </h5>
-
-        </div>
-
-        <div class="d-flex align-items-center gap-4">
-
-            <button class="btn position-relative">
-
-                <i class="fa-solid fa-bell fs-5"></i>
-
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    3
-                </span>
-
-            </button>
-
-            <div class="d-flex align-items-center gap-2">
-
-                <img src="~/images/@currentUser?.ProfilePicture"
-                     class="rounded-circle"
-                     width="45"
-                     height="45"
-                     style="object-fit:cover;" />
-
+<nav class="admin-topbar px-3 px-lg-4 d-flex align-items-center">
+    <div class="container-fluid p-0">
+        <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <button class="topbar-icon-btn sidebar-toggle" type="button" data-sidebar-toggle aria-label="Toggle sidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
                 <div>
-                    <h6 class="mb-0">@displayName</h6>
-                    <small class="text-muted">@roleName</small>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item"><a asp-controller="Admin" asp-action="Index">Vezeeta</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                        </ol>
+                    </nav>
+                    <h1 class="h4 mb-0 fw-bold">@ViewData["Title"]</h1>
                 </div>
-
             </div>
 
+            <div class="d-flex align-items-center gap-3">
+                <form class="admin-search" asp-controller="Doctor" asp-action="Index" method="get">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input class="form-control" type="search" name="name" placeholder="Search doctors or patients" aria-label="Search" />
+                </form>
+
+                <button class="topbar-icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+
+                <div class="dropdown">
+                    <button class="topbar-icon-btn" type="button" id="notificationsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge bg-danger">3</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2" aria-labelledby="notificationsMenu">
+                        <li><h6 class="dropdown-header">Notifications</h6></li>
+                        <li><a class="dropdown-item rounded-3" asp-controller="Appointment" asp-action="Index">New appointment booked</a></li>
+                        <li><a class="dropdown-item rounded-3" asp-controller="Doctor" asp-action="Index">Doctor profile awaiting review</a></li>
+                        <li><a class="dropdown-item rounded-3" asp-controller="Payment" asp-action="Index">Revenue report is ready</a></li>
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle px-2 px-md-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="@ProfilePictureHelper.GetUrl(currentUser?.ProfilePicture, displayName, size: 80)"
+                             class="avatar-sm" alt="@displayName" />
+                        <span class="d-none d-md-inline text-start">
+                            <span class="d-block fw-bold lh-1">@displayName</span>
+                            <small class="text-muted">@roleName</small>
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2">
+                        <li><a class="dropdown-item rounded-3" asp-controller="Account" asp-action="Profile">Profile</a></li>
+                        <li><a class="dropdown-item rounded-3" asp-controller="Account" asp-action="ChangePassword">Security</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item rounded-3 text-danger" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
     </div>
-
 </nav>

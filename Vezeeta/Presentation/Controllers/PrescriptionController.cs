@@ -1,11 +1,13 @@
 using Application.DTOs.Prescriptions;
 using Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
+    [Authorize(Roles = "Admin,Doctor,Patient")]
     public class PrescriptionController : Controller
     {
         private readonly IPrescriptionService _prescriptionService;
@@ -19,6 +21,7 @@ namespace Presentation.Controllers
             _prescriptionItemService = prescriptionItemService;
         }
 
+        [Authorize(Roles = "Admin,Doctor,Patient")]
         public async Task<IActionResult> Index()
         {
             var prescriptions = await _prescriptionService.GetAllAsync();
@@ -26,7 +29,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-       
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Save([FromBody] PrescriptionDto dto)
         {
             if (!ModelState.IsValid)
@@ -50,6 +53,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Doctor,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
@@ -61,6 +65,7 @@ namespace Presentation.Controllers
         }
     
         [HttpGet]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> GetDrugsBySearch(string search)
         {
             var drugs = await _prescriptionItemService.GetDrugsBySearchAsync(search);

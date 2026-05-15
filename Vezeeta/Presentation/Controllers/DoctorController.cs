@@ -2,6 +2,7 @@ using Application.DTOs;
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Infrastructure.Persistence.Configurations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Presentation.ViewModels;
@@ -11,16 +12,23 @@ namespace Presentation.Controllers
     public class DoctorController : Controller
     {
         private readonly IDoctorService _doctorService;
+        private readonly IDashboardService _dashboardService;
+        private readonly ICurrentUserService _currentUserService;
 
         public DoctorController(
-            IDoctorService doctorService)
+            IDoctorService doctorService,
+            IDashboardService dashboardService,
+            ICurrentUserService currentUserService)
         {
             _doctorService = doctorService;
+            _dashboardService = dashboardService;
+            _currentUserService = currentUserService;
         }
 
         #region Doctor CRUD
 
         // GET: /Doctor
+        [AllowAnonymous]
         public async Task<IActionResult> Index(
     string? name,
     string? specialization)
@@ -48,6 +56,7 @@ namespace Presentation.Controllers
             return View(doctors);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Details(
     string id)
         {
@@ -90,12 +99,14 @@ namespace Presentation.Controllers
         }
 
         // GET: /Doctor/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: /Doctor/Create
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
@@ -113,10 +124,13 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
+            if (!CanManageDoctor(id))
+                return Forbid();
 
             var doctor =
                 await _doctorService
@@ -142,6 +156,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Doctor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
     string id,
@@ -149,6 +164,8 @@ namespace Presentation.Controllers
         {
             if (id != model.ApplicationUserId)
                 return BadRequest();
+            if (!CanManageDoctor(id))
+                return Forbid();
 
             if (!ModelState.IsValid)
             {
@@ -177,6 +194,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Doctor/Delete/id
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(
             string id)
         {
@@ -195,6 +213,7 @@ namespace Presentation.Controllers
 
         // POST: /Doctor/Delete/id
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(
             string id)
@@ -213,6 +232,7 @@ namespace Presentation.Controllers
         #region Availability
 
         // GET: /Doctor/AvailableDoctors
+        [AllowAnonymous]
         public async Task<IActionResult>
             AvailableDoctors()
         {
@@ -225,6 +245,7 @@ namespace Presentation.Controllers
 
         // POST: /Doctor/ToggleAvailability/id
         [HttpPost]
+        [Authorize(Roles = "Admin,Doctor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult>
             ToggleAvailability(
@@ -249,6 +270,7 @@ namespace Presentation.Controllers
         #region Search
 
         // GET: /Doctor/Search
+        [AllowAnonymous]
         public IActionResult Search()
         {
             return View();
@@ -256,6 +278,7 @@ namespace Presentation.Controllers
 
         // POST: /Doctor/SearchBySpecialization
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult>
             SearchBySpecialization(
                 string specialization)
@@ -286,11 +309,14 @@ namespace Presentation.Controllers
         #region Doctor Clinics
 
         // GET: /Doctor/AssignClinic/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> AssignClinic(
             string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
+            if (!CanManageDoctor(id))
+                return Forbid();
 
             ViewBag.DoctorId = id;
 
@@ -303,6 +329,7 @@ namespace Presentation.Controllers
 
         // POST: /Doctor/AssignClinic
         [HttpPost]
+        [Authorize(Roles = "Admin,Doctor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult>
             AssignClinic(
@@ -310,6 +337,9 @@ namespace Presentation.Controllers
                 int clinicId,
                 decimal consultationFee)
         {
+            if (!CanManageDoctor(doctorId))
+                return Forbid();
+
             await _doctorService
                 .AssignDoctorToClinicAsync(
                     doctorId,
@@ -326,12 +356,16 @@ namespace Presentation.Controllers
 
         // POST: /Doctor/UpdateConsultationFee
         [HttpPost]
+        [Authorize(Roles = "Admin,Doctor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateConsultationFee(
             string doctorId,
             int clinicId,
             decimal consultationFee)
         {
+            if (!CanManageDoctor(doctorId))
+                return Forbid();
+
             try
             {
                 await _doctorService
@@ -351,11 +385,14 @@ namespace Presentation.Controllers
         #region Doctor Schedule
 
         // GET: /Doctor/Schedules/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult>
             Schedules(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
+            if (!CanManageDoctor(id))
+                return Forbid();
 
             var schedules =
                 await _doctorService
@@ -367,9 +404,13 @@ namespace Presentation.Controllers
         }
 
         // GET: /Doctor/AddSchedule?doctorId=...
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> AddSchedule(
             string doctorId)
         {
+            if (!CanManageDoctor(doctorId))
+                return Forbid();
+
             ViewBag.DoctorId = doctorId;
 
             await PopulateDoctorClinicSelectListAsync(doctorId);
@@ -385,6 +426,7 @@ namespace Presentation.Controllers
 
         // POST: /Doctor/AddSchedule
         [HttpPost]
+        [Authorize(Roles = "Admin,Doctor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult>
             AddSchedule(
@@ -395,6 +437,8 @@ namespace Presentation.Controllers
 
             if (schedule == null)
                 return BadRequest();
+            if (!CanManageDoctor(schedule.DoctorId))
+                return Forbid();
 
             if (!ModelState.IsValid)
             {
@@ -428,6 +472,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Doctor/DeleteSchedule/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult>
             DeleteSchedule(int id)
         {
@@ -437,16 +482,25 @@ namespace Presentation.Controllers
 
             if (schedule == null)
                 return NotFound();
+            if (!CanManageDoctor(schedule.DoctorId))
+                return Forbid();
 
             return View(schedule);
         }
 
         // POST: /Doctor/DeleteSchedule/id
         [HttpPost, ActionName("DeleteSchedule")]
+        [Authorize(Roles = "Admin,Doctor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult>
             DeleteScheduleConfirmed(int id)
         {
+            var schedule = await _doctorService.GetScheduleByIdAsync(id);
+            if (schedule == null)
+                return NotFound();
+            if (!CanManageDoctor(schedule.DoctorId))
+                return Forbid();
+
             var doctorId =
                 await _doctorService
                     .DeleteScheduleAsync(id);
@@ -464,33 +518,22 @@ namespace Presentation.Controllers
         #region Dashboard
 
         // GET: /Doctor/Dashboard/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult>
-            Dashboard(string id)
+            Dashboard(string? id)
         {
-            if (string.IsNullOrWhiteSpace(id))
-                return BadRequest();
+            var doctorId = string.IsNullOrWhiteSpace(id) ? _currentUserService.UserId : id;
 
-            var doctor =
-                await _doctorService
-                    .GetDoctorDetailsAsync(id);
+            if (string.IsNullOrWhiteSpace(doctorId))
+                return Challenge();
 
-            if (doctor == null)
+            if (User.IsInRole("Doctor") && doctorId != _currentUserService.UserId)
+                return Forbid();
+
+            var model = await _dashboardService.GetDoctorDashboardAsync(doctorId);
+
+            if (model == null)
                 return NotFound();
-
-            var appointments =
-                await _doctorService
-                    .GetDoctorAppointmentsAsync(id);
-
-            var clinics =
-                await _doctorService
-                    .GetDoctorClinicsAsync(id);
-
-            var model = new Presentation.ViewModels.DoctorDashboardViewModel
-            {
-                Doctor = doctor,
-                Appointments = appointments,
-                Clinics = clinics
-            };
 
             return View(model);
         }
@@ -508,6 +551,16 @@ namespace Presentation.Controllers
                 "Id",
                 "Name",
                 selectedClinicId);
+        }
+
+        private bool CanManageDoctor(string? doctorId)
+        {
+            if (User.IsInRole("Admin"))
+                return true;
+
+            return User.IsInRole("Doctor")
+                && !string.IsNullOrWhiteSpace(doctorId)
+                && doctorId == _currentUserService.UserId;
         }
 
     }
