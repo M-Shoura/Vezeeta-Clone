@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Domain.Enums;
+using Application.Validators;
 
 namespace Presentation.ViewModels.Payments
 {
@@ -21,8 +22,10 @@ namespace Presentation.ViewModels.Payments
         [Required]
         public int AppointmentId { get; set; }
 
+        [RequiredIfEnumValue(nameof(Status), PaymentStatus.Completed)]
         public string? TransactionReference { get; set; }
 
+        [RequiredIfEnumValue(nameof(Status), PaymentStatus.Failed)]
         public string? FailureReason { get; set; }
     }
 }
