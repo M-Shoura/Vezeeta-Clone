@@ -1,9 +1,11 @@
 using Application.Interfaces.Services;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Presentation.ViewModels.Reviews;
+using System.Security.Claims;
 
 namespace Presentation.Controllers
 {
@@ -19,6 +21,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Review
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Index()
         {
             var reviews = await _reviewService.GetAllReviewsAsync();
@@ -26,6 +29,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Review/DoctorReviews/id
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> DoctorReviews(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -37,10 +41,15 @@ namespace Presentation.Controllers
         }
 
         // GET: /Review/PatientReviews/id
+        [Authorize(Roles = "Patient,Admin,Doctor")]
         public async Task<IActionResult> PatientReviews(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
+
+            var currentUserId = GetCurrentUserId();
+            if (IsPatientUser() && id != currentUserId)
+                return Forbid();
 
             var reviews = await _reviewService.GetPatientReviewsAsync(id);
 
@@ -48,16 +57,25 @@ namespace Presentation.Controllers
         }
 
         // GET: /Review/Details/id
+        [Authorize(Roles = "Patient,Admin,Doctor")]
         public async Task<IActionResult> Details(int id)
         {
             var review = await _reviewService.GetReviewByIdAsync(id);
             if (review == null)
                 return NotFound();
 
+            var currentUserId = GetCurrentUserId();
+            if (IsPatientUser() && review.PatientId != currentUserId)
+                return Forbid();
+
+            if (IsDoctorUser() && review.DoctorId != currentUserId && !IsAdminUser())
+                return Forbid();
+
             return View(review);
         }
 
         // GET: /Review/Create
+        [Authorize(Roles = "Patient")]
         public IActionResult Create(int appointmentId = 0)
         {
             var vm = new ReviewCreateViewModel
@@ -69,6 +87,7 @@ namespace Presentation.Controllers
         }
 
         // POST: /Review/Create
+        [Authorize(Roles = "Patient")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ReviewCreateViewModel vm)
@@ -76,12 +95,19 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
+            var currentUserId = GetCurrentUserId();
+            if (string.IsNullOrWhiteSpace(currentUserId))
+                return Forbid();
+
             var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(vm.AppointmentId);
             if (appointment == null)
             {
                 ModelState.AddModelError(nameof(vm.AppointmentId), "Appointment not found.");
                 return View(vm);
             }
+
+            if (appointment.PatientId != currentUserId)
+                return Forbid();
 
             var existingReview = await _unitOfWork.Repository<Review>()
                 .FindAsync(r => r.AppointmentId == vm.AppointmentId);
@@ -116,11 +142,16 @@ namespace Presentation.Controllers
         }
 
         // GET: /Review/Edit/id
+        [Authorize(Roles = "Patient,Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var dto = await _reviewService.GetReviewByIdAsync(id);
             if (dto == null)
                 return NotFound();
+
+            var currentUserId = GetCurrentUserId();
+            if (!IsAdminUser() && dto.PatientId != currentUserId)
+                return Forbid();
 
             var vm = new ReviewEditViewModel
             {
@@ -136,6 +167,7 @@ namespace Presentation.Controllers
         }
 
         // POST: /Review/Edit/id
+        [Authorize(Roles = "Patient,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ReviewEditViewModel vm)
@@ -146,7 +178,15 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
-            var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(vm.AppointmentId);
+            var existingReview = await _reviewService.GetReviewByIdAsync(id);
+            if (existingReview == null)
+                return NotFound();
+
+            var currentUserId = GetCurrentUserId();
+            if (!IsAdminUser() && existingReview.PatientId != currentUserId)
+                return Forbid();
+
+            var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(existingReview.AppointmentId);
             if (appointment == null)
             {
                 ModelState.AddModelError(nameof(vm.AppointmentId), "Appointment not found.");
@@ -154,7 +194,7 @@ namespace Presentation.Controllers
             }
 
             var conflictingReview = await _unitOfWork.Repository<Review>()
-                .FindAsync(r => r.AppointmentId == vm.AppointmentId && r.Id != vm.Id);
+                .FindAsync(r => r.AppointmentId == existingReview.AppointmentId && r.Id != vm.Id);
             if (conflictingReview != null)
             {
                 ModelState.AddModelError(nameof(vm.AppointmentId), "A review already exists for this appointment.");
@@ -166,9 +206,9 @@ namespace Presentation.Controllers
                 Id = vm.Id,
                 Rating = vm.Rating,
                 Comment = vm.Comment,
-                AppointmentId = vm.AppointmentId,
-                DoctorId = appointment.DoctorId!,
-                PatientId = appointment.PatientId!
+                AppointmentId = existingReview.AppointmentId,
+                DoctorId = existingReview.DoctorId,
+                PatientId = existingReview.PatientId
             };
 
             await _reviewService.UpdateReviewAsync(review);
@@ -179,25 +219,59 @@ namespace Presentation.Controllers
         }
 
         // GET: /Review/Delete/id
+        [Authorize(Roles = "Patient,Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var dto = await _reviewService.GetReviewByIdAsync(id);
             if (dto == null)
                 return NotFound();
 
+            var currentUserId = GetCurrentUserId();
+            if (!IsAdminUser() && dto.PatientId != currentUserId)
+                return Forbid();
+
             return View(dto);
         }
 
         // POST: /Review/Delete/id
+        [Authorize(Roles = "Patient,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var dto = await _reviewService.GetReviewByIdAsync(id);
+            if (dto == null)
+                return NotFound();
+
+            var currentUserId = GetCurrentUserId();
+            if (!IsAdminUser() && dto.PatientId != currentUserId)
+                return Forbid();
+
             await _reviewService.DeleteReviewAsync(id);
 
             TempData["Success"] = "Review deleted successfully";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private string? GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        private bool IsAdminUser()
+        {
+            return User.IsInRole("Admin");
+        }
+
+        private bool IsDoctorUser()
+        {
+            return User.IsInRole("Doctor");
+        }
+
+        private bool IsPatientUser()
+        {
+            return User.IsInRole("Patient");
         }
     }
 }
