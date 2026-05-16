@@ -28,17 +28,6 @@ namespace Presentation.Controllers
             return View(payments);
         }
 
-        // GET: /Payment/PatientPayments/id
-        [Authorize(Roles = "Admin,Doctor")]
-        public async Task<IActionResult> PatientPayments(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-                return BadRequest();
-
-            var payments = await _paymentService.GetPatientPaymentsAsync(id);
-            return View(payments);
-        }
-
         // GET: /Payment/DoctorPayments/id
         [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> DoctorPayments(string id)
@@ -47,14 +36,6 @@ namespace Presentation.Controllers
                 return BadRequest();
 
             var payments = await _paymentService.GetDoctorPaymentsAsync(id);
-            return View(payments);
-        }
-
-        // GET: /Payment/Status/status
-        [Authorize(Roles = "Admin,Doctor")]
-        public async Task<IActionResult> Status(PaymentStatus status)
-        {
-            var payments = await _paymentService.GetPaymentsByStatusAsync(status);
             return View(payments);
         }
 
@@ -355,87 +336,6 @@ namespace Presentation.Controllers
             };
 
             return View(vm);
-        }
-
-        // GET: /Payment/Edit/id
-        [Authorize(Roles = "Admin,Doctor")]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var payment = await _paymentService.GetPaymentByIdAsync(id);
-            if (payment == null)
-                return NotFound();
-
-            var vm = new PaymentEditViewModel
-            {
-                Id = payment.Id,
-                Amount = payment.Amount,
-                PaymentMethod = payment.PaymentMethod,
-                Status = payment.Status,
-                AppointmentId = payment.AppointmentId,
-                TransactionReference = payment.TransactionReference,
-                FailureReason = payment.FailureReason
-            };
-
-            return View(vm);
-        }
-
-        // POST: /Payment/Edit/id
-    [Authorize(Roles = "Admin,Doctor")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PaymentEditViewModel vm)
-        {
-            if (id != vm.Id)
-                return BadRequest();
-
-            if (!ModelState.IsValid)
-                return View(vm);
-
-            var currentPayment = await _paymentService.GetPaymentByIdAsync(id);
-            if (currentPayment == null)
-                return NotFound();
-
-            var payment = new Payment
-            {
-                Id = vm.Id,
-                Amount = vm.Amount,
-                PaymentMethod = vm.PaymentMethod,
-                Status = currentPayment.Status,
-                AppointmentId = vm.AppointmentId,
-                TransactionReference = vm.TransactionReference,
-                FailureReason = vm.FailureReason,
-                PaidAt = currentPayment.PaidAt
-            };
-
-            await _paymentService.UpdatePaymentAsync(payment);
-
-            TempData["Success"] = "Payment updated successfully";
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: /Payment/Delete/id
-        [Authorize(Roles = "Admin,Doctor")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var payment = await _paymentService.GetPaymentByIdAsync(id);
-            if (payment == null)
-                return NotFound();
-
-            return View(payment);
-        }
-
-        // POST: /Payment/Delete/id
-    [Authorize(Roles = "Admin,Doctor")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            await _paymentService.DeletePaymentAsync(id);
-
-            TempData["Success"] = "Payment deleted successfully";
-
-            return RedirectToAction(nameof(Index));
         }
 
         private string? GetCurrentUserId()

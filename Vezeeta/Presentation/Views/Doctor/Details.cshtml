@@ -192,67 +192,48 @@
                 </span>
             </div>
 
-            <div class="card-body p-0">
+            <div class="card-body p-4">
                 @if (appointments.Any())
                 {
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0 align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="ps-4">Patient</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Clinic</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var appt in appointments.OrderByDescending(a => a.AppointmentDate))
-                                {
-                                    <tr>
-                                        <td class="ps-4">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <img src="@ProfilePictureHelper.GetUrl(appt.Patient?.ApplicationUser?.ProfilePicture, appt.Patient?.ApplicationUser?.FullName, size: 80)"
-                                                       alt="@(appt.Patient?.ApplicationUser?.FullName ?? "Patient")"
-                                                     class="rounded-circle"
-                                                     width="38"
-                                                     height="38"
-                                                     style="object-fit:cover;" />
-                                                <span class="fw-semibold">
-                                                    @(appt.Patient?.ApplicationUser?.FullName ?? "N/A")
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td>@appt.AppointmentDate.ToString("MMM dd, yyyy")</td>
-                                        <td>@appt.StartTime.ToString(@"hh\:mm") - @appt.EndTime.ToString(@"hh\:mm")</td>
-                                        <td>@(appt.Clinic?.Name ?? "-")</td>
-                                        <td>
-                                            @switch (appt.Status)
-                                            {
-                                                case Domain.Enums.AppointmentStatus.Pending:
-                                                    <span class="badge bg-warning text-dark">Pending</span>
-                                                    break;
-                                                case Domain.Enums.AppointmentStatus.Confirmed:
-                                                    <span class="badge bg-success">Confirmed</span>
-                                                    break;
-                                                case Domain.Enums.AppointmentStatus.Completed:
-                                                    <span class="badge bg-info text-dark">Completed</span>
-                                                    break;
-                                                default:
-                                                    <span class="badge bg-secondary">@appt.Status</span>
-                                                    break;
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                    <div class="d-grid gap-3">
+                        @foreach (var appt in appointments.OrderByDescending(a => a.AppointmentDate))
+                        {
+                            var statusClass = appt.Status == Domain.Enums.AppointmentStatus.Confirmed
+                                ? "status-success"
+                                : appt.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" 
+                                : appt.Status == Domain.Enums.AppointmentStatus.Completed ? "status-info" : "status-muted";
+
+                            <article class="appointment-card card p-4 border-0 shadow-sm hover-lift">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@ProfilePictureHelper.GetUrl(appt.Patient?.ApplicationUser?.ProfilePicture, appt.Patient?.ApplicationUser?.FullName, size: 80)"
+                                             alt="@(appt.Patient?.ApplicationUser?.FullName ?? "Patient")"
+                                             class="rounded-circle border border-2 border-primary"
+                                             width="48"
+                                             height="48"
+                                             style="object-fit:cover;" />
+                                        <div>
+                                            <h6 class="fw-bold mb-1">@(appt.Patient?.ApplicationUser?.FullName ?? "N/A")</h6>
+                                            <small class="text-muted">@appt.AppointmentDate.ToString("dd MMM yyyy"), @appt.StartTime.ToString(@"hh\:mm")</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="text-end">
+                                            <span class="d-block small text-muted">@(appt.Clinic?.Name ?? "-")</span>
+                                            <span class="d-block small fw-semibold">@appt.EndTime.ToString(@"hh\:mm")</span>
+                                        </div>
+                                        <span class="status-badge @statusClass">@appt.Status</span>
+                                    </div>
+                                </div>
+                            </article>
+                        }
                     </div>
                 }
                 else
                 {
-                    <div class="p-4 text-center text-muted">
-                        No appointments yet.
+                    <div class="empty-state text-center py-5">
+                        <i class="bi bi-calendar-x" style="font-size: 2.5rem; color: #ddd;"></i>
+                        <p class="mt-3 text-muted mb-0">No appointments booked yet.</p>
                     </div>
                 }
             </div>
@@ -295,34 +276,34 @@
             {
                 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
 
-                    @foreach (var slot in availableSlots)
+                    @foreach (var slot in availableSlots.Select((s, i) => new { Slot = s, Index = i + 1 }))
                     {
+                        var colorVariant = slot.Index % 4;
+
                         <div class="col">
 
-                            <div class="card h-100 border-0 shadow-sm reservation-slot-card">
+                            <div class="card h-100 border-0 shadow-sm reservation-slot-card reservation-slot-@colorVariant">
 
                                 <div class="card-body d-flex flex-column p-4">
 
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-                                        <span class="badge reservation-slot-badge rounded-pill">
-                                            Available
+                                    <div class="d-flex justify-content-between align-items-start mb-4">
+                                        <span class="badge reservation-slot-badge reservation-badge-@colorVariant rounded-pill">
+                                            ★ Slot @slot.Index
                                         </span>
-                                        <span class="text-muted small">
-                                            Slot @slot.ClinicId
-                                        </span>
+                                        <span class="clinic-badge">@slot.Slot.ClinicId</span>
                                     </div>
 
-                                    <h5 class="mb-2 reservation-slot-date">
-                                        @slot.Date.ToString("dddd, MMM dd")
+                                    <h5 class="reservation-slot-date fw-bold mb-1">
+                                        @slot.Slot.Date.ToString("dddd, MMM dd")
                                     </h5>
 
-                                    <div class="reservation-slot-time mb-2">
-                                        @slot.StartTime.ToString(@"hh\:mm")
-                                        <span class="mx-2 text-muted">-</span>
-                                        @slot.EndTime.ToString(@"hh\:mm")
+                                    <div class="reservation-slot-time mb-4">
+                                        <span class="time-badge">
+                                            @slot.Slot.StartTime.ToString(@"hh\:mm") - @slot.Slot.EndTime.ToString(@"hh\:mm")
+                                        </span>
                                     </div>
 
-                                    <p class="text-muted mb-4 small">
+                                    <p class="text-muted mb-4 small" style="flex: 1;">
                                         Select this slot to continue with your appointment booking.
                                     </p>
 
@@ -333,13 +314,13 @@
                                                 @Html.AntiForgeryToken()
 
                                                 <input type="hidden" name="DoctorId" value="@Model.Id" />
-                                                <input type="hidden" name="AppointmentDate" value="@(slot.Date.ToString("yyyy-MM-dd"))" />
-                                                <input type="hidden" name="StartTime" value="@slot.StartTime" />
-                                                <input type="hidden" name="EndTime" value="@slot.EndTime" />
-                                                <input type="hidden" name="ClinicId" value="@slot.ClinicId" />
+                                                <input type="hidden" name="AppointmentDate" value="@(slot.Slot.Date.ToString("yyyy-MM-dd"))" />
+                                                <input type="hidden" name="StartTime" value="@slot.Slot.StartTime" />
+                                                <input type="hidden" name="EndTime" value="@slot.Slot.EndTime" />
+                                                <input type="hidden" name="ClinicId" value="@slot.Slot.ClinicId" />
 
-                                                <button class="btn btn-slot btn-lg reservation-book-btn">
-                                                    Book Appointment
+                                                <button class="btn btn-slot btn-lg reservation-book-btn reservation-btn-@colorVariant">
+                                                    <i class="bi bi-calendar-check"></i> Book Now
                                                 </button>
                                             </form>
                                         }
