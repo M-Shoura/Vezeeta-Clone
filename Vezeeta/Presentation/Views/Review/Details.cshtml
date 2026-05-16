@@ -45,5 +45,12 @@
             @(ViewData["BackController"]?.ToString() == "Patient" ? "Back to dashboard" : "Back to list")
         </a>
         <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        @if (User.IsInRole("Patient") || User.IsInRole("Admin"))
+        {
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </form>
+        }
     </div>
 </div>
