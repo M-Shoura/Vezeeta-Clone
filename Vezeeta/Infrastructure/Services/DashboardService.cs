@@ -22,7 +22,9 @@ public sealed class DashboardService : IDashboardService
 
     public async Task<AdminDashboardViewModel> GetAdminDashboardAsync(CancellationToken cancellationToken = default)
     {
-        var today = DateTime.Today;
+        var now = DateTime.UtcNow;
+        var today = now.Date;
+        var timeOfDay = now.TimeOfDay;
         var monthStart = new DateTime(today.Year, today.Month, 1);
         var chartStart = monthStart.AddMonths(-5);
 
@@ -240,6 +242,8 @@ public sealed class DashboardService : IDashboardService
             return null;
 
         var today = DateTime.Today;
+        var now = DateTime.UtcNow;
+        var timeOfDay = now.TimeOfDay;
         var appointmentsQuery = _context.Appointments
             .AsNoTracking()
             .Where(a => a.PatientId == patientUserId)
@@ -266,7 +270,7 @@ public sealed class DashboardService : IDashboardService
             .ToListAsync(cancellationToken);
 
         var history = await appointmentsQuery
-            .Where(a => a.AppointmentDate.Date < today || a.Status == AppointmentStatus.Completed)
+            .Where(a => a.AppointmentDate < today || (a.AppointmentDate == today && a.EndTime <= timeOfDay))
             .OrderByDescending(a => a.AppointmentDate)
             .Take(6)
             .Select(a => new RecentAppointmentDashboardDto
@@ -324,7 +328,7 @@ public sealed class DashboardService : IDashboardService
             BloodType = patient.BloodType,
             ProfileCompletion = CalculateProfileCompletion(patient),
             UpcomingAppointmentsCount = await appointmentsQuery.CountAsync(a => a.AppointmentDate.Date >= today, cancellationToken),
-            AppointmentHistoryCount = await appointmentsQuery.CountAsync(a => a.AppointmentDate.Date < today || a.Status == AppointmentStatus.Completed, cancellationToken),
+            AppointmentHistoryCount = await appointmentsQuery.CountAsync(a => a.AppointmentDate < today || (a.AppointmentDate == today && a.EndTime <= timeOfDay), cancellationToken),
             PrescriptionCount = await _context.Prescriptions.CountAsync(p => p.Appointment.PatientId == patientUserId, cancellationToken),
             MedicalRecordCount = await _context.MedicalRecords.CountAsync(r => r.PatientId == patientUserId, cancellationToken),
             FavoriteDoctorsCount = 0,
