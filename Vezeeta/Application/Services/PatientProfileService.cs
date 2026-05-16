@@ -173,15 +173,9 @@ namespace Application.Services
                 .SaveChangesAsync();
         }
 
-        public Task ChangePasswordAsync(ChangePasswordDto model)
-        {
-            throw new NotImplementedException();
-        }
+       
 
-        public Task<PatientAppointmentsDto> GetAllCurrentPatientAppointmentsAsync()
-        {
-            throw new NotImplementedException();
-        }
+       
 
         #endregion
     }

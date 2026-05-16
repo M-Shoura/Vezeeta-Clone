@@ -79,7 +79,7 @@ namespace Presentation.Controllers
                     return Forbid();
 
                 // allow reviews only if appointment end time has passed
-                if (appointment.AppointmentDate.Add(appointment.EndTime) > DateTime.UtcNow)
+                if (appointment.AppointmentDate.Date.Add(appointment.EndTime) > DateTime.Now)
                     return Forbid();
 
                 var existingReview = await _unitOfWork.Repository<Review>()
@@ -120,7 +120,7 @@ namespace Presentation.Controllers
                 return Forbid();
 
             // allow reviews only if appointment end time has passed
-            if (appointment.AppointmentDate.Add(appointment.EndTime) > DateTime.UtcNow)
+            if (appointment.AppointmentDate.Date.Add(appointment.EndTime) > DateTime.Now)
             {
                 ModelState.AddModelError(nameof(vm.AppointmentId), "You can only review appointments after they have taken place.");
                 return View(vm);

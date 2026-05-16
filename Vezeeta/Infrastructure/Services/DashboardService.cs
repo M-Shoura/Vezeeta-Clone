@@ -248,7 +248,7 @@ public sealed class DashboardService : IDashboardService
             return null;
 
         var today = DateTime.Today;
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var timeOfDay = now.TimeOfDay;
         var appointmentsQuery = _context.Appointments
             .AsNoTracking()
@@ -278,12 +278,14 @@ public sealed class DashboardService : IDashboardService
             .ToListAsync(cancellationToken);
 
         var history = await appointmentsQuery
-            .Where(a => a.AppointmentDate < today || (a.AppointmentDate == today && a.EndTime <= timeOfDay))
+            .Where(a => a.AppointmentDate.Date < today || (a.AppointmentDate.Date == today && a.EndTime <= timeOfDay))
             .OrderByDescending(a => a.AppointmentDate)
+            .ThenByDescending(a => a.EndTime)
             .Take(6)
             .Select(a => new RecentAppointmentDashboardDto
             {
                 Id = a.Id,
+                ReviewId = a.ReviewId,
                 PatientName = a.Patient.ApplicationUser.FullName,
                 DoctorName = a.Doctor.ApplicationUser.FullName,
                 ClinicName = a.Clinic.Name,
@@ -338,7 +340,7 @@ public sealed class DashboardService : IDashboardService
             BloodType = patient.BloodType,
             ProfileCompletion = CalculateProfileCompletion(patient),
             UpcomingAppointmentsCount = await appointmentsQuery.CountAsync(a => a.AppointmentDate.Date >= today, cancellationToken),
-            AppointmentHistoryCount = await appointmentsQuery.CountAsync(a => a.AppointmentDate < today || (a.AppointmentDate == today && a.EndTime <= timeOfDay), cancellationToken),
+            AppointmentHistoryCount = await appointmentsQuery.CountAsync(a => a.AppointmentDate.Date < today || (a.AppointmentDate.Date == today && a.EndTime <= timeOfDay), cancellationToken),
             PrescriptionCount = await _context.Prescriptions.CountAsync(p => p.Appointment.PatientId == patientUserId, cancellationToken),
             MedicalRecordCount = await _context.MedicalRecords.CountAsync(r => r.PatientId == patientUserId, cancellationToken),
             FavoriteDoctorsCount = 0,

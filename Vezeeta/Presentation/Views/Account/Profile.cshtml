@@ -1,7 +1,8 @@
 @model ProfileViewModel
 
 @{
-    ViewData["Title"] = "Profile";
+    var isAdminEdit = !string.IsNullOrEmpty(Model.EditingUserId);
+    ViewData["Title"] = isAdminEdit ? "Edit User Profile" : "Profile";
     var initial = !string.IsNullOrWhiteSpace(Model.FullName) ? Model.FullName.Substring(0, 1) : "U";
     var profilePictureUrl = ProfilePictureHelper.GetUrl(Model.ProfilePicture, Model.FullName, size: 180);
 }
@@ -41,7 +42,16 @@
             </div>
 
             <div class="section-card p-4 p-lg-5">
-                <form asp-action="Profile" method="post" enctype="multipart/form-data" id="profileForm">
+                @if (isAdminEdit)
+                {
+                    <div class="alert alert-warning mb-4">
+                        <i class="bi bi-shield-lock"></i> You are editing another user's profile as <strong>Admin</strong>.
+                    </div>
+                }
+                <form asp-action="@(isAdminEdit ? "EditUser" : "Profile")"
+                      asp-route-id="@Model.EditingUserId"
+                      method="post" enctype="multipart/form-data" id="profileForm">
+                    <input type="hidden" asp-for="EditingUserId" />
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                     <input type="hidden" asp-for="ProfilePicture" />
 
@@ -168,7 +178,14 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-check2"></i> Save Changes
                         </button>
-                        <a class="btn btn-light" asp-controller="Home" asp-action="Index">Cancel</a>
+                        @if (isAdminEdit)
+                        {
+                            <a class="btn btn-light" asp-controller="Doctor" asp-action="Index">Cancel</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-light" asp-controller="Home" asp-action="Index">Cancel</a>
+                        }
                     </div>
                 </form>
             </div>

@@ -402,6 +402,105 @@ public sealed class AccountController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> EditUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+            return NotFound();
+
+        var patient = await _context.PatientProfiles
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.ApplicationUserId == id);
+
+        var doctor = await _context.DoctorProfiles
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.ApplicationUserId == id);
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var role = roles.Contains(UserRole.Doctor.ToString())
+            ? UserRole.Doctor
+            : UserRole.Patient;
+
+        return View("Profile", new ProfileViewModel
+        {
+            FullName = user.FullName,
+            Email = user.Email ?? string.Empty,
+            PhoneNumber = user.PhoneNumber,
+            Address = user.Address,
+            ProfilePicture = user.ProfilePicture,
+            Role = role,
+            BirthDate = patient?.DateOfBirth,
+            Gender = patient?.Gender,
+            BloodType = patient?.BloodType,
+            EmergencyContactName = patient?.EmergencyContactName,
+            EmergencyContactPhone = patient?.EmergencyContactPhone,
+            Specialization = doctor?.Specialization,
+            Qualification = doctor?.Qualification,
+            YearsOfExperience = doctor?.YearsOfExperience,
+            Bio = doctor?.Bio,
+            LicenseNumber = doctor?.LicenseNumber,
+            IsAvailable = doctor?.IsAvailable ?? true,
+            EditingUserId = id
+        });
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditUser(string id, ProfileViewModel model)
+    {
+        model.EditingUserId = id;
+
+        if (!ModelState.IsValid)
+            return View("Profile", model);
+
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+            return NotFound();
+
+        var duplicateEmailUser = await _userManager.FindByEmailAsync(model.Email);
+        if (duplicateEmailUser != null && duplicateEmailUser.Id != user.Id)
+        {
+            ModelState.AddModelError(nameof(model.Email), "Email is already used by another account.");
+            return View("Profile", model);
+        }
+
+        if (model.ProfilePictureFile != null)
+        {
+            try
+            {
+                user.ProfilePicture = await SaveProfilePictureAsync(model.ProfilePictureFile);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError(nameof(model.ProfilePictureFile), ex.Message);
+                return View("Profile", model);
+            }
+        }
+
+        user.FullName = model.FullName;
+        user.Email = model.Email;
+        user.UserName = model.Email;
+        user.PhoneNumber = model.PhoneNumber;
+        user.Address = model.Address;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+            return View("Profile", model);
+        }
+
+        await UpdateRoleProfileAsync(user.Id, model);
+
+        TempData["Success"] = $"Profile for {user.FullName} updated successfully.";
+        return RedirectToAction("Index", "Doctor");
+    }
+
+    [HttpGet]
     [AllowAnonymous]
     public IActionResult AccessDenied()
     {

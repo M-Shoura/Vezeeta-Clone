@@ -35,5 +35,8 @@ namespace Presentation.ViewModels.Accounts
         public string? Qualification { get; set; }
         public bool IsAvailable { get; set; }
         public string? LicenseNumber { get; set; }
+
+        /// <summary>Set by admin when editing another user's profile. Null = editing own profile.</summary>
+        public string? EditingUserId { get; set; }
     }
 }

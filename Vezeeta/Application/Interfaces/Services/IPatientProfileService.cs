@@ -35,9 +35,7 @@ namespace Application.Interfaces.Services
 
         Task<int> UpdatePatientProfileAsync(PatientProfileDto model);
 
-        Task ChangePasswordAsync(ChangePasswordDto model);
-
-        Task<PatientAppointmentsDto> GetAllCurrentPatientAppointmentsAsync();
+        
 
         #endregion
     }
