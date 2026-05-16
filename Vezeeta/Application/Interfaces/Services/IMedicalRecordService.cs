@@ -9,6 +9,8 @@ namespace Application.Interfaces.Services
     {
         Task<IEnumerable<MedicalRecordDto>> GetAllAsync();
 
+        Task<IEnumerable<MedicalRecordDto>> GetAllByPatientIdAsync(string patientId);
+
         Task<MedicalRecordDto?> GetByIdAsync(int id);
 
         Task<bool> CreateAsync(MedicalRecordDto dto);

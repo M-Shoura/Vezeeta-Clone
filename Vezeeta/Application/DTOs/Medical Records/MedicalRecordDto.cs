@@ -59,8 +59,7 @@ namespace Application.DTOs.Medical_Records
             ErrorMessage = "Family History cannot exceed 5000 characters")]
         public string? FamilyHistory { get; set; }
 
-        [Required(ErrorMessage = "Appointment ID is required")]
-        [Range(1, int.MaxValue, ErrorMessage = "Appointment ID must be valid")]
-        public int AppointmentId { get; set; }
+        [Display(Name = "Appointment ID")]
+        public int? AppointmentId { get; set; }
     }
 }

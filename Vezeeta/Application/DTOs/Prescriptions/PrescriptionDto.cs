@@ -12,6 +12,9 @@ namespace Application.DTOs.Prescriptions
 
         // For display
         public string? AppointmentInfo { get; set; }
+        // Doctor summary for details view
+        public string? DoctorName { get; set; }
+        public string? DoctorSpecialization { get; set; }
 
         public List<PrescriptionItemDto> Items { get; set; } = new();
     }

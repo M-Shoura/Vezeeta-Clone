@@ -1,0 +1,130 @@
+@model Application.DTOs.Prescriptions.PrescriptionDto
+
+@{
+    ViewData["Title"] = "Prescription Details";
+}
+
+<style>
+    .details-heading {
+        color: #0d6efd; /* Bootstrap primary */
+        font-weight: 600;
+        letter-spacing: .2px;
+        padding-left: .5rem;
+        border-left: 3px solid rgba(13,110,253,0.12);
+        margin-bottom: .5rem !important;
+    }
+</style>
+
+<div class="app-container">
+    <div class="page-header mb-4">
+        <div>
+            <span class="eyebrow"><i class="bi bi-prescription2"></i> Prescription overview</span>
+            <h1 class="page-title mt-2">Prescription Details</h1>
+            <p class="page-subtitle">Review medication recommendations and dosage instructions.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <a class="btn btn-outline-secondary" asp-action="Index">
+                <i class="bi bi-arrow-left"></i> Back to prescriptions
+            </a>
+        </div>
+    </div>
+
+    <div class="row gy-4">
+        <div class="col-xl-8">
+            <div class="section-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h4 class="fw-bold mb-1">Prescription summary</h4>
+                        <p class="mb-0 text-muted">Date: @Model.PrescriptionDate.ToString("dd MMM yyyy")</p>
+                    </div>
+
+                </div>
+
+                <div class="row gy-3">
+                    <div class="col-md-6">
+                        <div class="card card-soft p-3">
+
+                            @if (!string.IsNullOrWhiteSpace(Model.DoctorName) || !string.IsNullOrWhiteSpace(Model.DoctorSpecialization))
+                            {
+
+                                <h6 class="details-heading mb-1">Doctor</h6>
+                                <p class="mb-0"><strong>@(Model.DoctorName)</strong></p>
+                                <p class="mb-0 text-muted">@Model.DoctorSpecialization </p>
+                            }
+                            <hr />
+                            <h6 class="details-heading mb-2">Appointment</h6>
+                            <p class="mb-0">@Model.AppointmentInfo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-soft p-3">
+                            <h6 class="details-heading mb-2">Notes</h6>
+                            <p class="mb-0">@(!string.IsNullOrWhiteSpace(Model.Notes) ? Model.Notes : "No additional notes.")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card p-4">
+                <h4 class="details-heading fw-bold mb-3">Medication instructions</h4>
+                @if (Model.Items != null && Model.Items.Any())
+                {
+                    <div class="list-group">
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="list-group-item rounded-4 mb-3 shadow-sm">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h5 class="details-heading mb-1">@item.DrugName</h5>
+                                        
+                                    </div>
+                                    <span class="badge bg-info text-dark">@item.DurationInDays days</span>
+                                </div>
+                                <div class="row gx-3">
+                                    <div class="col-md-4 mb-2">
+                                        <strong>Dosage</strong>
+                                        <p class="mb-0">@item.Dosage</p>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <strong>Times per day</strong>
+                                        <p class="mb-0">@item.TimesPerDay</p>
+                                    </div>
+                                    <div class="col-md-8 mb-2">
+                                        <strong>Instructions</strong>
+                                        <p class="mb-0">@(!string.IsNullOrWhiteSpace(item.Instructions) ? item.Instructions : "No instructions provided.")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <i class="bi bi-prescription2"></i>
+                        <p class="mt-2 mb-0">No prescription items found.</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-xl-4">
+                <div class="section-card p-4">
+                    <h5 class="fw-bold mb-3">Key details</h5>
+                    <dl class="row">
+                        <dt class="col-5">Prescription ID</dt>
+                        <dd class="col-7">@Model.Id</dd>
+
+                        <dt class="col-5">Date</dt>
+                        <dd class="col-7">@Model.PrescriptionDate.ToString("dd MMM yyyy")</dd>
+
+                        <dt class="col-5">Appointment</dt>
+                        <dd class="col-7">@Model.AppointmentInfo</dd>
+                    </dl>
+                </div>
+            </div>
+        }
+    </div>
+</div>

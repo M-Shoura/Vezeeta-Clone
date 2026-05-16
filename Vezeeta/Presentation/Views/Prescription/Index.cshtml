@@ -40,12 +40,21 @@
                                     <td><span class="status-badge status-muted">@item.Items?.Count()</span></td>
                                     <td>@(item.Notes?.Substring(0, Math.Min(30, item.Notes.Length)) ?? "N/A")...</td>
                                     <td class="text-end">
-                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="editPrescription(@item.Id)">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deletePrescription(@item.Id)">
-                                            <i class="bi bi-trash"></i> Delete
-                                        </button>
+                                        @if (User.IsInRole("Patient"))
+                                        {
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye"></i> Details
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="editPrescription(@item.Id)">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="deletePrescription(@item.Id)">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        }
                                     </td>
                                 </tr>
                             }
