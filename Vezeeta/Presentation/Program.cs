@@ -51,14 +51,18 @@ namespace Presentation
 
             var app = builder.Build();
 
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
 
-            //    var context = services.GetRequiredService<ApplicationDbContext>();
+                var context = services.GetRequiredService<ApplicationDbContext>();
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
 
-            //    await DataSeeder.SeedAsync(context);
-            //}
+                DataSeeder.SeedAsync(context, userManager, roleManager)
+                    .GetAwaiter()
+                    .GetResult();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
