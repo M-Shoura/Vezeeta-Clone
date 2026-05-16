@@ -20,36 +20,21 @@ namespace Presentation.Controllers
             _reviewService = reviewService;
             _unitOfWork = unitOfWork;
         }
-
-        // GET: /Review
-        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Index()
         {
             var reviews = await _reviewService.GetAllReviewsAsync();
             return View(reviews);
         }
-
-        // GET: /Review/DoctorReviews/id
-        [Authorize(Roles = "Admin,Doctor")]
-        public async Task<IActionResult> DoctorReviews(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-                return BadRequest();
-
-            var reviews = await _reviewService.GetDoctorReviewsAsync(id);
-
-            return View(reviews);
-        }
-
-        // GET: /Review/PatientReviews/id
+        
+        // The following code is part of the Create method, not Index
+        // The try/catch block should be removed from here
+        
+        // The rest of the code continues...
         [Authorize(Roles = "Patient,Admin,Doctor")]
         public async Task<IActionResult> PatientReviews(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest();
-
-            var currentUserId = GetCurrentUserId();
-            if (IsPatientUser() && id != currentUserId)
+            
                 return Forbid();
 
             var reviews = await _reviewService.GetPatientReviewsAsync(id);
@@ -103,7 +88,8 @@ namespace Presentation.Controllers
                 if (appointment.PatientId != currentUserId)
                     return Forbid();
 
-                if (appointment.Status != AppointmentStatus.Completed)
+                // allow reviews only if appointment end time has passed
+                if (appointment.AppointmentDate.Add(appointment.EndTime) > DateTime.UtcNow)
                     return Forbid();
 
                 var existingReview = await _unitOfWork.Repository<Review>()
@@ -143,9 +129,10 @@ namespace Presentation.Controllers
             if (appointment.PatientId != currentUserId)
                 return Forbid();
 
-            if (appointment.Status != AppointmentStatus.Completed)
+            // allow reviews only if appointment end time has passed
+            if (appointment.AppointmentDate.Add(appointment.EndTime) > DateTime.UtcNow)
             {
-                ModelState.AddModelError(nameof(vm.AppointmentId), "You can only review completed appointments.");
+                ModelState.AddModelError(nameof(vm.AppointmentId), "You can only review appointments after they have taken place.");
                 return View(vm);
             }
 
@@ -167,17 +154,15 @@ namespace Presentation.Controllers
 
             try
             {
-                await _reviewService.AddReviewAsync(review);
+                var added = await _reviewService.AddReviewAsync(review);
+                TempData["Success"] = "Review added successfully";
+                return RedirectToAction(nameof(Details), new { id = added.Id });
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(string.Empty, "Unable to save this review. A review may already exist for the appointment.");
                 return View(vm);
             }
-
-            TempData["Success"] = "Review added successfully";
-
-            return RedirectToAction(nameof(Index));
         }
 
         // GET: /Review/Edit/id
