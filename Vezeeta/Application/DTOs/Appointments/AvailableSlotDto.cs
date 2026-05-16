@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs.Appointments
+namespace Application.DTOs.Appointments
 {
     public class AvailableSlotDto
     {
@@ -9,5 +9,7 @@
         public TimeSpan EndTime { get; set; }
 
         public int ClinicId { get; set; }
+
+        public string? ClinicName { get; set; }
     }
 }
