@@ -14,25 +14,46 @@
     </div>
 
     <form asp-action="Create" method="post" class="row g-3">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <input asp-for="AppointmentId" type="hidden" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input asp-for="AppointmentId" type="hidden" />
 
-    <div class="col-md-4">
-        <label asp-for="Rating" class="form-label">Rating</label>
-        <input asp-for="Rating" class="form-control" type="number" min="1" max="5" />
-        <span asp-validation-for="Rating" class="text-danger"></span>
-    </div>
+        <div class="col-12">
+            <fieldset class="rating-group">
+                <legend class="form-label mb-2">Rating</legend>
+                <div class="rating-stars" aria-label="Rating" role="radiogroup">
+                    @for (var star = 1; star <= 5; star++)
+                    {
+                        var inputId = $"rating-{star}";
 
-    <div class="col-12">
-        <label asp-for="Comment" class="form-label">Comment</label>
-        <textarea asp-for="Comment" class="form-control"></textarea>
-        <span asp-validation-for="Comment" class="text-danger"></span>
-    </div>
+                        if (Model.Rating == star)
+                        {
+                            <input class="rating-input" type="radio" id="@inputId" name="Rating" value="@star" checked="checked" />
+                        }
+                        else
+                        {
+                            <input class="rating-input" type="radio" id="@inputId" name="Rating" value="@star" />
+                        }
 
-    <div class="col-12 d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Create</button>
-        <a class="btn btn-secondary" asp-controller="Patient" asp-action="Dashboard">Cancel</a>
-    </div>
+                        <label class="rating-star" for="@inputId" title="@star star@(star > 1 ? "s" : string.Empty)" aria-label="@star star@(star > 1 ? "s" : string.Empty)">
+                            <i class="bi bi-star-fill"></i>
+                        </label>
+                    }
+                </div>
+                <small class="text-muted d-block mt-2">Select one to five stars.</small>
+                <span asp-validation-for="Rating" class="text-danger d-block"></span>
+            </fieldset>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="Comment" class="form-label">Comment</label>
+            <textarea asp-for="Comment" class="form-control"></textarea>
+            <span asp-validation-for="Comment" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a class="btn btn-secondary" asp-controller="Patient" asp-action="Dashboard">Cancel</a>
+        </div>
     </form>
 </div>
 
