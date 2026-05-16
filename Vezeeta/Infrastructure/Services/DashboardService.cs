@@ -248,7 +248,7 @@ public sealed class DashboardService : IDashboardService
             .Where(a => a.AppointmentDate.Date >= today)
             .OrderBy(a => a.AppointmentDate)
             .ThenBy(a => a.StartTime)
-            .Take(6)
+            //.Take(6)
             .Select(a => new RecentAppointmentDashboardDto
             {
                 Id = a.Id,
