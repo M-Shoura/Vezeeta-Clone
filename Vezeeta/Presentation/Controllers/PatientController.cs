@@ -201,20 +201,7 @@ namespace Presentation.Controllers
 
         #endregion
 
-        #region Appointments
-
-        // GET: /Patient/Appointments
-        [Authorize(Roles = "Patient")]
-        public async Task<IActionResult> Appointments()
-        {
-            var appointments =
-                await _patientService
-                    .GetAllCurrentPatientAppointmentsAsync();
-
-            return View(appointments);
-        }
-
-        #endregion
+       
 
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Dashboard(CancellationToken cancellationToken)

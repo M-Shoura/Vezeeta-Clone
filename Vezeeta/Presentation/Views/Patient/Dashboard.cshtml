@@ -113,7 +113,7 @@
                         <h5 class="fw-bold mb-1">Appointment History</h5>
                         <p class="text-muted mb-0">Past visits and review eligibility.</p>
                     </div>
-                    <a asp-controller="Patient" asp-action="Appointments" class="btn btn-outline-primary btn-sm">View All</a>
+                   
                 </div>
 
                 @if (Model.AppointmentHistory.Any())
@@ -142,8 +142,8 @@
                                         <td>@appointment.ClinicName</td>
                                         <td><span class="status-badge @statusClass">@appointment.Status</span></td>
                                         <td class="text-end">
-                                            @{ var appointmentEnd = appointment.AppointmentDate.Add(appointment.EndTime); }
-                                            @if (appointmentEnd <= DateTime.UtcNow && appointment.ReviewId == 0)
+                                            @{ var appointmentEnd = appointment.AppointmentDate.Date.Add(appointment.EndTime); }
+                                            @if (appointmentEnd <= DateTime.Now && appointment.ReviewId == 0)
                                             {
                                                 <a asp-controller="Review"
                                                    asp-action="Create"
@@ -152,7 +152,7 @@
                                                     Write Review
                                                 </a>
                                             }
-                                            else if (appointmentEnd <= DateTime.UtcNow && appointment.ReviewId != 0)
+                                            else if (appointmentEnd <= DateTime.Now && appointment.ReviewId != 0)
                                             {
                                                 <span class="text-success small fw-semibold">Reviewed</span>
                                             }
