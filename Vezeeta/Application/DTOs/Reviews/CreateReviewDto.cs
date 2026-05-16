@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using Application.Validators;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs.Reviews
 {
@@ -17,12 +13,7 @@ namespace Application.DTOs.Reviews
         [Required]
         public int AppointmentId { get; set; }
 
-        [Required]
-        [NotEmptyOrWhiteSpace]
         public string DoctorId { get; set; } = null!;
-
-        [Required]
-        [NotEmptyOrWhiteSpace]
         public string PatientId { get; set; } = null!;
     }
 }

@@ -10,43 +10,29 @@ namespace Infrastructure.Services
         private readonly IReviewRepository _reviewRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ReviewService(
-            IReviewRepository reviewRepository,
-            IUnitOfWork unitOfWork)
+        public ReviewService(IReviewRepository reviewRepository, IUnitOfWork unitOfWork)
         {
             _reviewRepository = reviewRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ReviewDto?> GetReviewByIdAsync(int reviewId)
-        {
-            return await _reviewRepository.GetReviewByIdAsync(reviewId);
-        }
+        public async Task<ReviewDto?> GetReviewByIdAsync(int reviewId) 
+            => await _reviewRepository.GetReviewByIdAsync(reviewId);
 
-        public async Task<IEnumerable<ReviewDto>> GetAllReviewsAsync()
-        {
-            return await _reviewRepository.GetAllReviewsAsync();
-        }
+        public async Task<IEnumerable<ReviewDto>> GetAllReviewsAsync() 
+            => await _reviewRepository.GetAllReviewsAsync();
 
-        public async Task<IEnumerable<ReviewDto>> GetDoctorReviewsAsync(string doctorId)
-        {
-            return await _reviewRepository.GetDoctorReviewsAsync(doctorId);
-        }
+        public async Task<IEnumerable<ReviewDto>> GetDoctorReviewsAsync(string doctorId) 
+            => await _reviewRepository.GetDoctorReviewsAsync(doctorId);
 
-        public async Task<IEnumerable<ReviewDto>> GetPatientReviewsAsync(string patientId)
-        {
-            return await _reviewRepository.GetPatientReviewsAsync(patientId);
-        }
+        public async Task<IEnumerable<ReviewDto>> GetPatientReviewsAsync(string patientId) 
+            => await _reviewRepository.GetPatientReviewsAsync(patientId);
 
-        public async Task<IEnumerable<ReviewDto>> GetReviewsByAppointmentAsync(int appointmentId)
-        {
-            return await _reviewRepository.GetReviewsByAppointmentAsync(appointmentId);
-        }
+        public async Task<IEnumerable<ReviewDto>> GetReviewsByAppointmentAsync(int appointmentId) 
+            => await _reviewRepository.GetReviewsByAppointmentAsync(appointmentId);
 
-        public async Task<double> GetDoctorAverageRatingAsync(string doctorId)
-        {
-            return await _reviewRepository.GetDoctorAverageRatingAsync(doctorId);
-        }
+        public async Task<double> GetDoctorAverageRatingAsync(string doctorId) 
+            => await _reviewRepository.GetDoctorAverageRatingAsync(doctorId);
 
         public async Task<Review> AddReviewAsync(Review review)
         {

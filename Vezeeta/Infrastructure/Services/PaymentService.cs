@@ -15,54 +15,36 @@ namespace Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
-        public PaymentService(
-            IPaymentRepository paymentRepository,
-            IUnitOfWork unitOfWork,
-            IConfiguration configuration)
+        public PaymentService(IPaymentRepository paymentRepository, IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _paymentRepository = paymentRepository;
             _unitOfWork = unitOfWork;
             _configuration = configuration;
         }
 
-        public async Task<PaymentDto?> GetPaymentByIdAsync(int paymentId)
-        {
-            return await _paymentRepository.GetPaymentByIdAsync(paymentId);
-        }
+        public async Task<PaymentDto?> GetPaymentByIdAsync(int paymentId) 
+            => await _paymentRepository.GetPaymentByIdAsync(paymentId);
 
-        public async Task<PaymentDto?> GetPaymentByAppointmentIdAsync(int appointmentId)
-        {
-            return await _paymentRepository.GetPaymentByAppointmentIdAsync(appointmentId);
-        }
+        public async Task<PaymentDto?> GetPaymentByAppointmentIdAsync(int appointmentId) 
+            => await _paymentRepository.GetPaymentByAppointmentIdAsync(appointmentId);
 
-        public async Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync()
-        {
-            return await _paymentRepository.GetAllPaymentsAsync();
-        }
+        public async Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync() 
+            => await _paymentRepository.GetAllPaymentsAsync();
 
-        public async Task<IEnumerable<PaymentDto>> GetPatientPaymentsAsync(string patientId)
-        {
-            return await _paymentRepository.GetPatientPaymentsAsync(patientId);
-        }
+        public async Task<IEnumerable<PaymentDto>> GetPatientPaymentsAsync(string patientId) 
+            => await _paymentRepository.GetPatientPaymentsAsync(patientId);
 
-        public async Task<IEnumerable<PaymentDto>> GetDoctorPaymentsAsync(string doctorId)
-        {
-            return await _paymentRepository.GetDoctorPaymentsAsync(doctorId);
-        }
+        public async Task<IEnumerable<PaymentDto>> GetDoctorPaymentsAsync(string doctorId) 
+            => await _paymentRepository.GetDoctorPaymentsAsync(doctorId);
 
-        public async Task<IEnumerable<PaymentDto>> GetPaymentsByStatusAsync(PaymentStatus status)
-        {
-            return await _paymentRepository.GetPaymentsByStatusAsync(status);
-        }
+        public async Task<IEnumerable<PaymentDto>> GetPaymentsByStatusAsync(PaymentStatus status) 
+            => await _paymentRepository.GetPaymentsByStatusAsync(status);
 
         public async Task<Payment> AddPaymentAsync(Payment payment)
         {
             payment.CreatedAt = DateTime.UtcNow;
-
             if (payment.Status == PaymentStatus.Completed && payment.PaidAt == null)
-            {
                 payment.PaidAt = DateTime.UtcNow;
-            }
 
             await _unitOfWork.Repository<Payment>().AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
@@ -72,11 +54,8 @@ namespace Infrastructure.Services
         public async Task<Payment> UpdatePaymentAsync(Payment payment)
         {
             payment.UpdatedAt = DateTime.UtcNow;
-
             if (payment.Status == PaymentStatus.Completed && payment.PaidAt == null)
-            {
                 payment.PaidAt = DateTime.UtcNow;
-            }
 
             _unitOfWork.Repository<Payment>().Update(payment);
             await _unitOfWork.SaveChangesAsync();
@@ -96,39 +75,15 @@ namespace Infrastructure.Services
 
         public async Task<string> CreatePaymobCheckoutUrlAsync(int paymentId, string successUrl, string cancelUrl, string? description = null)
         {
-            var apiKey = _configuration["Paymob:ApiKey"];
-            var integrationIdValue = _configuration["Paymob:IntegrationId"];
-            var iframeId = _configuration["Paymob:IframeId"];
-            var currency = _configuration["Paymob:Currency"] ?? "EGP";
+            ValidatePaymobConfig(out var apiKey, out var iframeId, out var currency, out var integrationId);
 
-            if (string.IsNullOrWhiteSpace(apiKey) ||
-                string.IsNullOrWhiteSpace(integrationIdValue) ||
-                string.IsNullOrWhiteSpace(iframeId))
-            {
-                throw new InvalidOperationException("Paymob is not configured.");
-            }
-
-            if (!int.TryParse(integrationIdValue, out var integrationId))
-                throw new InvalidOperationException("Paymob integration id is invalid.");
-
-            var payment = await _paymentRepository.GetPaymentForCheckoutAsync(paymentId);
-
-            if (payment == null)
-                throw new InvalidOperationException("Payment not found.");
+            var payment = await _paymentRepository.GetPaymentForCheckoutAsync(paymentId)
+                ?? throw new InvalidOperationException("Payment not found.");
 
             var httpClient = new HttpClient();
             var authToken = await CreateAuthTokenAsync(httpClient, apiKey);
             var orderId = await RegisterOrderAsync(httpClient, authToken, payment, currency, description);
-            var paymentToken = await CreatePaymentKeyAsync(
-                httpClient,
-                authToken,
-                orderId,
-                payment,
-                integrationId,
-                currency,
-                successUrl,
-                cancelUrl,
-                description);
+            var paymentToken = await CreatePaymentKeyAsync(httpClient, authToken, orderId, payment, integrationId, currency, successUrl, cancelUrl, description);
 
             payment.TransactionReference = orderId.ToString();
             _unitOfWork.Repository<Payment>().Update(payment);
@@ -153,27 +108,30 @@ namespace Infrastructure.Services
             return true;
         }
 
+        private void ValidatePaymobConfig(out string apiKey, out string iframeId, out string currency, out int integrationId)
+        {
+            apiKey = _configuration["Paymob:ApiKey"] ?? throw new InvalidOperationException("Paymob ApiKey not configured.");
+            var integrationIdValue = _configuration["Paymob:IntegrationId"] ?? throw new InvalidOperationException("Paymob IntegrationId not configured.");
+            iframeId = _configuration["Paymob:IframeId"] ?? throw new InvalidOperationException("Paymob IframeId not configured.");
+            currency = _configuration["Paymob:Currency"] ?? "EGP";
+
+            if (!int.TryParse(integrationIdValue, out integrationId))
+                throw new InvalidOperationException("Paymob integration id is invalid.");
+        }
+
         private static async Task<string> CreateAuthTokenAsync(HttpClient httpClient, string apiKey)
         {
-            var response = await httpClient.PostAsJsonAsync(
-                "https://accept.paymob.com/api/auth/tokens",
-                new { api_key = apiKey });
-
+            var response = await httpClient.PostAsJsonAsync("https://accept.paymob.com/api/auth/tokens", new { api_key = apiKey });
             response.EnsureSuccessStatusCode();
 
             using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-            return document.RootElement.GetProperty("token").GetString()
-                   ?? throw new InvalidOperationException("Paymob auth token was not returned.");
+            return document.RootElement.GetProperty("token").GetString() 
+                ?? throw new InvalidOperationException("Paymob auth token was not returned.");
         }
 
         private static async Task<long> RegisterOrderAsync(HttpClient httpClient, string authToken, Payment payment, string currency, string? description)
         {
-            var patient = payment.Appointment?.Patient?.ApplicationUser;
-            var firstName = !string.IsNullOrWhiteSpace(patient?.FullName) ? patient!.FullName.Split(' ', 2)[0] : "Vezeeta";
-            var lastName = !string.IsNullOrWhiteSpace(patient?.FullName) && patient!.FullName.Contains(' ')
-                ? patient.FullName.Split(' ', 2)[1]
-                : "Patient";
-
+            var (firstName, lastName, email, phone) = ExtractPatientInfo(payment);
             var requestBody = new
             {
                 auth_token = authToken,
@@ -183,19 +141,10 @@ namespace Infrastructure.Services
                 items = Array.Empty<object>(),
                 shipping_data = new
                 {
-                    apartment = "0",
-                    email = patient?.Email ?? "payment@vezeeta.local",
-                    floor = "0",
-                    first_name = firstName,
-                    street = description ?? "Vezeeta appointment payment",
-                    building = "0",
-                    phone_number = patient?.PhoneNumber ?? "01000000000",
-                    shipping_method = "PKG",
-                    postal_code = "00000",
-                    city = "Cairo",
-                    country = "EG",
-                    last_name = lastName,
-                    state = "Cairo"
+                    apartment = "0", email, floor = "0", first_name = firstName,
+                    street = description ?? "Vezeeta appointment payment", building = "0",
+                    phone_number = phone, shipping_method = "PKG", postal_code = "00000",
+                    city = "Cairo", country = "EG", last_name = lastName, state = "Cairo"
                 }
             };
 
@@ -206,23 +155,9 @@ namespace Infrastructure.Services
             return document.RootElement.GetProperty("id").GetInt64();
         }
 
-        private static async Task<string> CreatePaymentKeyAsync(
-            HttpClient httpClient,
-            string authToken,
-            long orderId,
-            Payment payment,
-            int integrationId,
-            string currency,
-            string successUrl,
-            string cancelUrl,
-            string? description)
+        private static async Task<string> CreatePaymentKeyAsync(HttpClient httpClient, string authToken, long orderId, Payment payment, int integrationId, string currency, string successUrl, string cancelUrl, string? description)
         {
-            var patient = payment.Appointment?.Patient?.ApplicationUser;
-            var firstName = !string.IsNullOrWhiteSpace(patient?.FullName) ? patient!.FullName.Split(' ', 2)[0] : "Vezeeta";
-            var lastName = !string.IsNullOrWhiteSpace(patient?.FullName) && patient!.FullName.Contains(' ')
-                ? patient.FullName.Split(' ', 2)[1]
-                : "Patient";
-
+            var (firstName, lastName, email, phone) = ExtractPatientInfo(payment);
             var requestBody = new
             {
                 auth_token = authToken,
@@ -231,19 +166,10 @@ namespace Infrastructure.Services
                 order_id = orderId,
                 billing_data = new
                 {
-                    apartment = "0",
-                    email = patient?.Email ?? "payment@vezeeta.local",
-                    floor = "0",
-                    first_name = firstName,
-                    street = description ?? "Vezeeta appointment payment",
-                    building = "0",
-                    phone_number = patient?.PhoneNumber ?? "01000000000",
-                    shipping_method = "PKG",
-                    postal_code = "00000",
-                    city = "Cairo",
-                    country = "EG",
-                    last_name = lastName,
-                    state = "Cairo"
+                    apartment = "0", email, floor = "0", first_name = firstName,
+                    street = description ?? "Vezeeta appointment payment", building = "0",
+                    phone_number = phone, shipping_method = "PKG", postal_code = "00000",
+                    city = "Cairo", country = "EG", last_name = lastName, state = "Cairo"
                 },
                 currency,
                 integration_id = integrationId,
@@ -256,7 +182,18 @@ namespace Infrastructure.Services
 
             using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             return document.RootElement.GetProperty("token").GetString()
-                   ?? throw new InvalidOperationException("Paymob payment token was not returned.");
+                ?? throw new InvalidOperationException("Paymob payment token was not returned.");
+        }
+
+        private static (string FirstName, string LastName, string Email, string Phone) ExtractPatientInfo(Payment payment)
+        {
+            var patient = payment.Appointment?.Patient?.ApplicationUser;
+            var fullName = patient?.FullName ?? "Vezeeta Patient";
+            var names = fullName.Split(' ', 2);
+            var firstName = names[0];
+            var lastName = names.Length > 1 ? names[1] : "Patient";
+
+            return (firstName, lastName, patient?.Email ?? "payment@vezeeta.local", patient?.PhoneNumber ?? "01000000000");
         }
     }
 }
