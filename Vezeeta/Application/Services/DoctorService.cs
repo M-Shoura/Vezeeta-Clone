@@ -28,7 +28,8 @@ namespace Application.Services
                         &&
                         s.Day == day
                         &&
-                        s.IsActive);
+                        s.IsActive,
+                    includes: new[] { "Clinic" });
 
             // booked appointments
             var appointments = await _unitOfWork
@@ -71,8 +72,8 @@ namespace Application.Services
                                 Date = date,
                                 StartTime = current,
                                 EndTime = slotEnd,
-                                ClinicId =
-                                    schedule.ClinicId
+                                ClinicId = schedule.ClinicId,
+                                ClinicName = schedule.Clinic?.Name
                             });
                     }
 

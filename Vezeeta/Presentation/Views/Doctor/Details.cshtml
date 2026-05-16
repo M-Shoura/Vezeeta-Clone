@@ -1,4 +1,4 @@
-﻿@model Application.DTOs.Doctors.DoctorDetailsDto
+@model Application.DTOs.Doctors.DoctorDetailsDto
 
 @{
     ViewData["Title"] = "Doctor Details";
@@ -244,117 +244,165 @@
 
     <!-- AVAILABLE APPOINTMENTS -->
 
-    <div class="card shadow border-0 rounded-4 mb-5 overflow-hidden reservation-section">
+    @{
+        var slotsByDay = availableSlots
+            .GroupBy(s => s.Date.Date)
+            .OrderBy(g => g.Key)
+            .ToList();
+    }
 
-        <div class="card-header reservation-section-header text-white p-4 border-0">
+    <div class="slots-section mb-5">
 
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+        <!-- Section header -->
+        <div class="slots-header mb-4">
+            <div>
+                <p class="slots-eyebrow">Appointment Booking</p>
+                <h3 class="slots-title">Available Slots</h3>
+            </div>
+            <span class="slots-total-badge">@availableSlots.Count() available</span>
+        </div>
 
-                <div>
-                    <p class="text-uppercase small mb-1 reservation-eyebrow">
-                        Appointment booking
-                    </p>
-                    <h3 class="mb-1">
-                        Available Appointment Slots
-                    </h3>
-                    <p class="mb-0 reservation-subtitle">
-                        Choose a time that fits your schedule and reserve your visit in seconds.
-                    </p>
+        @if (slotsByDay.Any())
+        {
+            <!-- Day Navigator -->
+            <div class="day-navigator mb-4" id="dayNavigator">
+
+                <button class="day-nav-btn" id="prevDayBtn" onclick="changeDay(-1)" aria-label="Previous day">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+
+                <div class="day-nav-center">
+                    <p class="day-nav-label" id="dayLabel">Loading…</p>
+                    <p class="day-nav-date" id="dayDate"></p>
                 </div>
 
-                <div class="reservation-count-badge">
-                    @availableSlots.Count() slots
-                </div>
+                <button class="day-nav-btn" id="nextDayBtn" onclick="changeDay(1)" aria-label="Next day">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
 
             </div>
 
-        </div>
+            <!-- Day Tabs (hidden pills for desktop) -->
+            <div class="day-tabs-strip mb-4" id="dayTabsStrip">
+                @for (int d = 0; d < slotsByDay.Count; d++)
+                {
+                    var day = slotsByDay[d];
+                    var isToday = day.Key.Date == DateTime.Today;
+                    var isTomorrow = day.Key.Date == DateTime.Today.AddDays(1);
+                    var label = isToday ? "Today" : isTomorrow ? "Tomorrow" : day.Key.ToString("ddd");
+                    <button class="day-tab" data-day-index="@d" onclick="selectDay(@d)">
+                        <span class="day-tab-label">@label</span>
+                        <span class="day-tab-date">@day.Key.ToString("MMM d")</span>
+                        <span class="day-tab-count">@day.Count()</span>
+                    </button>
+                }
+            </div>
 
-        <div class="card-body p-4 p-lg-5 reservation-section-body">
-
-            @if (availableSlots.Any())
+            <!-- Slot panels per day -->
+            @for (int d = 0; d < slotsByDay.Count; d++)
             {
-                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-
-                    @foreach (var slot in availableSlots.Select((s, i) => new { Slot = s, Index = i + 1 }))
-                    {
-                        var colorVariant = slot.Index % 4;
-
-                        <div class="col">
-
-                            <div class="card h-100 border-0 shadow-sm reservation-slot-card reservation-slot-@colorVariant">
-
-                                <div class="card-body d-flex flex-column p-4">
-
-                                    <div class="d-flex justify-content-between align-items-start mb-4">
-                                        <span class="badge reservation-slot-badge reservation-badge-@colorVariant rounded-pill">
-                                            ★ Slot @slot.Index
-                                        </span>
-                                        <span class="clinic-badge">@slot.Slot.ClinicId</span>
-                                    </div>
-
-                                    <h5 class="reservation-slot-date fw-bold mb-1">
-                                        @slot.Slot.Date.ToString("dddd, MMM dd")
-                                    </h5>
-
-                                    <div class="reservation-slot-time mb-4">
-                                        <span class="time-badge">
-                                            @slot.Slot.StartTime.ToString(@"hh\:mm") - @slot.Slot.EndTime.ToString(@"hh\:mm")
-                                        </span>
-                                    </div>
-
-                                    <p class="text-muted mb-4 small" style="flex: 1;">
-                                        Select this slot to continue with your appointment booking.
-                                    </p>
-
-                                    <div class="mt-auto">
-                                        @if (isPatient)
-                                        {
-                                            <form asp-controller="Appointment" asp-action="Book" method="post" class="d-grid">
-                                                @Html.AntiForgeryToken()
-
-                                                <input type="hidden" name="DoctorId" value="@Model.Id" />
-                                                <input type="hidden" name="AppointmentDate" value="@(slot.Slot.Date.ToString("yyyy-MM-dd"))" />
-                                                <input type="hidden" name="StartTime" value="@slot.Slot.StartTime" />
-                                                <input type="hidden" name="EndTime" value="@slot.Slot.EndTime" />
-                                                <input type="hidden" name="ClinicId" value="@slot.Slot.ClinicId" />
-
-                                                <button class="btn btn-slot btn-lg reservation-book-btn reservation-btn-@colorVariant">
-                                                    <i class="bi bi-calendar-check"></i> Book Now
-                                                </button>
-                                            </form>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-light border mb-0 small text-center reservation-login-note">
-                                                Login as a patient to reserve this slot.
-                                            </div>
-                                        }
-                                    </div>
-
+                var dayGroup = slotsByDay[d];
+                <div class="day-slots-panel" id="dayPanel_@d" style="display:none;">
+                    <div class="slots-grid">
+                        @foreach (var slot in dayGroup.OrderBy(s => s.StartTime))
+                        {
+                            <div class="slot-row">
+                                <div class="slot-time-block">
+                                    <i class="bi bi-clock slot-clock-icon"></i>
+                                    <span class="slot-time-text">
+                                        @slot.StartTime.ToString(@"hh\:mm") <span class="slot-time-sep">–</span> @slot.EndTime.ToString(@"hh\:mm")
+                                    </span>
                                 </div>
-
+                                <div class="slot-clinic-block">
+                                    <i class="bi bi-building slot-clinic-icon"></i>
+                                    <span class="slot-clinic-text">@(slot.ClinicName ?? $"Clinic {slot.ClinicId}")</span>
+                                </div>
+                                <div class="slot-action-block">
+                                    @if (isPatient)
+                                    {
+                                        <form asp-controller="Appointment" asp-action="Book" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="DoctorId" value="@Model.Id" />
+                                            <input type="hidden" name="AppointmentDate" value="@(dayGroup.Key.ToString("yyyy-MM-dd"))" />
+                                            <input type="hidden" name="StartTime" value="@slot.StartTime" />
+                                            <input type="hidden" name="EndTime" value="@slot.EndTime" />
+                                            <input type="hidden" name="ClinicId" value="@slot.ClinicId" />
+                                            <button type="submit" class="slot-book-btn">
+                                                <i class="bi bi-calendar-check"></i> Book
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="slot-login-note">Sign in to book</span>
+                                    }
+                                </div>
                             </div>
-
-                        </div>
-                    }
-
+                        }
+                    </div>
                 </div>
             }
-            else
-            {
-                <div class="reservation-empty-state text-center p-5">
-                    <div class="reservation-empty-icon mb-3">•</div>
-                    <h4 class="mb-2">No available appointments right now</h4>
-                    <p class="text-muted mb-0">
-                        Check back later or browse another doctor if you need an earlier opening.
-                    </p>
-                </div>
-            }
-
-        </div>
+        }
+        else
+        {
+            <div class="slots-empty">
+                <i class="bi bi-calendar-x slots-empty-icon"></i>
+                <h5 class="mt-3 mb-1">No available slots</h5>
+                <p class="text-muted mb-0">Check back later or browse another doctor.</p>
+            </div>
+        }
 
     </div>
+
+    <script>
+        (function () {
+            var totalDays = @slotsByDay.Count;
+            var currentDay = 0;
+
+            var days = [];
+            @for (int d = 0; d < slotsByDay.Count; d++)
+            {
+                var day = slotsByDay[d];
+                var isToday = day.Key.Date == DateTime.Today;
+                var isTomorrow = day.Key.Date == DateTime.Today.AddDays(1);
+                var label = isToday ? "Today" : isTomorrow ? "Tomorrow" : day.Key.ToString("dddd");
+                var dateStr = day.Key.ToString("MMMM d, yyyy");
+                <text>days.push({ label: "@label", date: "@dateStr", count: @day.Count() });</text>
+            }
+
+            function selectDay(index) {
+                if (index < 0 || index >= totalDays) return;
+
+                // hide all panels
+                document.querySelectorAll('.day-slots-panel').forEach(function(p) { p.style.display = 'none'; });
+                // deactivate all tabs
+                document.querySelectorAll('.day-tab').forEach(function(t) { t.classList.remove('active'); });
+
+                currentDay = index;
+
+                // show selected panel
+                var panel = document.getElementById('dayPanel_' + index);
+                if (panel) panel.style.display = 'block';
+
+                // activate tab
+                var tab = document.querySelector('[data-day-index="' + index + '"]');
+                if (tab) tab.classList.add('active');
+
+                // update navigator
+                var d = days[index];
+                document.getElementById('dayLabel').textContent = d.label + ' · ' + d.count + ' slot' + (d.count !== 1 ? 's' : '');
+                document.getElementById('dayDate').textContent = d.date;
+
+                document.getElementById('prevDayBtn').disabled = index === 0;
+                document.getElementById('nextDayBtn').disabled = index === totalDays - 1;
+            }
+
+            window.changeDay = function(delta) { selectDay(currentDay + delta); };
+            window.selectDay = selectDay;
+
+            if (totalDays > 0) selectDay(0);
+        })();
+    </script>
 
     <!-- REVIEWS -->
 
