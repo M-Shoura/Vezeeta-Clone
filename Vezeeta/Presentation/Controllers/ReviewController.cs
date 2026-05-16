@@ -1,5 +1,6 @@
 using Application.Interfaces.Services;
 using Application.Interfaces.Repositories;
+using Application.DTOs.Reviews;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -20,19 +21,17 @@ namespace Presentation.Controllers
             _reviewService = reviewService;
             _unitOfWork = unitOfWork;
         }
+
         [Authorize(Roles = "Patient,Admin,Doctor")]
         public async Task<IActionResult> PatientReviews(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-            
                 return Forbid();
 
             var reviews = await _reviewService.GetPatientReviewsAsync(id);
-
             return View(reviews);
         }
 
-        // GET: /Review/Details/id
         [Authorize(Roles = "Patient,Admin,Doctor")]
         public async Task<IActionResult> Details(int id)
         {
@@ -40,63 +39,36 @@ namespace Presentation.Controllers
             if (review == null)
                 return NotFound();
 
-            var currentUserId = GetCurrentUserId();
-            if (IsPatientUser() && review.PatientId != currentUserId)
+            if (!CanAccessReview(review))
                 return Forbid();
 
-            if (IsDoctorUser() && review.DoctorId != currentUserId && !IsAdminUser())
-                return Forbid();
-
-            if (IsPatientUser())
-            {
-                ViewData["BackController"] = "Patient";
-                ViewData["BackAction"] = nameof(PatientController.Dashboard);
-            }
-            else
-            {
-                ViewData["BackController"] = "Review";
-                ViewData["BackAction"] = nameof(Index);
-            }
-
+            SetBackNavigation();
             return View(review);
         }
 
-        // GET: /Review/Create
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Create(int appointmentId = 0)
         {
             if (appointmentId > 0)
             {
-                var currentUserId = GetCurrentUserId();
-                if (string.IsNullOrWhiteSpace(currentUserId))
-                    return Challenge();
-
                 var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(appointmentId);
                 if (appointment == null)
                     return NotFound();
 
-                if (appointment.PatientId != currentUserId)
+                if (appointment.PatientId != GetCurrentUserId())
                     return Forbid();
 
-                // allow reviews only if appointment end time has passed
-                if (appointment.AppointmentDate.Date.Add(appointment.EndTime) > DateTime.Now)
+                if (!IsAppointmentCompleted(appointment))
                     return Forbid();
 
-                var existingReview = await _unitOfWork.Repository<Review>()
-                    .FindAsync(r => r.AppointmentId == appointmentId);
+                var existingReview = await _unitOfWork.Repository<Review>().FindAsync(r => r.AppointmentId == appointmentId);
                 if (existingReview != null)
                     return RedirectToAction(nameof(Details), new { id = existingReview.Id });
             }
 
-            var vm = new ReviewCreateViewModel
-            {
-                AppointmentId = appointmentId,
-            };
-
-            return View(vm);
+            return View(new ReviewCreateViewModel { AppointmentId = appointmentId });
         }
 
-        // POST: /Review/Create
         [Authorize(Roles = "Patient")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -110,28 +82,15 @@ namespace Presentation.Controllers
                 return Forbid();
 
             var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(vm.AppointmentId);
-            if (appointment == null)
+            if (appointment == null || appointment.PatientId != currentUserId || !IsAppointmentCompleted(appointment))
             {
-                ModelState.AddModelError(nameof(vm.AppointmentId), "Appointment not found.");
+                ModelState.AddModelError(nameof(vm.AppointmentId), "Invalid appointment.");
                 return View(vm);
             }
 
-            if (appointment.PatientId != currentUserId)
-                return Forbid();
-
-            // allow reviews only if appointment end time has passed
-            if (appointment.AppointmentDate.Date.Add(appointment.EndTime) > DateTime.Now)
-            {
-                ModelState.AddModelError(nameof(vm.AppointmentId), "You can only review appointments after they have taken place.");
-                return View(vm);
-            }
-
-            var existingReview = await _unitOfWork.Repository<Review>()
-                .FindAsync(r => r.AppointmentId == vm.AppointmentId);
+            var existingReview = await _unitOfWork.Repository<Review>().FindAsync(r => r.AppointmentId == vm.AppointmentId);
             if (existingReview != null)
-            {
                 return RedirectToAction(nameof(Details), new { id = existingReview.Id });
-            }
 
             var review = new Review
             {
@@ -155,44 +114,41 @@ namespace Presentation.Controllers
             }
         }
 
-        // POST: /Review/Delete/id
+        [Authorize(Roles = "Patient,Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var dto = await _reviewService.GetReviewByIdAsync(id);
+            if (dto == null)
+                return NotFound();
+
+            if (!CanDeleteReview(dto))
+                return Forbid();
+
+            return View(dto);
+        }
+
         [Authorize(Roles = "Patient,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var dto = await _reviewService.GetReviewByIdAsync(id);
-            if (dto == null)
-                return NotFound();
-
-            var currentUserId = GetCurrentUserId();
-            if (!IsAdminUser() && dto.PatientId != currentUserId)
+            if (dto == null || !CanDeleteReview(dto))
                 return Forbid();
 
             await _reviewService.DeleteReviewAsync(id);
-
             TempData["Success"] = "Review deleted successfully";
 
-            // If the current user is a patient, redirect back to their dashboard
-            if (IsPatientUser())
-                return RedirectToAction(nameof(PatientController.Dashboard), "Patient");
-
-            return RedirectToAction(nameof(Index));
+            return IsPatientUser() 
+                ? RedirectToAction(nameof(PatientController.Dashboard), "Patient") 
+                : RedirectToAction(nameof(Index));
         }
 
-        // GET: /Review/Edit/5
         [Authorize(Roles = "Patient,Admin,Doctor")]
         public async Task<IActionResult> Edit(int id)
         {
             var dto = await _reviewService.GetReviewByIdAsync(id);
-            if (dto == null)
-                return NotFound();
-
-            var currentUserId = GetCurrentUserId();
-            if (IsPatientUser() && dto.PatientId != currentUserId)
-                return Forbid();
-
-            if (IsDoctorUser() && dto.DoctorId != currentUserId && !IsAdminUser())
+            if (dto == null || !CanAccessReview(dto))
                 return Forbid();
 
             var vm = new ReviewCreateViewModel
@@ -206,7 +162,6 @@ namespace Presentation.Controllers
             return View(vm);
         }
 
-        // POST: /Review/Edit/5
         [Authorize(Roles = "Patient,Admin,Doctor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -219,17 +174,9 @@ namespace Presentation.Controllers
             }
 
             var dto = await _reviewService.GetReviewByIdAsync(id);
-            if (dto == null)
-                return NotFound();
-
-            var currentUserId = GetCurrentUserId();
-            if (IsPatientUser() && dto.PatientId != currentUserId)
+            if (dto == null || !CanAccessReview(dto))
                 return Forbid();
 
-            if (IsDoctorUser() && dto.DoctorId != currentUserId && !IsAdminUser())
-                return Forbid();
-
-            // load entity, apply updates and save via service
             var reviewEntity = await _unitOfWork.Repository<Review>().GetByIdAsync(id);
             if (reviewEntity == null)
                 return NotFound();
@@ -238,45 +185,29 @@ namespace Presentation.Controllers
             reviewEntity.Comment = vm.Comment;
 
             await _reviewService.UpdateReviewAsync(reviewEntity);
-
             TempData["Success"] = "Review updated successfully";
 
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        // GET: /Review/Delete/5
-        [Authorize(Roles = "Patient,Admin")]
-        public async Task<IActionResult> Delete(int id)
+        private bool CanAccessReview(ReviewDto review) => IsAdminUser() || (IsPatientUser() && review.PatientId == GetCurrentUserId()) || (IsDoctorUser() && review.DoctorId == GetCurrentUserId());
+
+        private bool CanDeleteReview(ReviewDto review) => IsAdminUser() || (IsPatientUser() && review.PatientId == GetCurrentUserId());
+
+        private bool IsAppointmentCompleted(Appointment appointment) => appointment.AppointmentDate.Date.Add(appointment.EndTime) <= DateTime.Now;
+
+        private void SetBackNavigation()
         {
-            var dto = await _reviewService.GetReviewByIdAsync(id);
-            if (dto == null)
-                return NotFound();
+            if (!IsPatientUser())
+                return;
 
-            var currentUserId = GetCurrentUserId();
-            if (!IsAdminUser() && dto.PatientId != currentUserId)
-                return Forbid();
-
-            return View(dto);
+            ViewData["BackController"] = "Patient";
+            ViewData["BackAction"] = nameof(PatientController.Dashboard);
         }
 
-        private string? GetCurrentUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
-
-        private bool IsAdminUser()
-        {
-            return User.IsInRole("Admin");
-        }
-
-        private bool IsDoctorUser()
-        {
-            return User.IsInRole("Doctor");
-        }
-
-        private bool IsPatientUser()
-        {
-            return User.IsInRole("Patient");
-        }
+        private string? GetCurrentUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private bool IsAdminUser() => User.IsInRole("Admin");
+        private bool IsDoctorUser() => User.IsInRole("Doctor");
+        private bool IsPatientUser() => User.IsInRole("Patient");
     }
 }
