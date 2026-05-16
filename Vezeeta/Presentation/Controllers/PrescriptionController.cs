@@ -58,6 +58,41 @@ namespace Presentation.Controllers
             return View(prescriptions);
         }
 
+        [Authorize(Roles = "Admin,Doctor,Patient")]
+        public async Task<IActionResult> Details(int id)
+        {
+            var prescription = await _prescriptionService.GetByIdAsync(id);
+            if (prescription == null)
+                return NotFound();
+
+            if (User.IsInRole("Patient"))
+            {
+                var patientId = _currentUserService.UserId;
+                if (prescription.AppointmentId == null)
+                    return Forbid();
+
+                var appointment = await _unitOfWork.Repository<Appointment>()
+                    .FindAsync(a => a.Id == prescription.AppointmentId.Value && a.PatientId == patientId);
+
+                if (appointment == null)
+                    return Forbid();
+            }
+            else if (User.IsInRole("Doctor"))
+            {
+                var doctorId = _currentUserService.UserId;
+                if (prescription.AppointmentId == null)
+                    return Forbid();
+
+                var appointment = await _unitOfWork.Repository<Appointment>()
+                    .FindAsync(a => a.Id == prescription.AppointmentId.Value && a.DoctorId == doctorId);
+
+                if (appointment == null)
+                    return Forbid();
+            }
+
+            return View(prescription);
+        }
+
         [HttpGet]
         [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Create(int appointmentId)

@@ -44,11 +44,18 @@ namespace Infrastructure.Persistence.Configurations
             builder.Property(mr => mr.DiagnosedDate)
                 .IsRequired();
 
+            builder.Property(mr => mr.AppointmentId)
+                .IsRequired(false);
 
             // Relationships
             builder.HasOne(mr => mr.Patient)
-                .WithMany(p => p.MedicalRecords) 
+                .WithMany(p => p.MedicalRecords)
                 .HasForeignKey(mr => mr.PatientId);
+
+            builder.HasOne(mr => mr.Appointment)
+                .WithMany()
+                .HasForeignKey(mr => mr.AppointmentId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

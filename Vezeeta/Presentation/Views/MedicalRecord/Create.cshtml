@@ -17,28 +17,35 @@
 
             <form asp-action="Create" method="post">
 
+                <!-- PatientId as hidden field - will be set by controller -->
+                <input asp-for="PatientId" type="hidden" />
+                <!-- AppointmentId as hidden field - optional, can be null -->
+                <input asp-for="AppointmentId" type="hidden" />
+
                 <div class="row">
 
                     <div class="col-md-6 mb-3">
 
-                        <label asp-for="PatientId" class="form-label"></label>
+                        <label asp-for="DiagnosedDate" class="form-label"></label>
 
-                        <input asp-for="PatientId"
+                        <input asp-for="DiagnosedDate"
+                               type="date"
                                class="form-control" />
 
-                        <span asp-validation-for="PatientId"
+                        <span asp-validation-for="DiagnosedDate"
                               class="text-danger"></span>
 
                     </div>
 
                     <div class="col-md-6 mb-3">
 
-                        <label asp-for="AppointmentId" class="form-label"></label>
+                        <label asp-for="ResolvedDate" class="form-label"></label>
 
-                        <input asp-for="AppointmentId"
+                        <input asp-for="ResolvedDate"
+                               type="date"
                                class="form-control" />
 
-                        <span asp-validation-for="AppointmentId"
+                        <span asp-validation-for="ResolvedDate"
                               class="text-danger"></span>
 
                     </div>
@@ -65,6 +72,9 @@
                               class="form-control"
                               rows="3"></textarea>
 
+                    <span asp-validation-for="Description"
+                          class="text-danger"></span>
+
                 </div>
 
                 <div class="row">
@@ -76,67 +86,81 @@
                         <input asp-for="DiagnosisCode"
                                class="form-control" />
 
+                        <span asp-validation-for="DiagnosisCode"
+                              class="text-danger"></span>
+
                     </div>
 
                     <div class="col-md-6 mb-3">
 
-                        <label asp-for="DiagnosedDate" class="form-label"></label>
+                        <label asp-for="IsActive" class="form-label"></label>
 
-                        <input asp-for="DiagnosedDate"
-                               type="date"
-                               class="form-control" />
+                        <div class="form-check mt-2">
+                            <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label"></label>
+                        </div>
 
                     </div>
 
                 </div>
 
-                <div class="mb-3">
+                <div class="row">
 
-                    <label asp-for="ResolvedDate" class="form-label"></label>
+                    <div class="col-md-6 mb-3">
 
-                    <input asp-for="ResolvedDate"
-                           type="date"
-                           class="form-control" />
+                        <label asp-for="Treatment" class="form-label"></label>
 
-                </div>
+                        <textarea asp-for="Treatment"
+                                  class="form-control"
+                                  rows="2"></textarea>
 
-                <div class="mb-3">
+                        <span asp-validation-for="Treatment"
+                              class="text-danger"></span>
 
-                    <label asp-for="Treatment" class="form-label"></label>
+                    </div>
 
-                    <textarea asp-for="Treatment"
-                              class="form-control"
-                              rows="3"></textarea>
+                    <div class="col-md-6 mb-3">
 
-                </div>
+                        <label asp-for="Allergies" class="form-label"></label>
 
-                <div class="mb-3">
+                        <textarea asp-for="Allergies"
+                                  class="form-control"
+                                  rows="2"></textarea>
 
-                    <label asp-for="Allergies" class="form-label"></label>
+                        <span asp-validation-for="Allergies"
+                              class="text-danger"></span>
 
-                    <textarea asp-for="Allergies"
-                              class="form-control"
-                              rows="3"></textarea>
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label asp-for="Medications" class="form-label"></label>
-
-                    <textarea asp-for="Medications"
-                              class="form-control"
-                              rows="3"></textarea>
+                    </div>
 
                 </div>
 
-                <div class="mb-3">
+                <div class="row">
 
-                    <label asp-for="SurgeryDetails" class="form-label"></label>
+                    <div class="col-md-6 mb-3">
 
-                    <textarea asp-for="SurgeryDetails"
-                              class="form-control"
-                              rows="3"></textarea>
+                        <label asp-for="Medications" class="form-label"></label>
+
+                        <textarea asp-for="Medications"
+                                  class="form-control"
+                                  rows="2"></textarea>
+
+                        <span asp-validation-for="Medications"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="SurgeryDetails" class="form-label"></label>
+
+                        <textarea asp-for="SurgeryDetails"
+                                  class="form-control"
+                                  rows="2"></textarea>
+
+                        <span asp-validation-for="SurgeryDetails"
+                              class="text-danger"></span>
+
+                    </div>
 
                 </div>
 
@@ -148,31 +172,22 @@
                               class="form-control"
                               rows="3"></textarea>
 
-                </div>
-
-                <div class="form-check mb-3">
-
-                    <input asp-for="IsActive"
-                           class="form-check-input" />
-
-                    <label asp-for="IsActive"
-                           class="form-check-label"></label>
+                    <span asp-validation-for="FamilyHistory"
+                          class="text-danger"></span>
 
                 </div>
 
-                <button type="submit"
-                        class="btn btn-success">
+                <div class="d-grid gap-2">
 
-                    Create
+                    <button type="submit" class="btn btn-primary">
+                        Create Medical Record
+                    </button>
 
-                </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        Back to List
+                    </a>
 
-                <a asp-action="Index"
-                   class="btn btn-secondary">
-
-                    Back
-
-                </a>
+                </div>
 
             </form>
 

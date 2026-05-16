@@ -19,7 +19,7 @@ namespace Domain.Entities
         public string? Medications { get; set; }
         public string? SurgeryDetails { get; set; }
         public string? FamilyHistory { get; set; }
-        public int AppointmentId { get; set; }
+        public int? AppointmentId { get; set; }
 
         public PatientProfile Patient { get; set; } = null!;
         public Appointment? Appointment { get; set; }

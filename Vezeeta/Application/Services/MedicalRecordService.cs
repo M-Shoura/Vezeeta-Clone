@@ -31,6 +31,15 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<MedicalRecordDto>>(records);
         }
 
+        public async Task<IEnumerable<MedicalRecordDto>> GetAllByPatientIdAsync(string patientId)
+        {
+            var records = await _unitOfWork
+                .Repository<MedicalRecord>()
+                .FindAllAsync(r => r.PatientId == patientId);
+
+            return _mapper.Map<IEnumerable<MedicalRecordDto>>(records);
+        }
+
         public async Task<MedicalRecordDto?> GetByIdAsync(int id)
         {
             var record = await _unitOfWork

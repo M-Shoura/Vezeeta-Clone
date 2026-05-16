@@ -24,6 +24,8 @@ namespace Application.Services
                 .FindAllAsync(p => true, includes: new[]
                 {
                     "Appointment",
+                    "Appointment.Doctor",
+                    "Appointment.Doctor.ApplicationUser",
                     "PrescriptionItems",
                     "PrescriptionItems.Drug"
                 });
@@ -38,6 +40,8 @@ namespace Application.Services
                 .FindAsync(p => p.Id == id, includes: new[]
                 {
                     "Appointment",
+                    "Appointment.Doctor",
+                    "Appointment.Doctor.ApplicationUser",
                     "PrescriptionItems",
                     "PrescriptionItems.Drug"
                 });
@@ -55,6 +59,8 @@ namespace Application.Services
                 .FindAsync(p => p.AppointmentId == appointmentId, includes: new[]
                 {
                     "Appointment",
+                    "Appointment.Doctor",
+                    "Appointment.Doctor.ApplicationUser",
                     "PrescriptionItems",
                     "PrescriptionItems.Drug"
                 });
@@ -208,6 +214,8 @@ namespace Application.Services
                 AppointmentInfo = prescription.Appointment == null
                     ? null
                     : $"{prescription.Appointment.AppointmentDate:dd MMM yyyy} {prescription.Appointment.StartTime:hh\\:mm}",
+                DoctorName = prescription.Appointment?.Doctor?.ApplicationUser?.FullName,
+                DoctorSpecialization = prescription.Appointment?.Doctor?.Specialization,
                 Items = prescription.PrescriptionItems.Select(item => new PrescriptionItemDto
                 {
                     Id = item.Id,
