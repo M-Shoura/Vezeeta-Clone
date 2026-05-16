@@ -1,5 +1,15 @@
 [
   {
+    "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf0001",
+    "email": "admin@vezeeta.local",
+    "password": "Admin123!",
+    "fullName": "Admin User",
+    "role": "Admin",
+    "address": "Downtown, Cairo",
+    "phoneNumber": "+201000000001",
+    "profilePicture": null
+  },
+  {
     "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf1001",
     "email": "dr.sara@vezeeta.local",
     "password": "Doctor123!",
