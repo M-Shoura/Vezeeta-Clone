@@ -39,6 +39,7 @@ public sealed class DashboardService : IDashboardService
             .Select(a => new RecentAppointmentDashboardDto
             {
                 Id = a.Id,
+                ReviewId = a.ReviewId,
                 PatientName = a.Patient.ApplicationUser.FullName,
                 DoctorName = a.Doctor.ApplicationUser.FullName,
                 ClinicName = a.Clinic.Name,
@@ -150,6 +151,7 @@ public sealed class DashboardService : IDashboardService
             .Select(a => new RecentAppointmentDashboardDto
             {
                 Id = a.Id,
+                ReviewId = a.ReviewId,
                 PatientName = a.Patient.ApplicationUser.FullName,
                 DoctorName = a.Doctor.ApplicationUser.FullName,
                 ClinicName = a.Clinic.Name,
@@ -168,6 +170,7 @@ public sealed class DashboardService : IDashboardService
             .Select(a => new RecentAppointmentDashboardDto
             {
                 Id = a.Id,
+                ReviewId = a.ReviewId,
                 PatientName = a.Patient.ApplicationUser.FullName,
                 DoctorName = a.Doctor.ApplicationUser.FullName,
                 ClinicName = a.Clinic.Name,

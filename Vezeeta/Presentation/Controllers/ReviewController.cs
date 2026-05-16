@@ -1,6 +1,7 @@
 using Application.Interfaces.Services;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -71,13 +72,46 @@ namespace Presentation.Controllers
             if (IsDoctorUser() && review.DoctorId != currentUserId && !IsAdminUser())
                 return Forbid();
 
+            if (IsPatientUser())
+            {
+                ViewData["BackController"] = "Patient";
+                ViewData["BackAction"] = nameof(PatientController.Dashboard);
+            }
+            else
+            {
+                ViewData["BackController"] = "Review";
+                ViewData["BackAction"] = nameof(Index);
+            }
+
             return View(review);
         }
 
         // GET: /Review/Create
         [Authorize(Roles = "Patient")]
-        public IActionResult Create(int appointmentId = 0)
+        public async Task<IActionResult> Create(int appointmentId = 0)
         {
+            if (appointmentId > 0)
+            {
+                var currentUserId = GetCurrentUserId();
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                    return Challenge();
+
+                var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(appointmentId);
+                if (appointment == null)
+                    return NotFound();
+
+                if (appointment.PatientId != currentUserId)
+                    return Forbid();
+
+                if (appointment.Status != AppointmentStatus.Completed)
+                    return Forbid();
+
+                var existingReview = await _unitOfWork.Repository<Review>()
+                    .FindAsync(r => r.AppointmentId == appointmentId);
+                if (existingReview != null)
+                    return RedirectToAction(nameof(Details), new { id = existingReview.Id });
+            }
+
             var vm = new ReviewCreateViewModel
             {
                 AppointmentId = appointmentId,
@@ -109,12 +143,17 @@ namespace Presentation.Controllers
             if (appointment.PatientId != currentUserId)
                 return Forbid();
 
+            if (appointment.Status != AppointmentStatus.Completed)
+            {
+                ModelState.AddModelError(nameof(vm.AppointmentId), "You can only review completed appointments.");
+                return View(vm);
+            }
+
             var existingReview = await _unitOfWork.Repository<Review>()
                 .FindAsync(r => r.AppointmentId == vm.AppointmentId);
             if (existingReview != null)
             {
-                ModelState.AddModelError(nameof(vm.AppointmentId), "A review already exists for this appointment.");
-                return View(vm);
+                return RedirectToAction(nameof(Details), new { id = existingReview.Id });
             }
 
             var review = new Review
@@ -215,7 +254,7 @@ namespace Presentation.Controllers
 
             TempData["Success"] = "Review updated successfully";
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new { id = review.Id });
         }
 
         // GET: /Review/Delete/id
