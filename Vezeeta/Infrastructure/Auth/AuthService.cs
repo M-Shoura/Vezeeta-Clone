@@ -281,7 +281,7 @@ public sealed class AuthService : IAuthService
         if (file.Length > MaxFileSizeBytes)
             throw new InvalidOperationException("File size must not exceed 2MB.");
 
-        var folder = Path.Combine(_env.WebRootPath, "uploads", "profiles");
+        var folder = Path.Combine(_env.WebRootPath, "images");
         Directory.CreateDirectory(folder);
 
         var fileName = $"{Guid.NewGuid()}{extension}";
@@ -290,7 +290,7 @@ public sealed class AuthService : IAuthService
         await using var stream = new FileStream(fullPath, FileMode.Create);
         await file.CopyToAsync(stream);
 
-        return $"/uploads/profiles/{fileName}";
+        return fileName;
     }
     private static Result<T> IdentityFailure<T>(IdentityResult result)
     {
