@@ -22,6 +22,13 @@ namespace Presentation.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index()
+        {
+            var reviews = await _reviewService.GetAllReviewsAsync();
+            return View(reviews);
+        }
+
         [Authorize(Roles = "Patient,Admin,Doctor")]
         public async Task<IActionResult> PatientReviews(string id)
         {
@@ -144,7 +151,7 @@ namespace Presentation.Controllers
                 : RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Patient,Admin,Doctor")]
+        [Authorize(Roles = "Patient,Doctor")]
         public async Task<IActionResult> Edit(int id)
         {
             var dto = await _reviewService.GetReviewByIdAsync(id);
@@ -162,7 +169,7 @@ namespace Presentation.Controllers
             return View(vm);
         }
 
-        [Authorize(Roles = "Patient,Admin,Doctor")]
+        [Authorize(Roles = "Patient,Doctor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ReviewCreateViewModel vm)
