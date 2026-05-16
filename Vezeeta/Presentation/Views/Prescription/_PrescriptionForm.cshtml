@@ -8,14 +8,14 @@
         <form id="prescriptionForm">
             @Html.AntiForgeryToken()
 
-            <input type="hidden" name="id" value="@Model?.Id" />
-            <input type="hidden" name="appointmentId" value="@Model?.AppointmentId" />
+            <input type="hidden" name="id" value="@(Model?.Id ?? 0)" />
+            <input type="hidden" name="appointmentId" value="@(Model?.AppointmentId ?? 0)" />
 
             <!-- Prescription Date -->
             <div class="mb-3">
                 <label for="prescriptionDate" class="form-label">Prescription Date</label>
                 <input type="date" id="prescriptionDate" name="prescriptionDate" 
-                       value="@Model?.PrescriptionDate.ToString("yyyy-MM-dd")"
+                       value="@((Model?.PrescriptionDate == default ? DateTime.Today : Model?.PrescriptionDate)?.ToString("yyyy-MM-dd"))"
                        class="form-control" required />
             </div>
 
@@ -180,7 +180,7 @@
         }
 
         const response =
-            await fetch(`/Prescription/GetDrugsBySearch?search=${search}`);
+            await fetch(`/Prescription/GetDrugsBySearch?search=${encodeURIComponent(search)}`);
 
         const drugs = await response.json();
 
@@ -250,6 +250,11 @@
             });
         });
 
+        if (!items.length) {
+            alert("Add at least one prescription item.");
+            return;
+        }
+
         const data = {
             id: parseInt(document.querySelector('[name="id"]').value) || 0,
 
@@ -282,6 +287,10 @@
     const result = await response.json();
 
     alert(result.message);
+
+    if (result.success) {
+        window.location.href = '/Doctor/Dashboard';
+    }
     });
 
 </script>

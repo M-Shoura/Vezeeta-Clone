@@ -20,23 +20,28 @@ namespace Presentation.Helpers
 
 
 
-            //var path = profilePicture.Trim().Replace("\\", "/");
+            var path = profilePicture.Trim().Replace("\\", "/");
 
-            //if (path.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
-            //    || path.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
-            //    || path.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    return path;
-            //}
+            if (path.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+                || path.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+                || path.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
+            {
+                return path;
+            }
 
-            //if (path.StartsWith("~/", StringComparison.Ordinal))
-            //    return "/" + path[2..];
+            if (path.StartsWith("~/", StringComparison.Ordinal))
+                return "/" + path[2..];
 
-            //if (path.StartsWith("/", StringComparison.Ordinal))
-            //    return path;
+            if (path.StartsWith("/", StringComparison.Ordinal))
+                return path;
 
-            //return "/" + path;
-            return "";
+            if (path.StartsWith("images/", StringComparison.OrdinalIgnoreCase)
+                || path.StartsWith("uploads/", StringComparison.OrdinalIgnoreCase))
+            {
+                return "/" + path;
+            }
+
+            return "/images/" + path;
         }
     }
 }

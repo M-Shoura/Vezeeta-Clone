@@ -42,9 +42,10 @@ namespace Presentation.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
 
-            var patient =
-                await _patientService
-                    .GetPatientByIdAsync(id);
+            var patients =
+                await _patientService.GetAllPatientsAsync();
+                    
+            var patient = patients.FirstOrDefault(x => x.Email == id);
 
             if (patient == null)
                 return NotFound();
@@ -86,9 +87,10 @@ namespace Presentation.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
 
-            var patient =
-                await _patientService
-                    .GetPatientByIdAsync(id);
+            var patients =
+                await _patientService.GetAllPatientsAsync();
+
+            var patient = patients.FirstOrDefault(x => x.Email == id);
 
             if (patient == null)
                 return NotFound();
@@ -127,9 +129,10 @@ namespace Presentation.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
 
-            var patient =
-                await _patientService
-                    .GetPatientByIdAsync(id);
+            var patients =
+                await _patientService.GetAllPatientsAsync();
+
+            var patient = patients.FirstOrDefault(x => x.Email == id);
 
             if (patient == null)
                 return NotFound();

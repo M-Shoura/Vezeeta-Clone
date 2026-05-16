@@ -1,0 +1,25 @@
+@model Application.DTOs.Prescriptions.PrescriptionDto
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Create Prescription" : "Edit Prescription";
+}
+
+<div class="app-container">
+    <div class="page-header">
+        <div>
+            <span class="eyebrow"><i class="bi bi-prescription2"></i> Treatment plan</span>
+            <h1 class="page-title mt-2">@ViewData["Title"]</h1>
+            @if (ViewBag.AppointmentInfo != null)
+            {
+                <p class="page-subtitle mb-0">@ViewBag.AppointmentInfo</p>
+            }
+        </div>
+        <a asp-controller="Doctor" asp-action="Dashboard" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+    <div class="section-card p-4">
+        <partial name="_PrescriptionForm" model="Model" />
+    </div>
+</div>

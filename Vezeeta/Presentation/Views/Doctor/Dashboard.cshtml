@@ -113,9 +113,26 @@
                                         <h6 class="fw-bold mb-1">@appointment.PatientName</h6>
                                         <small class="text-muted">@appointment.ClinicName • @appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</small>
                                     </div>
-                                    <span class="status-badge @(appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-success" : appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted")">
-                                        @appointment.Status
-                                    </span>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="status-badge @(appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-success" : appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted")">
+                                            @appointment.Status
+                                        </span>
+                                        @if (appointment.Status == Domain.Enums.AppointmentStatus.Confirmed || appointment.Status == Domain.Enums.AppointmentStatus.Completed)
+                                        {
+                                            if (appointment.HasPrescription && appointment.PrescriptionId.HasValue)
+                                            {
+                                                <a asp-controller="Prescription" asp-action="Edit" asp-route-id="@appointment.PrescriptionId" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-pencil-square"></i> Edit Prescription
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Prescription" asp-action="Create" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-prescription2"></i> Add Prescription
+                                                </a>
+                                            }
+                                        }
+                                    </div>
                                 </div>
                             </article>
                         }
@@ -140,6 +157,7 @@
                             <th>Time</th>
                             <th>Clinic</th>
                             <th>Status</th>
+                            <th class="text-end">Prescription</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -153,12 +171,29 @@
                                     <td>@appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</td>
                                     <td>@appointment.ClinicName</td>
                                     <td><span class="status-badge status-muted">@appointment.Status</span></td>
+                                    <td class="text-end">
+                                        @if (appointment.Status == Domain.Enums.AppointmentStatus.Confirmed || appointment.Status == Domain.Enums.AppointmentStatus.Completed)
+                                        {
+                                            if (appointment.HasPrescription && appointment.PrescriptionId.HasValue)
+                                            {
+                                                <a asp-controller="Prescription" asp-action="Edit" asp-route-id="@appointment.PrescriptionId" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-pencil-square"></i> Edit
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Prescription" asp-action="Create" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-prescription2"></i> Add
+                                                </a>
+                                            }
+                                        }
+                                    </td>
                                 </tr>
                             }
                         }
                         else
                         {
-                            <tr><td colspan="5"><div class="empty-state my-2">No upcoming appointments yet.</div></td></tr>
+                            <tr><td colspan="6"><div class="empty-state my-2">No upcoming appointments yet.</div></td></tr>
                         }
                     </tbody>
                 </table>
