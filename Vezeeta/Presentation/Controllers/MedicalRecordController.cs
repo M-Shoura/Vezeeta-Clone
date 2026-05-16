@@ -23,7 +23,7 @@ namespace Presentation.Controllers
 
             return View(records);
         }
-        [Authorize(Roles = "Admin,Doctor")]
+        [Authorize(Roles = "Admin,Doctor,Patient")]
         public IActionResult Create()
         {
             return View();

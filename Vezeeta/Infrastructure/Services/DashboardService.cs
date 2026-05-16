@@ -45,7 +45,9 @@ public sealed class DashboardService : IDashboardService
                 AppointmentDate = a.AppointmentDate,
                 StartTime = a.StartTime,
                 EndTime = a.EndTime,
-                Status = a.Status
+                Status = a.Status,
+                HasPrescription = a.Prescription != null,
+                PrescriptionId = a.Prescription != null ? a.Prescription.Id : null
             })
             .ToListAsync(cancellationToken);
 
@@ -156,7 +158,9 @@ public sealed class DashboardService : IDashboardService
                 AppointmentDate = a.AppointmentDate,
                 StartTime = a.StartTime,
                 EndTime = a.EndTime,
-                Status = a.Status
+                Status = a.Status,
+                HasPrescription = a.Prescription != null,
+                PrescriptionId = a.Prescription != null ? a.Prescription.Id : null
             })
             .ToListAsync(cancellationToken);
 
@@ -174,7 +178,9 @@ public sealed class DashboardService : IDashboardService
                 AppointmentDate = a.AppointmentDate,
                 StartTime = a.StartTime,
                 EndTime = a.EndTime,
-                Status = a.Status
+                Status = a.Status,
+                HasPrescription = a.Prescription != null,
+                PrescriptionId = a.Prescription != null ? a.Prescription.Id : null
             })
             .ToListAsync(cancellationToken);
 
@@ -258,7 +264,9 @@ public sealed class DashboardService : IDashboardService
                 AppointmentDate = a.AppointmentDate,
                 StartTime = a.StartTime,
                 EndTime = a.EndTime,
-                Status = a.Status
+                Status = a.Status,
+                HasPrescription = a.Prescription != null,
+                PrescriptionId = a.Prescription != null ? a.Prescription.Id : null
             })
             .ToListAsync(cancellationToken);
 
@@ -275,7 +283,9 @@ public sealed class DashboardService : IDashboardService
                 AppointmentDate = a.AppointmentDate,
                 StartTime = a.StartTime,
                 EndTime = a.EndTime,
-                Status = a.Status
+                Status = a.Status,
+                HasPrescription = a.Prescription != null,
+                PrescriptionId = a.Prescription != null ? a.Prescription.Id : null
             })
             .ToListAsync(cancellationToken);
 

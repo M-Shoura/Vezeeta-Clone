@@ -8,6 +8,7 @@ namespace Application.Interfaces.Services
     {
         Task<IEnumerable<PrescriptionDto>> GetAllAsync();
         Task<PrescriptionDto?> GetByIdAsync(int id);
+        Task<PrescriptionDto?> GetByAppointmentIdAsync(int appointmentId);
         Task<bool> CreateAsync(PrescriptionDto dto);
         Task<bool> UpdateAsync(int id, PrescriptionDto dto);
         Task<bool> DeleteAsync(int id);

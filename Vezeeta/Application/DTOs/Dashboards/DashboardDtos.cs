@@ -20,6 +20,8 @@ public sealed class RecentAppointmentDashboardDto
     public TimeSpan StartTime { get; set; }
     public TimeSpan EndTime { get; set; }
     public AppointmentStatus Status { get; set; }
+    public bool HasPrescription { get; set; }
+    public int? PrescriptionId { get; set; }
 }
 
 public sealed class RecentUserDashboardDto

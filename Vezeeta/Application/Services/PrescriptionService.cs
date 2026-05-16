@@ -21,28 +21,70 @@ namespace Application.Services
         {
             var prescriptions = await _unitOfWork
                 .Repository<Prescription>()
-                .GetAllAsync();
+                .FindAllAsync(p => true, includes: new[]
+                {
+                    "Appointment",
+                    "PrescriptionItems",
+                    "PrescriptionItems.Drug"
+                });
 
-            return _mapper.Map<IEnumerable<PrescriptionDto>>(prescriptions);
+            return prescriptions.Select(MapPrescription);
         }
 
         public async Task<PrescriptionDto?> GetByIdAsync(int id)
         {
             var prescription = await _unitOfWork
                 .Repository<Prescription>()
-                .GetByIdAsync(id);
+                .FindAsync(p => p.Id == id, includes: new[]
+                {
+                    "Appointment",
+                    "PrescriptionItems",
+                    "PrescriptionItems.Drug"
+                });
 
             if (prescription == null)
                 return null;
 
-            return _mapper.Map<PrescriptionDto>(prescription);
+            return MapPrescription(prescription);
+        }
+
+        public async Task<PrescriptionDto?> GetByAppointmentIdAsync(int appointmentId)
+        {
+            var prescription = await _unitOfWork
+                .Repository<Prescription>()
+                .FindAsync(p => p.AppointmentId == appointmentId, includes: new[]
+                {
+                    "Appointment",
+                    "PrescriptionItems",
+                    "PrescriptionItems.Drug"
+                });
+
+            if (prescription == null)
+                return null;
+
+            return MapPrescription(prescription);
         }
 
         public async Task<bool> CreateAsync(PrescriptionDto dto)
         {
-            var prescription = _mapper.Map<Prescription>(dto);
+            if (dto.AppointmentId == null || dto.AppointmentId <= 0)
+                return false;
 
-            prescription.PrescriptionDate = DateTime.UtcNow;
+            var existingPrescription = await _unitOfWork
+                .Repository<Prescription>()
+                .FindAsync(p => p.AppointmentId == dto.AppointmentId.Value);
+
+            if (existingPrescription != null)
+                return false;
+
+            var prescription = new Prescription
+            {
+                AppointmentId = dto.AppointmentId.Value,
+                Notes = dto.Notes,
+                PrescriptionDate = dto.PrescriptionDate == default
+                    ? DateTime.UtcNow
+                    : dto.PrescriptionDate
+            };
 
             await _unitOfWork
                 .Repository<Prescription>()
@@ -56,8 +98,18 @@ namespace Application.Services
                 {
                     item.PrescriptionId = prescription.Id;
 
-                    var prescriptionItem =
-                        _mapper.Map<PrescriptionItem>(item);
+                    if (item.DrugId <= 0)
+                        continue;
+
+                    var prescriptionItem = new PrescriptionItem
+                    {
+                        PrescriptionId = prescription.Id,
+                        DrugId = item.DrugId,
+                        Dosage = item.Dosage,
+                        DurationInDays = item.DurationInDays,
+                        TimesPerDay = item.TimesPerDay,
+                        Instructions = item.Instructions
+                    };
 
                     await _unitOfWork
                         .Repository<PrescriptionItem>()
@@ -103,8 +155,18 @@ namespace Application.Services
                 {
                     item.PrescriptionId = id;
 
-                    var mappedItem =
-                        _mapper.Map<PrescriptionItem>(item);
+                    if (item.DrugId <= 0)
+                        continue;
+
+                    var mappedItem = new PrescriptionItem
+                    {
+                        PrescriptionId = id,
+                        DrugId = item.DrugId,
+                        Dosage = item.Dosage,
+                        DurationInDays = item.DurationInDays,
+                        TimesPerDay = item.TimesPerDay,
+                        Instructions = item.Instructions
+                    };
 
                     await _unitOfWork
                         .Repository<PrescriptionItem>()
@@ -133,6 +195,31 @@ namespace Application.Services
             await _unitOfWork.SaveChangesAsync();
 
             return true;
+        }
+
+        private static PrescriptionDto MapPrescription(Prescription prescription)
+        {
+            return new PrescriptionDto
+            {
+                Id = prescription.Id,
+                AppointmentId = prescription.AppointmentId,
+                PrescriptionDate = prescription.PrescriptionDate,
+                Notes = prescription.Notes,
+                AppointmentInfo = prescription.Appointment == null
+                    ? null
+                    : $"{prescription.Appointment.AppointmentDate:dd MMM yyyy} {prescription.Appointment.StartTime:hh\\:mm}",
+                Items = prescription.PrescriptionItems.Select(item => new PrescriptionItemDto
+                {
+                    Id = item.Id,
+                    PrescriptionId = item.PrescriptionId,
+                    DrugId = item.DrugId ?? 0,
+                    DrugName = item.Drug?.Name,
+                    Dosage = item.Dosage,
+                    DurationInDays = item.DurationInDays,
+                    TimesPerDay = item.TimesPerDay,
+                    Instructions = item.Instructions
+                }).ToList()
+            };
         }
     }
 }
