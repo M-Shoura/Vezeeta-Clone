@@ -382,6 +382,57 @@ textarea.form-control {
   min-height: 110px;
 }
 
+.rating-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rating-stars {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.rating-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rating-star {
+  margin-bottom: 0;
+  color: #d1d5db;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--transition), transform var(--transition);
+}
+
+.rating-star:hover,
+.rating-star:hover ~ .rating-star,
+.rating-input:checked ~ .rating-star {
+  color: #f59e0b;
+}
+
+.rating-input:focus-visible + .rating-star {
+  outline: 2px solid rgba(245, 158, 11, 0.35);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+.rating-star:hover {
+  transform: translateY(-1px) scale(1.05);
+}
+
 .input-group > .form-control,
 .input-group > .form-select,
 .input-group > .input-group-text {
