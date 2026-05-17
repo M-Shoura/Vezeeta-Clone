@@ -142,8 +142,7 @@
                                         <td>@appointment.ClinicName</td>
                                         <td><span class="status-badge @statusClass">@appointment.Status</span></td>
                                         <td class="text-end">
-                                            @{ var appointmentEnd = appointment.AppointmentDate.Date.Add(appointment.EndTime); }
-                                            @if (appointmentEnd <= DateTime.Now && appointment.ReviewId == 0)
+                                            @if (appointment.Status == Domain.Enums.AppointmentStatus.Completed && appointment.ReviewId == 0)
                                             {
                                                 <a asp-controller="Review"
                                                    asp-action="Create"
@@ -152,7 +151,7 @@
                                                     Write Review
                                                 </a>
                                             }
-                                            else if (appointmentEnd <= DateTime.Now && appointment.ReviewId != 0)
+                                            else if (appointment.Status == Domain.Enums.AppointmentStatus.Completed && appointment.ReviewId != 0)
                                             {
                                                 <span class="text-success small fw-semibold">Reviewed</span>
                                             }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Presentation.ViewModels;
+using Application.Interfaces.Repositories;
 
 namespace Presentation.Controllers
 {
@@ -14,15 +15,18 @@ namespace Presentation.Controllers
         private readonly IDoctorService _doctorService;
         private readonly IDashboardService _dashboardService;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IUnitOfWork _unitOfWork;
 
         public DoctorController(
             IDoctorService doctorService,
             IDashboardService dashboardService,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IUnitOfWork unitOfWork)
         {
             _doctorService = doctorService;
             _dashboardService = dashboardService;
             _currentUserService = currentUserService;
+            _unitOfWork = unitOfWork;
         }
 
         #region Doctor CRUD
@@ -536,6 +540,36 @@ namespace Presentation.Controllers
                 return NotFound();
 
             return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Doctor")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAppointmentCompleted(int appointmentId)
+        {
+            var doctorId = _currentUserService.UserId;
+            if (string.IsNullOrWhiteSpace(doctorId))
+                return Challenge();
+
+            var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(appointmentId);
+            if (appointment == null)
+                return NotFound();
+
+            if (appointment.DoctorId != doctorId)
+                return Forbid();
+
+            if (appointment.Status == Domain.Enums.AppointmentStatus.Completed)
+            {
+                TempData["Success"] = "Appointment is already marked as completed.";
+                return RedirectToAction(nameof(Dashboard), new { id = doctorId });
+            }
+
+            appointment.Status = Domain.Enums.AppointmentStatus.Completed;
+            await _unitOfWork.SaveChangesAsync();
+
+            TempData["Success"] = "Appointment marked as completed.";
+
+            return RedirectToAction(nameof(Dashboard), new { id = doctorId });
         }
 
         #endregion

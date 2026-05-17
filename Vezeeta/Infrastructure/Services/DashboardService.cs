@@ -278,10 +278,11 @@ public sealed class DashboardService : IDashboardService
             .ToListAsync(cancellationToken);
 
         var history = await appointmentsQuery
-            .Where(a => a.AppointmentDate.Date < today || (a.AppointmentDate.Date == today && a.EndTime <= timeOfDay))
+            .Where(a => a.Status == AppointmentStatus.Completed
+                || a.AppointmentDate.Date < today
+                || (a.AppointmentDate.Date == today && a.EndTime <= timeOfDay))
             .OrderByDescending(a => a.AppointmentDate)
             .ThenByDescending(a => a.EndTime)
-            .Take(6)
             .Select(a => new RecentAppointmentDashboardDto
             {
                 Id = a.Id,
