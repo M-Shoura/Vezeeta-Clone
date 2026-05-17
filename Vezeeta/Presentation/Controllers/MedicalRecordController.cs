@@ -20,7 +20,7 @@ namespace Presentation.Controllers
             _currentUserService = currentUserService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? patientId = null)
         {
             if (IsPatientUser())
             {
@@ -29,6 +29,12 @@ namespace Presentation.Controllers
                     return Challenge();
 
                 var records = await _medicalRecordService.GetAllByPatientIdAsync(currentUserId);
+                return View(records);
+            }
+
+            if (IsDoctorUser() && !string.IsNullOrWhiteSpace(patientId))
+            {
+                var records = await _medicalRecordService.GetAllByPatientIdAsync(patientId);
                 return View(records);
             }
 
@@ -143,6 +149,11 @@ namespace Presentation.Controllers
         private bool IsPatientUser()
         {
             return User.IsInRole("Patient");
+        }
+
+        private bool IsDoctorUser()
+        {
+            return User.IsInRole("Doctor");
         }
     }
 }
