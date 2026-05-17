@@ -16,17 +16,23 @@ namespace Presentation.Controllers
         private readonly IDashboardService _dashboardService;
         private readonly ICurrentUserService _currentUserService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPatientProfileService _patientService;
+        private readonly IMedicalRecordService _medicalRecordService;
 
         public DoctorController(
             IDoctorService doctorService,
             IDashboardService dashboardService,
             ICurrentUserService currentUserService,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IPatientProfileService patientService,
+            IMedicalRecordService medicalRecordService)
         {
             _doctorService = doctorService;
             _dashboardService = dashboardService;
             _currentUserService = currentUserService;
             _unitOfWork = unitOfWork;
+            _patientService = patientService;
+            _medicalRecordService = medicalRecordService;
         }
 
         #region Doctor CRUD
@@ -570,6 +576,58 @@ namespace Presentation.Controllers
             TempData["Success"] = "Appointment marked as completed.";
 
             return RedirectToAction(nameof(Dashboard), new { id = doctorId });
+        }
+
+        [Authorize(Roles = "Doctor")]
+        public async Task<IActionResult> AppointmentDetails(int appointmentId)
+        {
+            var doctorId = _currentUserService.UserId;
+            if (string.IsNullOrWhiteSpace(doctorId))
+                return Challenge();
+
+            var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(appointmentId);
+            if (appointment == null)
+                return NotFound();
+
+            if (appointment.DoctorId != doctorId)
+                return Forbid();
+
+            // Get patient information
+            var patient = await _patientService.GetPatientByIdAsync(appointment.PatientId);
+            if (patient == null)
+                return NotFound();
+
+            // Get medical records for patient
+            var medicalRecords = await _medicalRecordService.GetAllByPatientIdAsync(appointment.PatientId);
+
+            // Get doctor information
+                var doctor = await _unitOfWork.Repository<DoctorProfile>().FindAsync(d => d.ApplicationUserId == doctorId);
+                var doctorName = doctor?.ApplicationUser?.FullName ?? "Unknown";
+
+            // Create dashboard DTO for appointment
+            var appointmentDto = new Application.DTOs.Dashboards.RecentAppointmentDashboardDto
+            {
+                Id = appointment.Id,
+                ReviewId = appointment.ReviewId,
+                PatientName = patient.FullName,
+                DoctorName = doctorName,
+                ClinicName = appointment.Clinic?.Name ?? "Unknown",
+                AppointmentDate = appointment.AppointmentDate,
+                StartTime = appointment.StartTime,
+                EndTime = appointment.EndTime,
+                Status = appointment.Status,
+                    HasPrescription = appointment.PrescriptionId > 0,
+                    PrescriptionId = appointment.PrescriptionId > 0 ? appointment.PrescriptionId : null
+            };
+
+            var viewModel = new AppointmentDetailsViewModel
+            {
+                Appointment = appointmentDto,
+                Patient = patient,
+                MedicalRecords = medicalRecords
+            };
+
+            return View(viewModel);
         }
 
         #endregion

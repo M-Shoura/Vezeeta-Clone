@@ -117,6 +117,9 @@
                                         <span class="status-badge @(appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-success" : appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted")">
                                             @appointment.Status
                                         </span>
+                                        <a asp-action="AppointmentDetails" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary" title="View appointment details">
+                                            <i class="bi bi-eye"></i> View Details
+                                        </a>
                                         @if (appointment.Status == Domain.Enums.AppointmentStatus.Confirmed)
                                         {
                                             <form asp-action="MarkAppointmentCompleted" method="post" class="d-inline">
@@ -167,7 +170,7 @@
                             <th>Time</th>
                             <th>Clinic</th>
                             <th>Status</th>
-                            <th class="text-end">Prescription</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -181,36 +184,12 @@
                                     <td>@appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</td>
                                     <td>@appointment.ClinicName</td>
                                     <td>
-                                        <div class="d-flex flex-wrap align-items-center gap-2">
-                                            <span class="status-badge status-muted">@appointment.Status</span>
-                                            @if (appointment.Status == Domain.Enums.AppointmentStatus.Confirmed)
-                                            {
-                                                <form asp-action="MarkAppointmentCompleted" method="post" class="d-inline">
-                                                    @Html.AntiForgeryToken()
-                                                    <input type="hidden" name="appointmentId" value="@appointment.Id" />
-                                                    <button type="submit" class="btn btn-sm btn-outline-success">
-                                                        Mark Completed
-                                                    </button>
-                                                </form>
-                                            }
-                                        </div>
+                                        <span class="status-badge status-muted">@appointment.Status</span>
                                     </td>
                                     <td class="text-end">
-                                        @if (appointment.Status == Domain.Enums.AppointmentStatus.Confirmed || appointment.Status == Domain.Enums.AppointmentStatus.Completed)
-                                        {
-                                            if (appointment.HasPrescription && appointment.PrescriptionId.HasValue)
-                                            {
-                                                <a asp-controller="Prescription" asp-action="Edit" asp-route-id="@appointment.PrescriptionId" class="btn btn-sm btn-outline-primary">
-                                                    <i class="bi bi-pencil-square"></i> Edit
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a asp-controller="Prescription" asp-action="Create" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-prescription2"></i> Add
-                                                </a>
-                                            }
-                                        }
+                                        <a asp-action="AppointmentDetails" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary" title="View appointment details">
+                                            <i class="bi bi-eye"></i> Details
+                                        </a>
                                     </td>
                                 </tr>
                             }

@@ -35,7 +35,7 @@ namespace Presentation.Controllers
         }
 
         // GET: /Patient/Details/id
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Details(
             string id)
         {
