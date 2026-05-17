@@ -186,6 +186,7 @@
                                 <th>Doctor</th>
                                 <th>Items</th>
                                 <th>Notes</th>
+                                                            <th class="text-end">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -196,6 +197,11 @@
                                     <td>@prescription.DoctorName</td>
                                     <td><span class="status-badge status-muted">@prescription.ItemsCount</span></td>
                                     <td>@(prescription.Notes ?? "N/A")</td>
+                                                                    <td class="text-end">
+                                                                        <a asp-controller="Prescription" asp-action="Details" asp-route-id="@prescription.Id" class="btn btn-sm btn-primary">
+                                                                            <i class="bi bi-eye"></i> Details
+                                                                        </a>
+                                                                    </td>
                                 </tr>
                             }
                         </tbody>
