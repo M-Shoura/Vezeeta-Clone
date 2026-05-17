@@ -1,0 +1,176 @@
+@model AppointmentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<div class="app-container">
+    <div class="page-header mb-4">
+        <div>
+            <span class="eyebrow"><i class="bi bi-calendar-check"></i> Appointment</span>
+            <h1 class="page-title mt-2">Appointment Details</h1>
+        </div>
+        <a asp-action="Dashboard" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    @if (Model?.Appointment != null)
+    {
+        <!-- Appointment Information -->
+        <div class="section-card p-4 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-info-circle"></i> Appointment Information</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Date:</strong> @Model.Appointment.AppointmentDate.ToString("dddd, MMMM d, yyyy")</p>
+                    <p><strong>Time:</strong> @Model.Appointment.StartTime.ToString(@"hh\:mm") - @Model.Appointment.EndTime.ToString(@"hh\:mm")</p>
+                    <p><strong>Status:</strong> 
+                        <span class="status-badge @(Model.Appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-success" : Model.Appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted")">
+                            @Model.Appointment.Status
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Clinic:</strong> @Model.Appointment.ClinicName</p>
+                    <p><strong>Doctor:</strong> @Model.Appointment.DoctorName</p>
+                    <p><strong>Appointment ID:</strong> #@Model.Appointment.Id</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Information -->
+        @if (Model.Patient != null)
+        {
+            <div class="section-card p-4 mb-4">
+                <h5 class="fw-bold mb-3"><i class="bi bi-person"></i> Patient Information</h5>
+                <div class="row">
+                    <div class="col-md-2 text-center">
+                        <img src="@ProfilePictureHelper.GetUrl(Model.Patient.ProfilePicture, Model.Patient.FullName, size: 100)"
+                             class="rounded-circle shadow-sm"
+                             width="100"
+                             height="100"
+                             alt="@Model.Patient.FullName"
+                             style="object-fit:cover;" />
+                    </div>
+                    <div class="col-md-10">
+                        <p><strong>Name:</strong> @Model.Patient.FullName</p>
+                        <p><strong>Email:</strong> <a href="mailto:@Model.Patient.Email">@Model.Patient.Email</a></p>
+                        <p><strong>Phone:</strong> <a href="tel:@Model.Patient.PhoneNumber">@Model.Patient.PhoneNumber</a></p>
+                        <p><strong>Date of Birth:</strong> @Model.Patient.BirthDate.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Medical Records -->
+        <div class="section-card p-4 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-file-medical"></i> Medical Records</h5>
+            @if (Model.MedicalRecords?.Any() == true)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Condition</th>
+                                <th>Diagnosis Code</th>
+                                <th>Diagnosed Date</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model.MedicalRecords)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@record.Condition</td>
+                                    <td>@(string.IsNullOrEmpty(record.DiagnosisCode) ? "-" : record.DiagnosisCode)</td>
+                                    <td>@record.DiagnosisCode</td>
+                                    <td>@(string.IsNullOrEmpty(record.Description) ? "-" : record.Description.Substring(0, Math.Min(50, record.Description.Length)) + (record.Description.Length > 50 ? "..." : ""))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle"></i> No medical records found for this patient.
+                </div>
+            }
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="section-card p-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-gear"></i> Actions</h5>
+            <div class="d-flex gap-2 flex-wrap">
+                <a asp-action="Dashboard" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+
+                @if (Model.Appointment.Status == Domain.Enums.AppointmentStatus.Confirmed)
+                {
+                    <form asp-action="MarkAppointmentCompleted" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="appointmentId" value="@Model.Appointment.Id" />
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i> Mark Completed
+                        </button>
+                    </form>
+                }
+
+                @if (Model.Appointment.Status == Domain.Enums.AppointmentStatus.Confirmed || Model.Appointment.Status == Domain.Enums.AppointmentStatus.Completed)
+                {
+                    @if (Model.Appointment.HasPrescription && Model.Appointment.PrescriptionId.HasValue)
+                    {
+                        <a asp-controller="Prescription" asp-action="Edit" asp-route-id="@Model.Appointment.PrescriptionId" class="btn btn-info">
+                            <i class="bi bi-pencil-square"></i> Edit Prescription
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Prescription" asp-action="Create" asp-route-appointmentId="@Model.Appointment.Id" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Add Prescription
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Appointment details not found.
+        </div>
+    }
+</div>
+
+<style>
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-warning {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-muted {
+        background-color: #e2e3e5;
+        color: #383d41;
+    }
+
+    .section-card {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+    }
+</style>
