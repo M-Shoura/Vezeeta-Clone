@@ -48,5 +48,25 @@
     "address": "Heliopolis, Cairo",
     "phoneNumber": "+201000000102",
     "profilePicture": null
+  },
+  {
+    "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf3001",
+    "email": "test.patient@vezeeta.local",
+    "password": "Patient123!",
+    "fullName": "Test Patient",
+    "role": "Patient",
+    "address": "Test Address, Cairo",
+    "phoneNumber": "+201000000999",
+    "profilePicture": null
+  },
+  {
+    "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf1999",
+    "email": "dr.test@vezeeta.local",
+    "password": "Doctor123!",
+    "fullName": "Dr. Test Physician",
+    "role": "Doctor",
+    "address": "Test Medical Center, Cairo",
+    "phoneNumber": "+201000000888",
+    "profilePicture": null
   }
 ]
