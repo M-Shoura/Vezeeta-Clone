@@ -65,7 +65,7 @@ namespace Presentation.Controllers
                 if (appointment.PatientId != GetCurrentUserId())
                     return Forbid();
 
-                if (!IsAppointmentCompleted(appointment))
+                if (!CanPatientReviewAppointment(appointment))
                     return Forbid();
 
                 var existingReview = await _unitOfWork.Repository<Review>().FindAsync(r => r.AppointmentId == appointmentId);
@@ -89,7 +89,7 @@ namespace Presentation.Controllers
                 return Forbid();
 
             var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(vm.AppointmentId);
-            if (appointment == null || appointment.PatientId != currentUserId || !IsAppointmentCompleted(appointment))
+            if (appointment == null || appointment.PatientId != currentUserId || !CanPatientReviewAppointment(appointment))
             {
                 ModelState.AddModelError(nameof(vm.AppointmentId), "Invalid appointment.");
                 return View(vm);
@@ -201,7 +201,7 @@ namespace Presentation.Controllers
 
         private bool CanDeleteReview(ReviewDto review) => IsAdminUser() || (IsPatientUser() && review.PatientId == GetCurrentUserId());
 
-        private bool IsAppointmentCompleted(Appointment appointment) => appointment.AppointmentDate.Date.Add(appointment.EndTime) <= DateTime.Now;
+        private bool CanPatientReviewAppointment(Appointment appointment) => appointment.Status == AppointmentStatus.Completed;
 
         private void SetBackNavigation()
         {
