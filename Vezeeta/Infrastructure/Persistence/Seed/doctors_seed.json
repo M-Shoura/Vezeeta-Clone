@@ -16,5 +16,14 @@
     "isAvailable": true,
     "bio": "Treats skin, hair, and cosmetic dermatology cases.",
     "licenseNumber": "DOC-DERM-1002"
+  },
+  {
+    "applicationUserId": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf1999",
+    "specialization": "General Practice",
+    "yearsOfExperience": 5,
+    "qualification": "MBBS, MD General Practice",
+    "isAvailable": true,
+    "bio": "Test doctor for testing the appointment details feature.",
+    "licenseNumber": "DOC-TEST-9999"
   }
 ]

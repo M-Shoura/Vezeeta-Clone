@@ -31,6 +31,7 @@ namespace Infrastructure.Persistence
             await SeedDoctorSchedulesAsync(context);
             await SeedAppointmentsAsync(context);
             await SeedDrugsAsync(context);
+            await SeedMedicalRecordsAsync(context);
         }
 
         private static async Task SeedRolesAsync(RoleManager<ApplicationRole> roleManager)
@@ -305,6 +306,36 @@ namespace Infrastructure.Persistence
             await context.SaveChangesAsync();
         }
 
+        private static async Task SeedMedicalRecordsAsync(ApplicationDbContext context)
+        {
+            var medicalRecords = LoadSeed<List<MedicalRecordSeed>>("medical_records_seed.json") ?? new List<MedicalRecordSeed>();
+
+            foreach (var seed in medicalRecords)
+            {
+                var exists = await context.MedicalRecords.AnyAsync(mr =>
+                    mr.PatientId == seed.PatientId &&
+                    mr.Condition == seed.Condition &&
+                    mr.DiagnosedDate == seed.DiagnosedDate);
+
+                if (exists)
+                {
+                    continue;
+                }
+
+                context.MedicalRecords.Add(new MedicalRecord
+                {
+                    PatientId = seed.PatientId,
+                    Condition = seed.Condition,
+                    Description = seed.Description,
+                    DiagnosisCode = seed.DiagnosisCode,
+                    DiagnosedDate = seed.DiagnosedDate,
+                    CreatedAt = DateTime.UtcNow
+                });
+            }
+
+            await context.SaveChangesAsync();
+        }
+
         private static T? LoadSeed<T>(string fileName)
         {
             var seedPath = ResolveSeedPath(fileName);
@@ -393,5 +424,12 @@ namespace Infrastructure.Persistence
             TimeSpan EndTime,
             AppointmentStatus Status,
             string? Notes);
+
+        private sealed record MedicalRecordSeed(
+            string PatientId,
+            string Condition,
+            string Description,
+            string DiagnosisCode,
+            DateTime DiagnosedDate);
     }
 }
