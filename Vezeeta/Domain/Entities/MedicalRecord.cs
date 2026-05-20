@@ -21,7 +21,27 @@ namespace Domain.Entities
         public string? FamilyHistory { get; set; }
         public int? AppointmentId { get; set; }
 
+
         public PatientProfile Patient { get; set; } = null!;
         public Appointment? Appointment { get; set; }
+
+        public override string ToString()
+        {
+            var activeStatus = IsActive ? "Active" : "Resolved";
+            var resolvedStr = ResolvedDate.HasValue ? ResolvedDate.Value.ToString("yyyy-MM-dd") : "N/A";
+
+            return $"[Medical Record] Condition: {Condition} | " +
+                   $"Status: {activeStatus} | " +
+                   $"Code: {DiagnosisCode ?? "None"} | " +
+                   $"Diagnosed: {DiagnosedDate:yyyy-MM-dd} | " +
+                   $"Resolved: {resolvedStr} | " +
+                   $"Medications: {Medications ?? "None"} | " +
+                   $"Allergies: {Allergies ?? "None"} | " +
+                   $"Treatment: {Treatment ?? "None"} | " +
+                   $"Surgery: {SurgeryDetails ?? "None"} | " +
+                   $"Family History: {FamilyHistory ?? "None"} | " +
+                   $"Appt ID: {AppointmentId?.ToString() ?? "None"} | " +
+                   $"Description: {Description ?? "No description available."}";
+        }
     }
 }

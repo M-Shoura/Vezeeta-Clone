@@ -17,7 +17,6 @@
 
     @if (Model?.Appointment != null)
     {
-        <!-- Appointment Information -->
         <div class="section-card p-4 mb-4">
             <h5 class="fw-bold mb-3"><i class="bi bi-info-circle"></i> Appointment Information</h5>
             <div class="row">
@@ -38,7 +37,6 @@
             </div>
         </div>
 
-        <!-- Patient Information -->
         @if (Model.Patient != null)
         {
             <div class="section-card p-4 mb-4">
@@ -62,7 +60,6 @@
             </div>
         }
 
-        <!-- Medical Records -->
         <div class="section-card p-4 mb-4">
             <h5 class="fw-bold mb-3"><i class="bi bi-file-medical"></i> Medical Records</h5>
             @if (Model.MedicalRecords?.Any() == true)
@@ -99,7 +96,50 @@
             }
         </div>
 
-        <!-- Action Buttons -->
+        @if (Model.Appointment.Status == Domain.Enums.AppointmentStatus.Confirmed || Model.Appointment.Status == Domain.Enums.AppointmentStatus.Pending)
+        {
+            <div class="section-card p-4 mb-4 ai-copilot-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold m-0 text-primary"><i class="bi bi-cpu"></i> AI Ambient Consultation Assistant</h5>
+                    <span id="ai-status" class="status-badge bg-light text-secondary border">
+                        <span class="status-dot bg-secondary"></span> Ready to Listen
+                    </span>
+                </div>
+                
+                <p class="text-muted small mb-3">
+                    Click "Start AI Listening" when starting your session with the patient. The AI will securely process the vocal consultation to draft clinical symptoms and diagnostic lines below.
+                </p>
+
+                <div class="mb-3">
+                    <button id="btn-ai-record" type="button" class="btn btn-outline-primary btn-lg">
+                        <i id="ai-icon" class="bi bi-mic"></i> <span id="ai-btn-text">Start AI Listening</span>
+                    </button>
+                </div>
+
+                <form asp-action="SaveAmbientAnalysis" method="post" id="form-ai-analysis">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="AppointmentId" value="@Model.Appointment.Id" />
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Extracted Symptoms</label>
+                            <textarea id="ai-symptoms" name="ExtractedSymptoms" class="form-control bg-white" rows="5" placeholder="Symptoms from speech will process here..."></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Suggested Diagnostics & Interventions</label>
+                            <textarea id="ai-diagnostics" name="SuggestedDiagnostics" class="form-control bg-white" rows="5" placeholder="Potential diagnostics will process here..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" id="btn-save-ai" class="btn btn-primary" disabled>
+                            <i class="bi bi-file-earmark-plus"></i> Merge insights into Clinical File
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+
         <div class="section-card p-4">
             <h5 class="fw-bold mb-3"><i class="bi bi-gear"></i> Actions</h5>
             <div class="d-flex gap-2 flex-wrap">
@@ -173,4 +213,157 @@
         border: 1px solid #dee2e6;
         border-radius: 8px;
     }
+
+    .ai-copilot-card {
+        border: 1px dashed #0d6efd !important;
+        background-color: #f4f8ff !important;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 4px;
+    }
+
+    .pulse-animation {
+        animation: pulse 1.5s infinite;
+    }
+
+    @@keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.95); }
+        100% { opacity: 1; transform: scale(1); }
+    }
 </style>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    
+    <script>
+        const appointmentId = '@Model?.Appointment?.Id';
+        const btnAiRecord = document.getElementById("btn-ai-record");
+        
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/consultationHub")
+            .withAutomaticReconnect()
+            .build();
+
+        let mediaRecorder;
+        let recordingContextActive = false;
+
+        if (btnAiRecord) {
+            connection.start()
+                .then(() => console.log("SignalR Context Linked Successfully."))
+                .catch(err => console.error("SignalR Init Failure: ", err.toString()));
+
+            btnAiRecord.addEventListener("click", async () => {
+                if (!recordingContextActive) {
+                    try {
+                        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                            throw new Error("The browser blocks recording input devices. Ensure local deployments run via localhost or explicit HTTPS channels.");
+                        }
+
+                        const symptomsField = document.getElementById("ai-symptoms");
+                        const diagnosticsField = document.getElementById("ai-diagnostics");
+                        if (symptomsField) symptomsField.value = "";
+                        if (diagnosticsField) diagnosticsField.value = "";
+                        
+                        const saveBtn = document.getElementById("btn-save-ai");
+                        if (saveBtn) saveBtn.setAttribute("disabled", "disabled");
+
+                        const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        
+                        // Select a supported MIME format variant dynamically to prevent hardware engine initialization fault exceptions
+                        let selectedMimeType = 'audio/webm';
+                        if (typeof MediaRecorder.isTypeSupported === "function") {
+                            if (MediaRecorder.isTypeSupported('audio/webm')) {
+                                selectedMimeType = 'audio/webm';
+                            } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+                                selectedMimeType = 'audio/ogg';
+                            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                                selectedMimeType = 'audio/mp4';
+                            }
+                        }
+
+                        mediaRecorder = new MediaRecorder(audioStream, { mimeType: selectedMimeType });
+                        
+                        mediaRecorder.ondataavailable = async (e) => {
+                            if (e.data && e.data.size > 0 && mediaRecorder.state === "recording" && connection.state === "Connected") {
+                                const buffer = await e.data.arrayBuffer();
+                                const byteView = new Uint8Array(buffer);
+                                connection.invoke("SendAudioChunk", appointmentId, Array.from(byteView))
+                                          .catch(err => console.error(err));
+                            }
+                        };
+
+                        mediaRecorder.start(1000);
+                        recordingContextActive = true;
+                        toggleAudioUiState(true);
+                    } catch (micError) {
+                        alert("Microphone configuration or access mismatch. Details: " + micError.message);
+                        console.error("Detailed Tracking Target:", micError);
+                    }
+                } else {
+                    recordingContextActive = false;
+                    toggleAudioUiState(false);
+
+                    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                        mediaRecorder.stop();
+                        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+
+                        setTimeout(() => {
+                            connection.invoke("StopAndAnalyze", appointmentId)
+                                      .catch(err => console.error(err));
+                        }, 500);
+                    }
+                }
+            });
+        }
+
+        connection.on("ReceiveAnalysis", (symptoms, diagnostics) => {
+            const symptomsField = document.getElementById("ai-symptoms");
+            const diagnosticsField = document.getElementById("ai-diagnostics");
+            const saveBtn = document.getElementById("btn-save-ai");
+            const badge = document.getElementById("ai-status");
+
+            if (symptomsField) symptomsField.value = symptoms;
+            if (diagnosticsField) diagnosticsField.value = diagnostics;
+            
+            if (badge) {
+                badge.className = "status-badge status-success";
+                badge.innerHTML = '<span class="status-dot bg-success"></span> Data Extracted';
+            }
+            
+            if (saveBtn) saveBtn.removeAttribute("disabled");
+        });
+
+        function toggleAudioUiState(isListening) {
+            const btn = document.getElementById("btn-ai-record");
+            const btnText = document.getElementById("ai-btn-text");
+            const icon = document.getElementById("ai-icon");
+            const badge = document.getElementById("ai-status");
+
+            if (!btn) return;
+
+            if (isListening) {
+                btn.className = "btn btn-danger btn-lg pulse-animation";
+                if (btnText) btnText.innerText = "Stop Listening & Analyze";
+                if (icon) icon.className = "bi bi-stop-circle";
+                if (badge) {
+                    badge.className = "status-badge bg-danger text-white";
+                    badge.innerHTML = '<span class="status-dot bg-white pulse-animation"></span> AI Listening Live...';
+                }
+            } else {
+                btn.className = "btn btn-outline-primary btn-lg";
+                if (btnText) btnText.innerText = "Start AI Listening";
+                if (icon) icon.className = "bi bi-mic";
+                if (badge) {
+                    badge.className = "status-badge bg-warning text-dark";
+                    badge.innerHTML = '<span class="status-dot bg-dark pulse-animation"></span> Analyzing voice...';
+                }
+            }
+        }
+    </script>
+}
