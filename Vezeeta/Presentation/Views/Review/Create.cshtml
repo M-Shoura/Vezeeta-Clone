@@ -21,7 +21,7 @@
             <fieldset class="rating-group">
                 <legend class="form-label mb-2">Rating</legend>
                 <div class="rating-stars" aria-label="Rating" role="radiogroup">
-                    @for (var star = 1; star <= 5; star++)
+                    @for (var star = 5; star >= 1; star--)
                     {
                         var inputId = $"rating-{star}";
 
