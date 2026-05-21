@@ -1,38 +1,78 @@
 @model Application.DTOs.Profiles.Patients.PatientDto
-<h2>Edit Patient</h2>
 
-<form method="post">
-    <input type="hidden" asp-for="ApplicationUserId" />
+@{
+    ViewData["Title"] = "Edit Patient";
+}
 
-    <div class="mb-2">
-        <label>Date of Birth</label>
-        <input asp-for="DateOfBirth" class="form-control" type="date" />
+<div class="app-container">
+    <div class="page-header">
+        <div>
+            <span class="eyebrow"><i class="bi bi-pencil"></i> Patient registry</span>
+            <h1 class="page-title mt-2">Edit Patient — @Model.FullName</h1>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Patients
+        </a>
     </div>
 
-    <div class="mb-2">
-        <label>Gender</label>
-        <select asp-for="Gender" class="form-control">
-            <option value="">Select Gender</option>
-            <option value="0">Male</option>
-            <option value="1">Female</option>
-            <option value="2">Other</option>
-        </select>
-    </div>
+    <div class="section-card p-4 p-lg-5">
+        <form method="post" asp-action="Edit" asp-route-id="@Model.ApplicationUserId">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+            <input type="hidden" asp-for="ApplicationUserId" />
 
-    <div class="mb-2">
-        <label>Blood Type</label>
-        <input asp-for="BloodType" class="form-control" />
-    </div>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-    <div class="mb-2">
-        <label>Emergency Contact Name</label>
-        <input asp-for="EmergencyContactName" class="form-control" />
-    </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Full Name</label>
+                    <input class="form-control" value="@Model.FullName" readonly />
+                    <div class="form-text text-muted">Name is managed through the user's account profile.</div>
+                </div>
 
-    <div class="mb-2">
-        <label>Emergency Contact Phone</label>
-        <input asp-for="EmergencyContactPhone" class="form-control" />
-    </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input class="form-control" value="@Model.Email" readonly />
+                </div>
 
-    <button class="btn btn-primary">Save</button>
-</form>
+                <div class="col-md-6">
+                    <label asp-for="DateOfBirth" class="form-label fw-semibold">Date of Birth</label>
+                    <input asp-for="DateOfBirth" class="form-control" type="date" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Gender" class="form-label fw-semibold">Gender</label>
+                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Domain.Enums.Gender>()" class="form-select">
+                        <option value="">Select Gender</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="BloodType" class="form-label fw-semibold">Blood Type</label>
+                    <input asp-for="BloodType" class="form-control" placeholder="e.g. A+" />
+                    <span asp-validation-for="BloodType" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="EmergencyContactName" class="form-label fw-semibold">Emergency Contact Name</label>
+                    <input asp-for="EmergencyContactName" class="form-control" />
+                    <span asp-validation-for="EmergencyContactName" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="EmergencyContactPhone" class="form-label fw-semibold">Emergency Contact Phone</label>
+                    <input asp-for="EmergencyContactPhone" class="form-control" type="tel" />
+                    <span asp-validation-for="EmergencyContactPhone" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button class="btn btn-primary"><i class="bi bi-check2"></i> Save Changes</button>
+                <a class="btn btn-outline-secondary" href="@(ViewData["ReturnUrl"] ?? Url.Action("Index","Patient"))">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -255,6 +255,7 @@
                         <th>Email</th>
                         <th>Role</th>
                         <th>Joined</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -267,12 +268,26 @@
                                 <td>@user.Email</td>
                                 <td><span class="status-badge status-muted">@user.Role</span></td>
                                 <td>@user.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if (user.Role?.ToLowerInvariant() == "patient")
+                                    {
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="Patient" asp-action="Edit" asp-route-id="@user.Id" asp-route-returnUrl="@Url.Action("Details","Patient", new { id = user.Id })">Edit</a>
+                                    }
+                                    else if (user.Role?.ToLowerInvariant() == "doctor")
+                                    {
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="Doctor" asp-action="Edit" asp-route-id="@user.Id" asp-route-returnUrl="@Url.Action("Index","Admin")">Edit</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-sm btn-outline-secondary" asp-controller="Account" asp-action="Details" asp-route-id="@user.Id">View</a>
+                                    }
+                                </td>
                             </tr>
                         }
                     }
                     else
                     {
-                        <tr><td colspan="4"><div class="empty-state my-2">No recent users found.</div></td></tr>
+                        <tr><td colspan="5"><div class="empty-state my-2">No recent users found.</div></td></tr>
                     }
                 </tbody>
             </table>

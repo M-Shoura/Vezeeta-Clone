@@ -4,13 +4,13 @@ namespace Application.Interfaces.Repositories
 {
     public interface IPatientRepository
     {
-        Task<IEnumerable<PatientProfileDto>>
+        Task<IEnumerable<PatientDto>>
             GetAllPatientsAsync();
 
-        Task<PatientProfileDto?>
+        Task<PatientDto?>
             GetPatientByIdAsync(string patientId);
 
-        Task<IEnumerable<PatientProfileDto>>
+        Task<IEnumerable<PatientDto>>
             GetAvailablePatientsAsync();
     }
 }

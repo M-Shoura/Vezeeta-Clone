@@ -58,10 +58,10 @@
                 <div class="col-md-6 mb-3">
                     <label asp-for="Role"></label>
 
-                    <select asp-for="Role"
-                            class="form-select"
-                            id="roleSelect"
-                            asp-items="Html.GetEnumSelectList<UserRole>()">
+                    <select asp-for="Role"  class="form-select" id="roleSelect">
+                           <option value="">Select Role</option>
+                            <option value="Doctor">Doctor</option>
+                            <option value="Patient">Patient</option>
                     </select>
                 </div>
 

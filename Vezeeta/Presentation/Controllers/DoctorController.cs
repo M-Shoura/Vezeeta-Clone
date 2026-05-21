@@ -135,7 +135,7 @@ namespace Presentation.Controllers
         }
 
         [Authorize(Roles = "Admin,Doctor")]
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string id, string? returnUrl)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
@@ -162,6 +162,8 @@ namespace Presentation.Controllers
                 LicenseNumber = doctor.LicenseNumber
             };
 
+            ViewData["ReturnUrl"] = returnUrl;
+
             return View(model);
         }
 
@@ -170,7 +172,8 @@ namespace Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
     string id,
-    EditDoctorViewModel model)
+    EditDoctorViewModel model,
+    string? returnUrl)
         {
             if (id != model.ApplicationUserId)
                 return BadRequest();
@@ -181,6 +184,7 @@ namespace Presentation.Controllers
             {
                 var clinics = await _doctorService.GetAllClinicsAsync();
                 ViewBag.Clinics = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(clinics, "Id", "Name");
+                ViewData["ReturnUrl"] = returnUrl;
                 return View(model);
             }
             var doctor = new DoctorProfile
@@ -199,6 +203,9 @@ namespace Presentation.Controllers
 
             TempData["Success"] =
                 "Doctor updated successfully";
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
 
             return RedirectToAction(nameof(Index));
         }
@@ -578,7 +585,7 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Dashboard), new { id = doctorId });
         }
 
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Doctor,Admin")]
         public async Task<IActionResult> AppointmentDetails(int appointmentId)
         {
             var doctorId = _currentUserService.UserId;
@@ -589,7 +596,8 @@ namespace Presentation.Controllers
             if (appointment == null)
                 return NotFound();
 
-            if (appointment.DoctorId != doctorId)
+            // Doctors can only view their own appointments; admins can view any
+            if (User.IsInRole("Doctor") && appointment.DoctorId != doctorId)
                 return Forbid();
 
             // Get patient information
@@ -601,7 +609,7 @@ namespace Presentation.Controllers
             var medicalRecords = await _medicalRecordService.GetAllByPatientIdAsync(appointment.PatientId);
 
             // Get doctor information
-                var doctor = await _unitOfWork.Repository<DoctorProfile>().FindAsync(d => d.ApplicationUserId == doctorId);
+                var doctor = await _unitOfWork.Repository<DoctorProfile>().FindAsync(d => d.ApplicationUserId == appointment.DoctorId);
                 var doctorName = doctor?.ApplicationUser?.FullName ?? "Unknown";
 
             // Create dashboard DTO for appointment

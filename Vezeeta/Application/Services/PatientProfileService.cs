@@ -29,18 +29,25 @@ namespace Application.Services
 
         #region Patient Queries
 
-        public async Task<IEnumerable<PatientProfileDto>>
+        public async Task<IEnumerable<PatientDto>>
             GetAllPatientsAsync()
         {
             return await _patientRepository
                 .GetAllPatientsAsync();
         }
 
-        public async Task<PatientProfileDto?>
+        public async Task<PatientDto?>
             GetPatientByIdAsync(string patientId)
         {
             return await _patientRepository
                 .GetPatientByIdAsync(patientId);
+        }
+
+        public async Task<PatientDto?>
+            GetPatientByUserIdAsync(string userId)
+        {
+            return await _patientRepository
+                .GetPatientByIdAsync(userId);
         }
 
         #endregion

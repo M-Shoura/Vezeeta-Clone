@@ -1,7 +1,9 @@
+using Application.DTOs.Profiles.Patients;
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ViewModels;
 
 namespace Presentation.Controllers
 {
@@ -42,10 +44,8 @@ namespace Presentation.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
 
-            var patients =
-                await _patientService.GetAllPatientsAsync();
-                    
-            var patient = patients.FirstOrDefault(x => x.Email == id);
+            var patient =
+                await _patientService.GetPatientByUserIdAsync(id);
 
             if (patient == null)
                 return NotFound();
@@ -57,7 +57,7 @@ namespace Presentation.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            return View();
+            return View(new CreatePatientViewModel());
         }
 
         // POST: /Patient/Create
@@ -65,10 +65,20 @@ namespace Presentation.Controllers
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            PatientProfile patient)
+            CreatePatientViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(patient);
+                return View(model);
+
+            var patient = new PatientProfile
+            {
+                ApplicationUserId = model.ApplicationUserId,
+                DateOfBirth = model.DateOfBirth,
+                Gender = model.Gender,
+                BloodType = model.BloodType,
+                EmergencyContactName = model.EmergencyContactName ?? string.Empty,
+                EmergencyContactPhone = model.EmergencyContactPhone ?? string.Empty
+            };
 
             await _patientService
                 .CreatePatientAsync(patient);
@@ -82,18 +92,19 @@ namespace Presentation.Controllers
         // GET: /Patient/Edit/id
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(
-            string id)
+            string id,
+            string? returnUrl)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
 
-            var patients =
-                await _patientService.GetAllPatientsAsync();
-
-            var patient = patients.FirstOrDefault(x => x.Email == id);
+            var patient =
+                await _patientService.GetPatientByUserIdAsync(id);
 
             if (patient == null)
                 return NotFound();
+
+            ViewData["ReturnUrl"] = returnUrl;
 
             return View(patient);
         }
@@ -104,19 +115,36 @@ namespace Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             string id,
-            PatientProfile patient)
+            PatientDto model,
+            string? returnUrl)
         {
-            if (id != patient.ApplicationUserId)
+            if (id != model.ApplicationUserId)
                 return BadRequest();
 
             if (!ModelState.IsValid)
-                return View(patient);
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                return View(model);
+            }
+
+            var patient = new PatientProfile
+            {
+                ApplicationUserId = model.ApplicationUserId,
+                DateOfBirth = model.DateOfBirth,
+                Gender = model.Gender,
+                BloodType = model.BloodType,
+                EmergencyContactName = model.EmergencyContactName ?? string.Empty,
+                EmergencyContactPhone = model.EmergencyContactPhone ?? string.Empty
+            };
 
             await _patientService
                 .UpdatePatientAsync(patient);
 
             TempData["Success"] =
                 "Patient updated successfully";
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
 
             return RedirectToAction(nameof(Index));
         }
@@ -129,10 +157,8 @@ namespace Presentation.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
 
-            var patients =
-                await _patientService.GetAllPatientsAsync();
-
-            var patient = patients.FirstOrDefault(x => x.Email == id);
+            var patient =
+                await _patientService.GetPatientByUserIdAsync(id);
 
             if (patient == null)
                 return NotFound();
@@ -201,7 +227,7 @@ namespace Presentation.Controllers
 
         #endregion
 
-       
+
 
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Dashboard(CancellationToken cancellationToken)
