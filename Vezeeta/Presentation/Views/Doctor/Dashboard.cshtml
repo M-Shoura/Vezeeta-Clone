@@ -37,8 +37,8 @@
                     <a asp-controller="Account" asp-action="Profile" class="btn btn-light">
                         <i class="bi bi-pencil-square"></i> Edit Profile
                     </a>
-                    <a asp-action="AddSchedule" asp-route-doctorId="@Model.DoctorId" class="btn btn-warning">
-                        <i class="bi bi-calendar-plus"></i> Add Schedule
+                    <a asp-action="Schedules" asp-route-id="@Model.DoctorId" class="btn btn-warning">
+                        <i class="bi bi-calendar-week"></i> Schedules
                     </a>
                     <a asp-action="AssignClinic" asp-route-id="@Model.DoctorId" class="btn btn-outline-light">
                         <i class="bi bi-hospital"></i> Add Clinic

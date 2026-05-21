@@ -67,7 +67,7 @@
 
                 <div class="col-md-6 col-xl-4">
                     <div class="card border-0 shadow rounded-4 h-100 overflow-hidden">
-                        <div class="card-header fw-bold py-3 px-4 text-white bg-@color">
+                        <div class="card-header fw-bold py-3 px-4  bg-@color">
                             @day
                         </div>
                         <div class="list-group list-group-flush">
@@ -78,28 +78,28 @@
                                         <div>
                                             <div class="fw-semibold">
                                                 @sch.StartTime.ToString(@"hh\:mm")
-                                                <span class="text-muted mx-1">→</span>
+                                                <span class=" mx-1">→</span>
                                                 @sch.EndTime.ToString(@"hh\:mm")
                                             </div>
-                                            <small class="text-muted">
+                                            <small class="">
                                                 @if (sch.Clinic != null)
                                                 {
                                                     <span>🏥 @sch.Clinic.Name</span>
                                                 }
                                             </small>
                                             <div class="mt-1">
-                                                <span class="badge bg-@color bg-opacity-15 text-@color rounded-pill">
+                                                <span class="badge bg-@color bg-opacity-15  rounded-pill">
                                                     ⏱️ @sch.SlotDurationMinutes min slots
                                                 </span>
                                                 @if (sch.IsActive)
                                                 {
-                                                    <span class="badge bg-success bg-opacity-15 text-success rounded-pill ms-1">
+                                                    <span class="badge bg-success bg-opacity-15  rounded-pill ms-1">
                                                         Active
                                                     </span>
                                                 }
                                                 else
                                                 {
-                                                    <span class="badge bg-danger bg-opacity-15 text-danger rounded-pill ms-1">
+                                                    <span class="badge bg-danger bg-opacity-15  rounded-pill ms-1">
                                                         Inactive
                                                     </span>
                                                 }
@@ -150,11 +150,11 @@
                                 <td>
                                     @if (sch.IsActive)
                                     {
-                                        <span class="badge bg-success bg-opacity-15 text-success rounded-pill px-3">Active</span>
+                                        <span class="badge bg-success bg-opacity-15  rounded-pill px-3">Active</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary bg-opacity-15 text-secondary rounded-pill px-3">Inactive</span>
+                                        <span class="badge bg-secondary bg-opacity-15  rounded-pill px-3">Inactive</span>
                                     }
                                 </td>
                                 <td>

@@ -28,6 +28,8 @@
                         <input type="hidden"
                                asp-for="ApplicationUserId" />
 
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
                         <input type="hidden"
                                asp-for="FullName" />
 
@@ -166,8 +168,7 @@
 
                             </button>
 
-                            <a asp-action="Index"
-                               class="btn btn-outline-secondary btn-lg px-5">
+                            <a class="btn btn-outline-secondary btn-lg px-5" href="@(ViewData["ReturnUrl"] ?? Url.Action("Index","Doctor"))">
 
                                 Cancel
 

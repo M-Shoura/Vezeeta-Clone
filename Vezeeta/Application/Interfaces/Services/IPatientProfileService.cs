@@ -8,11 +8,14 @@ namespace Application.Interfaces.Services
     {
         #region Patient Queries
 
-        Task<IEnumerable<PatientProfileDto>>
+        Task<IEnumerable<PatientDto>>
             GetAllPatientsAsync();
 
-        Task<PatientProfileDto?>
+        Task<PatientDto?>
             GetPatientByIdAsync(string patientId);
+
+        Task<PatientDto?>
+            GetPatientByUserIdAsync(string userId);
 
         #endregion
 

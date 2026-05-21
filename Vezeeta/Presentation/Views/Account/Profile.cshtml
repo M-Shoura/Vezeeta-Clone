@@ -90,10 +90,19 @@
 
                         <div class="col-md-6">
                             <label asp-for="Role" class="form-label">Profile Type <span class="text-danger">*</span></label>
-                            <select asp-for="Role" class="form-select" id="roleSelect">
-                                <option value="@UserRole.Doctor">Doctor</option>
-                                <option value="@UserRole.Patient">Patient</option>
-                            </select>
+                            @if (User.IsInRole("Admin") && !isAdminEdit)
+                            {
+                                <!-- Admin editing own profile: role is fixed, show read-only label -->
+                                <input class="form-control" value="Administrator" readonly />
+                                <input type="hidden" asp-for="Role" />
+                            }
+                            else
+                            {
+                                <select asp-for="Role" class="form-select" id="roleSelect">
+                                    <option value="@UserRole.Doctor">Doctor</option>
+                                    <option value="@UserRole.Patient">Patient</option>
+                                </select>
+                            }
                             <span asp-validation-for="Role" class="text-danger small"></span>
                         </div>
 
@@ -104,6 +113,8 @@
                         </div>
                     </div>
 
+                    @if (!User.IsInRole("Admin") || isAdminEdit)
+                    {
                     <div id="patientFields" class="border rounded-3 p-3 mt-4">
                         <h5 class="fw-bold mb-3">Patient Information</h5>
                         <div class="row g-3">
@@ -173,6 +184,7 @@
                             </div>
                         </div>
                     </div>
+                    } @* end admin-check: patientFields + doctorFields *@
 
                     <div class="d-flex flex-wrap gap-2 mt-4">
                         <button type="submit" class="btn btn-primary">

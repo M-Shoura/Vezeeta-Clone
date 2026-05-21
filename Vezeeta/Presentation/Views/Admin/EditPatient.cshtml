@@ -1,35 +1,39 @@
-@model Presentation.ViewModels.CreatePatientViewModel
+@model Application.DTOs.Profiles.Patients.PatientDto
 
 @{
-    ViewData["Title"] = "Create Patient";
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Patient (Admin)";
 }
 
 <div class="app-container">
     <div class="page-header">
         <div>
-            <span class="eyebrow"><i class="bi bi-person-plus"></i> Patient registry</span>
-            <h1 class="page-title mt-2">Create Patient</h1>
-            <p class="page-subtitle">Add a new patient profile for an existing system user.</p>
+            <span class="eyebrow"><i class="bi bi-pencil"></i> Patient registry (admin)</span>
+            <h1 class="page-title mt-2">Edit Patient — @Model.FullName</h1>
         </div>
+        <a asp-action="Index" asp-controller="Admin" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
     </div>
 
     <div class="section-card p-4 p-lg-5">
-        <form method="post">
+        <form method="post" asp-action="EditPatient" asp-controller="Admin" asp-route-id="@Model.ApplicationUserId">
             @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+            <input type="hidden" asp-for="ApplicationUserId" />
 
-            <div asp-validation-summary="All" class="alert alert-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
             <div class="row g-3">
-                <div class="col-12">
-                    <label asp-for="ApplicationUserId" class="form-label fw-semibold">
-                        Application User Id <span class="text-danger">*</span>
-                    </label>
-                    <input asp-for="ApplicationUserId" class="form-control"
-                           placeholder="Paste the user's GUID from the Users table" />
-                    <div class="form-text text-muted">
-                        The ID of the existing <code>ApplicationUser</code> to link this patient profile to.
-                    </div>
-                    <span asp-validation-for="ApplicationUserId" class="text-danger small"></span>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Full Name</label>
+                    <input class="form-control" value="@Model.FullName" readonly />
+                    <div class="form-text text-muted">Name is managed through the user's account profile.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input class="form-control" value="@Model.Email" readonly />
                 </div>
 
                 <div class="col-md-6">
@@ -66,10 +70,9 @@
             </div>
 
             <div class="mt-4 d-flex gap-2">
-                <button class="btn btn-primary"><i class="bi bi-check2"></i> Create</button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                <button class="btn btn-primary"><i class="bi bi-check2"></i> Save Changes</button>
+                <a class="btn btn-outline-secondary" href="@(ViewData["ReturnUrl"] ?? Url.Action("Index","Admin"))">Cancel</a>
             </div>
         </form>
     </div>
 </div>
-

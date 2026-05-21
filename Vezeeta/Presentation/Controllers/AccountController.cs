@@ -229,9 +229,13 @@ public sealed class AccountController : Controller
             .FirstOrDefaultAsync(d => d.ApplicationUserId == user.Id);
 
         var roles = await _userManager.GetRolesAsync(user);
-        var role = roles.Contains(UserRole.Doctor.ToString())
-            ? UserRole.Doctor
-            : UserRole.Patient;
+        UserRole role;
+        if (roles.Contains(UserRole.Doctor.ToString()))
+            role = UserRole.Doctor;
+        else if (roles.Contains(UserRole.Patient.ToString()))
+            role = UserRole.Patient;
+        else
+            role = UserRole.Admin;
 
         return View(new ProfileViewModel
         {
@@ -267,16 +271,16 @@ public sealed class AccountController : Controller
         if (user == null)
             return Challenge();
 
-        if (!User.IsInRole("Doctor") && !User.IsInRole("Patient"))
-        {
-            ModelState.AddModelError(nameof(model.Role), "Only doctors and patients can change profile type.");
-            return View(model);
-        }
+        var isAdminOwnProfile = User.IsInRole("Admin") && !User.IsInRole("Doctor") && !User.IsInRole("Patient");
 
-        if (model.Role != UserRole.Doctor && model.Role != UserRole.Patient)
+        if (!isAdminOwnProfile)
         {
-            ModelState.AddModelError(nameof(model.Role), "Profile type must be Doctor or Patient.");
-            return View(model);
+            // Doctor / Patient: validate the role selection
+            if (model.Role != UserRole.Doctor && model.Role != UserRole.Patient)
+            {
+                ModelState.AddModelError(nameof(model.Role), "Profile type must be Doctor or Patient.");
+                return View(model);
+            }
         }
 
         var duplicateEmailUser = await _userManager.FindByEmailAsync(model.Email);
@@ -315,8 +319,13 @@ public sealed class AccountController : Controller
             return View(model);
         }
 
-        await UpdateUserRoleAsync(user, model.Role);
-        await UpdateRoleProfileAsync(user.Id, model);
+        // Only Doctor / Patient profiles have role or extra profile fields
+        if (!isAdminOwnProfile)
+        {
+            await UpdateUserRoleAsync(user, model.Role);
+            await UpdateRoleProfileAsync(user.Id, model);
+        }
+
         await _signInManager.RefreshSignInAsync(user);
 
         TempData["Success"] = "Profile updated successfully.";

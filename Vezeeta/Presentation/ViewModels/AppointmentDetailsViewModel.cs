@@ -7,7 +7,7 @@ namespace Presentation.ViewModels
     public class AppointmentDetailsViewModel
     {
         public RecentAppointmentDashboardDto? Appointment { get; set; }
-        public PatientProfileDto? Patient { get; set; }
+        public PatientDto? Patient { get; set; }
         public IEnumerable<MedicalRecordDto> MedicalRecords { get; set; } = new List<MedicalRecordDto>();
     }
 }
