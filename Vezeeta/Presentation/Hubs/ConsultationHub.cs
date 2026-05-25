@@ -8,6 +8,7 @@ using System;
 using Application.Interfaces.Services;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Application.Models;
 
 namespace Presentation.Hubs
 {
@@ -74,7 +75,7 @@ namespace Presentation.Hubs
 
                     if (audioBytes.Length < 1000) // If less than ~1KB, it's an empty artifact
                     {
-                        await Clients.Caller.SendAsync("ReceiveAnalysis", "خطأ", "التسجيل قصير جداً أو فارغ.");
+                        await Clients.Caller.SendAsync("ReceiveAiError", "التسجيل قصير جداً أو فارغ.");
                         return;
                     }
 
@@ -86,18 +87,17 @@ namespace Presentation.Hubs
 
                     if (string.IsNullOrWhiteSpace(transcript) || transcript.StartsWith("["))
                     {
-                        await Clients.Caller.SendAsync("ReceiveAnalysis", "لم يتم التقاط الصوت", "يرجى إعادة المحاولة.");
+                        await Clients.Caller.SendAsync("ReceiveAiError", "لم يتم التقاط الصوت، يرجى إعادة المحاولة.");
                         return;
                     }
 
-                    var aiResult = await _aiService.AnalyzeConsultationAsync(transcript,appointmentId);
-                    string structuredSymptoms = string.Join(", ", aiResult.Symptoms);
+                    var extractionResult = await _aiService.ExtractConsultationSymptomsAsync(transcript, appointmentId);
 
-                    await Clients.Caller.SendAsync("ReceiveAnalysis", structuredSymptoms, aiResult.DiagnosticSuggestions);
+                    await Clients.Caller.SendAsync("ReceiveSymptomExtraction", extractionResult);
                 }
                 catch (Exception ex)
                 {
-                    await Clients.Caller.SendAsync("ReceiveAnalysis", "Error", ex.Message);
+                    await Clients.Caller.SendAsync("ReceiveAiError", ex.Message);
                 }
                 finally
                 {
@@ -106,7 +106,60 @@ namespace Presentation.Hubs
             }
             else
             {
-                await Clients.Caller.SendAsync("ReceiveAnalysis", "Error", "No audio tracking container found.");
+                await Clients.Caller.SendAsync("ReceiveAiError", "No audio tracking container found.");
+            }
+        }
+
+        public async Task AnalyzeLiveSnapshot(string appointmentId)
+        {
+            if (string.IsNullOrWhiteSpace(appointmentId))
+                return;
+
+            if (!AudioBuffers.TryGetValue(appointmentId, out var stream))
+                return;
+
+            byte[] audioBytes;
+            lock (stream)
+            {
+                audioBytes = stream.ToArray();
+            }
+
+            if (audioBytes.Length < 5000)
+                return;
+
+            try
+            {
+                using var snapshotStream = new MemoryStream(audioBytes);
+                var transcript = await _aiService.TranscribeAudioAsync(snapshotStream);
+
+                if (string.IsNullOrWhiteSpace(transcript) || transcript.StartsWith("["))
+                    return;
+
+                var extraction = await _aiService.ExtractConsultationSnapshotAsync(transcript, appointmentId);
+                await Clients.Caller.SendAsync("ReceiveLiveExtraction", extraction);
+            }
+            catch
+            {
+                // Live snapshots are best-effort; the final StopAndAnalyze pass remains authoritative.
+            }
+        }
+
+        public async Task GenerateDiagnostics(ConsultationDiagnosticRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.AppointmentId))
+            {
+                await Clients.Caller.SendAsync("ReceiveAiError", "Missing appointment context for diagnostic generation.");
+                return;
+            }
+
+            try
+            {
+                var diagnostics = await _aiService.GenerateDiagnosticsAsync(request);
+                await Clients.Caller.SendAsync("ReceiveDiagnostics", diagnostics);
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("ReceiveAiError", ex.Message);
             }
         }
     }

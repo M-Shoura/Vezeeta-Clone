@@ -7,54 +7,59 @@
 <div class="app-container">
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-            @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-success shadow-sm mb-4 animate-fade" role="alert">
+            <i class="bi bi-check-circle-fill fs-5"></i>
+            <div>@TempData["Success"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
     @if (TempData["Error"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-            @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-danger shadow-sm mb-4 animate-fade" role="alert">
+            <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+            <div>@TempData["Error"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
-    <section class="hero-panel p-4 p-xl-5 mb-4">
+    <section class="hero-panel p-4 p-xl-5 mb-4 animate-in">
         <div class="row g-4 align-items-center">
             <div class="col-lg-7">
-                <div class="d-flex align-items-center gap-3 mb-4">
-                    <img src="@ProfilePictureHelper.GetUrl(Model.ProfilePicture, Model.FullName, "ffffff", "2563eb", 120)"
-                         class="avatar-lg border border-3 border-white" alt="Dr. @Model.FullName" />
+                <div class="d-flex align-items-center gap-4 mb-4">
+                    <img src="@ProfilePictureHelper.GetUrl(Model.ProfilePicture, Model.FullName, size: 120)"
+                         class="avatar-lg border border-3 border-white shadow" alt="Dr. @Model.FullName" style="width: 100px; height: 100px;" />
                     <div>
-                        <span class="eyebrow text-white-50">Care workspace</span>
-                        <h1 class="h2 fw-bold mb-1">Dr. @Model.FullName</h1>
-                        <p class="mb-0 text-white-50">@Model.Specialization • @Model.YearsOfExperience years experience</p>
+                        <span class="eyebrow text-white-50"><i class="bi bi-stethoscope"></i> Care workspace</span>
+                        <h1 class="display-6 fw-bold mb-1 mt-1">Dr. @Model.FullName</h1>
+                        <p class="mb-0 text-white-50 fs-5">@Model.Specialization • @Model.YearsOfExperience years experience</p>
                     </div>
                 </div>
                 <div class="d-flex flex-wrap gap-2">
-                    <a asp-controller="Account" asp-action="Profile" class="btn btn-light">
+                    <a asp-controller="Account" asp-action="Profile" class="btn btn-light fw-bold px-4 shadow-sm">
                         <i class="bi bi-pencil-square"></i> Edit Profile
                     </a>
-                    <a asp-action="AddSchedule" asp-route-doctorId="@Model.DoctorId" class="btn btn-warning">
+                    <a asp-action="AddSchedule" asp-route-doctorId="@Model.DoctorId" class="btn btn-warning fw-bold px-4 shadow-sm">
                         <i class="bi bi-calendar-plus"></i> Add Schedule
                     </a>
-                    <a asp-action="AssignClinic" asp-route-id="@Model.DoctorId" class="btn btn-outline-light">
+                    <a asp-action="AssignClinic" asp-route-id="@Model.DoctorId" class="btn btn-outline-light fw-bold px-4">
                         <i class="bi bi-hospital"></i> Add Clinic
                     </a>
                 </div>
             </div>
             <div class="col-lg-5">
-                <div class="glass-panel p-3">
+                <div class="glass-panel p-4 stagger-1 animate-in">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <small class="text-white-50 fw-bold">Availability</small>
-                            <div class="h3 fw-bold mb-0">@(Model.IsAvailable ? "Accepting visits" : "Unavailable")</div>
+                            <small class="text-white-50 fw-bold text-uppercase" style="letter-spacing: 0.05em">Availability</small>
+                            <div class="h3 fw-bold mb-0 mt-2">@(Model.IsAvailable ? "Accepting visits" : "Unavailable")</div>
                         </div>
-                        <span class="status-badge @(Model.IsAvailable ? "status-success" : "status-danger")">
-                            @(Model.IsAvailable ? "Online" : "Offline")
-                        </span>
+                        <div class="d-flex flex-column align-items-end gap-2">
+                            <span class="status-badge px-3 py-2 border-0 @(Model.IsAvailable ? "bg-success text-white" : "bg-danger text-white") shadow-sm" style="font-size: 0.85rem">
+                                <i class="bi @(Model.IsAvailable ? "bi-check-circle-fill" : "bi-x-circle-fill")"></i>
+                                @(Model.IsAvailable ? "Online" : "Offline")
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,40 +67,52 @@
     </section>
 
     <div class="row g-4 mb-4">
-        <div class="col-sm-6 col-xl-3">
-            <div class="metric-card">
+        <div class="col-sm-6 col-xl-3 animate-in stagger-1">
+            <div class="metric-card hover-lift">
+                <div class="icon-box">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
                 <p class="metric-label">Today's Appointments</p>
                 <h2 class="metric-value">@Model.TodaysAppointmentsCount</h2>
-                <span class="metric-trend">Scheduled for @DateTime.Today.ToString("dd MMM")</span>
+                <span class="metric-trend"><i class="bi bi-clock-history me-1"></i> Scheduled for @DateTime.Today.ToString("dd MMM")</span>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="metric-card">
+        <div class="col-sm-6 col-xl-3 animate-in stagger-2">
+            <div class="metric-card hover-lift">
+                <div class="icon-box green">
+                    <i class="bi bi-people"></i>
+                </div>
                 <p class="metric-label">Total Patients</p>
                 <h2 class="metric-value">@Model.TotalPatients</h2>
-                <span class="metric-trend">Unique patient records</span>
+                <span class="metric-trend"><i class="bi bi-person-lines-fill me-1"></i> Unique patient records</span>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="metric-card">
+        <div class="col-sm-6 col-xl-3 animate-in stagger-3">
+            <div class="metric-card hover-lift">
+                <div class="icon-box amber">
+                    <i class="bi bi-envelope-exclamation"></i>
+                </div>
                 <p class="metric-label">Pending Requests</p>
                 <h2 class="metric-value">@Model.PendingRequests</h2>
-                <span class="metric-trend">Needs confirmation</span>
+                <span class="metric-trend"><i class="bi bi-hourglass-split me-1"></i> Needs confirmation</span>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="metric-card">
+        <div class="col-sm-6 col-xl-3 animate-in stagger-4">
+            <div class="metric-card hover-lift">
+                <div class="icon-box teal">
+                    <i class="bi bi-wallet2"></i>
+                </div>
                 <p class="metric-label">Earnings</p>
                 <h2 class="metric-value">EGP @Model.Earnings.ToString("N0")</h2>
-                <span class="metric-trend">@Model.CompletedSessions completed sessions</span>
+                <span class="metric-trend"><i class="bi bi-check-all me-1"></i> @Model.CompletedSessions completed sessions</span>
             </div>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-xl-8">
-            <div class="section-card p-4 mb-4">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <div class="section-card p-4 mb-4 animate-in stagger-2">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                     <div>
                         <h5 class="fw-bold mb-1">Today's Queue</h5>
                         <p class="text-muted mb-0">Real appointments ordered by visit time.</p>
@@ -107,43 +124,57 @@
                     <div class="d-grid gap-3">
                         @foreach (var appointment in Model.TodaysAppointments)
                         {
-                            <article class="appointment-card card p-3">
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                                    <div>
-                                        <h6 class="fw-bold mb-1">@appointment.PatientName</h6>
-                                        <small class="text-muted">@appointment.ClinicName • @appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</small>
+                            var statusClass = appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-success" : 
+                                              appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-info";
+                            
+                            <article class="appointment-card card p-4 border-0 shadow-sm hover-lift">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar bg-primary-soft text-primary fw-bold shadow-sm">
+                                            @appointment.PatientName.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-1 text-body fs-5">@appointment.PatientName</h6>
+                                            <div class="d-flex align-items-center gap-2 text-muted small">
+                                                <span><i class="bi bi-hospital me-1"></i> @appointment.ClinicName</span>
+                                                <span class="text-primary-soft mx-1">•</span>
+                                                <span class="fw-semibold text-body"><i class="bi bi-clock me-1"></i> @appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="status-badge @(appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-success" : appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted")">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="status-badge @statusClass px-3 py-2 me-2">
                                             @appointment.Status
                                         </span>
-                                        <a asp-action="AppointmentDetails" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary" title="View appointment details">
-                                            <i class="bi bi-eye"></i> View Details
+                                        <a asp-action="AppointmentDetails" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-light fw-medium border shadow-sm" title="View appointment details">
+                                            <i class="bi bi-eye"></i> Details
                                         </a>
+                                        
+                                        @if (appointment.Status == Domain.Enums.AppointmentStatus.Confirmed || appointment.Status == Domain.Enums.AppointmentStatus.Completed)
+                                        {
+                                            if (appointment.HasPrescription && appointment.PrescriptionId.HasValue)
+                                            {
+                                                <a asp-controller="Prescription" asp-action="Edit" asp-route-id="@appointment.PrescriptionId" class="btn btn-sm btn-outline-primary fw-medium shadow-sm">
+                                                    <i class="bi bi-pencil-square"></i> Prescription
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Prescription" asp-action="Create" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary fw-medium shadow-sm">
+                                                    <i class="bi bi-prescription2"></i> Prescription
+                                                </a>
+                                            }
+                                        }
+
                                         @if (appointment.Status == Domain.Enums.AppointmentStatus.Confirmed)
                                         {
                                             <form asp-action="MarkAppointmentCompleted" method="post" class="d-inline">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="appointmentId" value="@appointment.Id" />
-                                                <button type="submit" class="btn btn-sm btn-outline-success">
-                                                    Mark Completed
+                                                <button type="submit" class="btn btn-sm btn-success fw-medium shadow-sm text-white">
+                                                    <i class="bi bi-check-lg"></i> Complete
                                                 </button>
                                             </form>
-                                        }
-                                        @if (appointment.Status == Domain.Enums.AppointmentStatus.Confirmed || appointment.Status == Domain.Enums.AppointmentStatus.Completed)
-                                        {
-                                            if (appointment.HasPrescription && appointment.PrescriptionId.HasValue)
-                                            {
-                                                <a asp-controller="Prescription" asp-action="Edit" asp-route-id="@appointment.PrescriptionId" class="btn btn-sm btn-outline-primary">
-                                                    <i class="bi bi-pencil-square"></i> Edit Prescription
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a asp-controller="Prescription" asp-action="Create" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-prescription2"></i> Add Prescription
-                                                </a>
-                                            }
                                         }
                                     </div>
                                 </div>
@@ -153,100 +184,119 @@
                 }
                 else
                 {
-                    <div class="empty-state">
-                        <i class="bi bi-calendar-heart"></i>
-                        <p class="mt-2 mb-0">No appointments scheduled for today.</p>
+                    <div class="empty-state border-0 bg-surface-soft py-5">
+                        <i class="bi bi-calendar-heart text-primary opacity-25" style="font-size: 3rem;"></i>
+                        <h5 class="fw-bold mt-3 text-body">No appointments today</h5>
+                        <p class="mb-0 text-muted">Enjoy your free time or review pending requests.</p>
                     </div>
                 }
             </div>
 
-            <div class="section-card p-4">
-                <h5 class="fw-bold mb-3">Upcoming Schedule</h5>
-                <table class="table table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th>Patient</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Clinic</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.UpcomingAppointments.Any())
-                        {
-                            foreach (var appointment in Model.UpcomingAppointments)
+            <div class="section-card p-4 animate-in stagger-3">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0">Upcoming Schedule</h5>
+                    <a asp-controller="Appointment" asp-action="Index" class="btn btn-sm btn-outline-primary">View Calendar</a>
+                </div>
+                
+                <div class="table-responsive border-0">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Date & Time</th>
+                                <th>Clinic</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.UpcomingAppointments.Any())
                             {
-                                <tr>
-                                    <td class="fw-semibold">@appointment.PatientName</td>
-                                    <td>@appointment.AppointmentDate.ToString("dd MMM yyyy")</td>
-                                    <td>@appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</td>
-                                    <td>@appointment.ClinicName</td>
-                                    <td>
-                                        <span class="status-badge status-muted">@appointment.Status</span>
-                                    </td>
-                                    <td class="text-end">
-                                        <a asp-action="AppointmentDetails" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-primary" title="View appointment details">
-                                            <i class="bi bi-eye"></i> Details
-                                        </a>
-                                    </td>
-                                </tr>
+                                foreach (var appointment in Model.UpcomingAppointments)
+                                {
+                                    <tr>
+                                        <td class="fw-bold text-body">@appointment.PatientName</td>
+                                        <td>
+                                            <div class="fw-medium text-body">@appointment.AppointmentDate.ToString("dd MMM yyyy")</div>
+                                            <small class="text-muted">@appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</small>
+                                        </td>
+                                        <td class="text-muted">@appointment.ClinicName</td>
+                                        <td>
+                                            <span class="status-badge status-muted">@appointment.Status</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a asp-action="AppointmentDetails" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-light border shadow-sm fw-medium">
+                                                Details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
-                        else
-                        {
-                            <tr><td colspan="6"><div class="empty-state my-2">No upcoming appointments yet.</div></td></tr>
-                        }
-                    </tbody>
-                </table>
+                            else
+                            {
+                                <tr><td colspan="5"><div class="empty-state border-0 py-4">No upcoming appointments found.</div></td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <div class="col-xl-4">
-            <div class="section-card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="section-card p-4 mb-4 animate-in stagger-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="fw-bold mb-0">Timetable</h5>
-                    <a asp-action="Schedules" asp-route-id="@Model.DoctorId" class="btn btn-sm btn-outline-primary">Manage</a>
+                    <a asp-action="Schedules" asp-route-id="@Model.DoctorId" class="btn btn-sm btn-light border shadow-sm fw-medium"><i class="bi bi-gear me-1"></i> Manage</a>
                 </div>
 
                 @if (Model.Schedules.Any())
                 {
-                    <div class="d-grid gap-2">
+                    <div class="d-grid gap-3">
                         @foreach (var schedule in Model.Schedules)
                         {
-                            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 bg-light">
-                                <div>
-                                    <div class="fw-bold">@schedule.Day</div>
-                                    <small class="text-muted">@schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")</small>
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 border bg-surface hover-lift transition">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-primary-soft text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px; font-size: 0.85rem">
+                                        @schedule.Day.ToString().Substring(0, 3)
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-body">@schedule.Day</div>
+                                        <small class="text-muted fw-medium"><i class="bi bi-clock me-1"></i> @schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")</small>
+                                    </div>
                                 </div>
-                                <span class="badge bg-primary-subtle text-primary">@schedule.SlotDurationMinutes min</span>
+                                <span class="badge bg-surface-soft text-body border px-2 py-1">@schedule.SlotDurationMinutes min</span>
                             </div>
                         }
                     </div>
                 }
                 else
                 {
-                    <div class="empty-state">No schedules set.</div>
+                    <div class="empty-state border-0 py-4">
+                        <i class="bi bi-calendar-x text-muted opacity-50 fs-1 mb-2"></i>
+                        <p class="mb-0 fw-medium">No schedules set.</p>
+                    </div>
                 }
             </div>
 
-            <div class="section-card p-4 mb-4">
-                <h5 class="fw-bold mb-3">Clinics & Fees</h5>
+            <div class="section-card p-4 mb-4 animate-in stagger-5">
+                <h5 class="fw-bold mb-4">Clinics & Fees</h5>
                 @if (Model.Clinics.Any())
                 {
                     <div class="d-grid gap-3">
                         @foreach (var clinic in Model.Clinics)
                         {
-                            <form asp-action="UpdateConsultationFee" method="post" class="p-3 rounded-4 bg-light">
+                            <form asp-action="UpdateConsultationFee" method="post" class="p-3 rounded-4 border bg-surface shadow-sm">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="doctorId" value="@Model.DoctorId" />
                                 <input type="hidden" name="clinicId" value="@clinic.ClinicId" />
-                                <div class="fw-bold mb-2">@clinic.ClinicName</div>
-                                <div class="input-group">
-                                    <span class="input-group-text">EGP</span>
-                                    <input type="number" name="consultationFee" step="0.01" min="0" value="@clinic.ConsultationFee" class="form-control" />
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <i class="bi bi-hospital text-primary fs-5"></i>
+                                    <div class="fw-bold text-body fs-6">@clinic.ClinicName</div>
+                                </div>
+                                <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                                    <span class="input-group-text bg-light text-muted border-end-0 fw-bold fs-6">EGP</span>
+                                    <input type="number" name="consultationFee" step="0.01" min="0" value="@clinic.ConsultationFee" class="form-control border-start-0 ps-0 fw-bold fs-5 text-primary bg-light" />
+                                    <button type="submit" class="btn btn-primary px-4 fw-bold">Save</button>
                                 </div>
                             </form>
                         }
@@ -254,24 +304,28 @@
                 }
                 else
                 {
-                    <div class="empty-state">No clinics assigned.</div>
+                    <div class="empty-state border-0 py-4">
+                        <p class="mb-0 fw-medium">No clinics assigned.</p>
+                    </div>
                 }
             </div>
 
-            <div class="section-card p-4">
-                <h5 class="fw-bold mb-3">Notifications</h5>
-                <div class="activity-item">
-                    <span class="activity-dot"></span>
-                    <div>
-                        <div class="fw-bold">@Model.PendingRequests appointment requests</div>
-                        <small class="text-muted">Review pending requests before clinic hours.</small>
+            <div class="section-card p-4 animate-in stagger-5">
+                <h5 class="fw-bold mb-4">Notifications</h5>
+                <div class="d-flex flex-column gap-3">
+                    <div class="activity-item py-0 border-0">
+                        <span class="activity-dot mt-1 shadow-none"></span>
+                        <div>
+                            <div class="fw-bold text-body">@Model.PendingRequests appointment requests</div>
+                            <small class="text-muted d-block mt-1">Review pending requests before clinic hours.</small>
+                        </div>
                     </div>
-                </div>
-                <div class="activity-item">
-                    <span class="activity-dot bg-success"></span>
-                    <div>
-                        <div class="fw-bold">@Model.UpcomingAppointmentsCount upcoming visits</div>
-                        <small class="text-muted">Based on real scheduled appointments.</small>
+                    <div class="activity-item py-0 border-0">
+                        <span class="activity-dot bg-success mt-1 shadow-none"></span>
+                        <div>
+                            <div class="fw-bold text-body">@Model.UpcomingAppointmentsCount upcoming visits</div>
+                            <small class="text-muted d-block mt-1">Based on real scheduled appointments.</small>
+                        </div>
                     </div>
                 </div>
             </div>

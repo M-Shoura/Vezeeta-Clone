@@ -13,7 +13,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Vezeeta</title>
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <title>@ViewData["Title"] - Taybat</title>
     <script type="importmap"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,13 +31,16 @@
         <header class="app-navbar">
             <nav class="navbar navbar-expand-lg py-3">
                 <div class="app-container d-flex align-items-center gap-3">
-                    <a class="bg-primary p-3 rounded-4 navbar-brand me-lg-4" asp-controller="Home" asp-action="Index" aria-label="Vezeeta home">
-                        <img src="~/Images/logo.png" alt="Vezeeta Logo" />
+                    <a class="navbar-brand me-lg-4 d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index" aria-label="Taybat home">
+                        <div class="bg-primary p-2 rounded-3 d-inline-flex">
+                            <i class="bi bi-heart-pulse-fill text-white fs-5"></i>
+                        </div>
+                        <span class="fw-bold fs-5 d-none d-sm-block text-body">Taybat</span>
                     </a>
 
-                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    <button class="navbar-toggler border-0 shadow-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
                             aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                        <i class="bi bi-list fs-3"></i>
                     </button>
 
                     <div class="collapse navbar-collapse" id="mainNav">
@@ -44,7 +49,7 @@
                             <input class="form-control" type="search" name="name" placeholder="Search doctors, clinics..." aria-label="Search doctors" />
                         </form>
 
-                        <ul class="navbar-nav align-items-lg-center gap-1 ms-lg-auto">
+                        <ul class="navbar-nav align-items-lg-center gap-2 ms-lg-auto">
                             <li class="nav-item">
                                 <a class="nav-link nav-pill" asp-controller="Doctor" asp-action="Index">
                                     <i class="bi bi-search-heart"></i> Find Doctors
@@ -56,34 +61,44 @@
                                 </a>
                             </li>
 
+                            <li class="nav-item d-none d-lg-block">
+                                <span class="text-muted opacity-25">|</span>
+                            </li>
+
+                            <li class="nav-item">
+                                <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center border-0" style="width:40px;height:40px" type="button" data-theme-toggle aria-label="Toggle theme">
+                                    <i class="bi bi-moon"></i>
+                                </button>
+                            </li>
+
                             @if (isAuthenticated)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link nav-pill" asp-controller="@dashboardController" asp-action="@dashboardAction">
-                                        <i class="bi bi-grid-1x2"></i> Dashboard
+                                    <a class="btn btn-primary btn-sm px-3 ms-lg-2" asp-controller="@dashboardController" asp-action="@dashboardAction">
+                                        <i class="bi bi-grid-1x2 me-1"></i> Dashboard
                                     </a>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <button class="btn btn-light dropdown-toggle px-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <li class="nav-item dropdown ms-lg-2">
+                                    <button class="btn btn-light dropdown-toggle px-3 d-flex align-items-center gap-2 border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <img src="@ProfilePictureHelper.GetUrl(currentUser?.ProfilePicture, displayName, size: 80)"
                                              class="avatar-sm" alt="@displayName" />
-                                        <span class="d-none d-md-inline">@displayName</span>
+                                        <span class="d-none d-md-inline fw-semibold text-body">@displayName</span>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2">
-                                        <li><a class="dropdown-item rounded-3" asp-controller="Account" asp-action="Profile">Profile</a></li>
-                                        <li><a class="dropdown-item rounded-3" asp-controller="Account" asp-action="ChangePassword">Security</a></li>
-                                        <li><hr class="dropdown-divider" /></li>
-                                        <li><a class="dropdown-item rounded-3 text-danger" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate-in" style="animation-duration: 0.2s">
+                                        <li><a class="dropdown-item rounded-3 py-2" asp-controller="Account" asp-action="Profile"><i class="bi bi-person me-2"></i>Profile</a></li>
+                                        <li><a class="dropdown-item rounded-3 py-2" asp-controller="Account" asp-action="ChangePassword"><i class="bi bi-shield-lock me-2"></i>Security</a></li>
+                                        <li><hr class="dropdown-divider opacity-10 my-2" /></li>
+                                        <li><a class="dropdown-item rounded-3 py-2 text-danger fw-semibold" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                                     </ul>
                                 </li>
                             }
                             else
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link nav-pill" asp-controller="Account" asp-action="Login">Login</a>
+                                <li class="nav-item ms-lg-2">
+                                    <a class="btn btn-light fw-semibold" asp-controller="Account" asp-action="Login">Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="btn btn-primary px-4" asp-controller="Account" asp-action="Register">Sign Up</a>
+                                    <a class="btn btn-primary fw-semibold px-4" asp-controller="Account" asp-action="Register">Sign Up</a>
                                 </li>
                             }
                         </ul>
@@ -92,48 +107,56 @@
             </nav>
         </header>
 
-        <main role="main" class="app-main py-4">
+        <main role="main" class="app-main py-4 animate-in">
             @RenderBody()
         </main>
 
-        <footer class="app-footer pt-5 pb-4">
+        <footer class="app-footer pt-5 pb-4 mt-auto">
             <div class="app-container">
-                <div class="row g-4">
+                <div class="row g-4 mb-4">
                     <div class="col-lg-4 footer-brand">
-                        <img src="~/Images/logo.png" alt="Vezeeta Logo" class="mb-3" />
-                        <p class="mb-0 text-white-50">Premium healthcare booking, clinic operations, and patient care in one calm workspace.</p>
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-heart-pulse-fill fs-3 text-primary"></i>
+                            <h4 class="text-white mb-0 fw-bold">Taybat</h4>
+                        </div>
+                        <p class="mb-0 text-white-50 pe-lg-4">Premium healthcare booking, clinic operations, and patient care in one calm, secure workspace.</p>
                     </div>
                     <div class="col-6 col-lg-2">
-                        <h6 class="text-white fw-bold mb-3">Explore</h6>
+                        <h6 class="text-white fw-bold mb-3 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.05em">Platform</h6>
                         <ul class="list-unstyled d-grid gap-2">
-                            <li><a asp-controller="Doctor" asp-action="Index">Doctors</a></li>
-                            <li><a asp-controller="Clinic" asp-action="Index">Clinics</a></li>
-                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-controller="Doctor" asp-action="Index">Find Doctors</a></li>
+                            <li><a asp-controller="Clinic" asp-action="Index">Explore Clinics</a></li>
+                            <li><a asp-controller="Home" asp-action="Index">How it works</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-lg-2">
-                        <h6 class="text-white fw-bold mb-3">Account</h6>
+                        <h6 class="text-white fw-bold mb-3 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.05em">Account</h6>
                         <ul class="list-unstyled d-grid gap-2">
-                            <li><a asp-controller="Account" asp-action="Login">Login</a></li>
-                            <li><a asp-controller="Account" asp-action="Register">Register</a></li>
-                            <li><a asp-controller="Account" asp-action="Profile">Profile</a></li>
+                            <li><a asp-controller="Account" asp-action="Login">Sign In</a></li>
+                            <li><a asp-controller="Account" asp-action="Register">Create Account</a></li>
+                            <li><a asp-controller="Account" asp-action="Profile">Manage Profile</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-4">
-                        <h6 class="text-white fw-bold mb-3">Download App</h6>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
+                        <h6 class="text-white fw-bold mb-3 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.05em">Get the App</h6>
+                        <div class="d-flex flex-wrap gap-2 mb-4">
                             <img src="~/Images/google-play.png" alt="Google Play" class="store-badge" />
                             <img src="~/Images/app-store.png" alt="App Store" class="store-badge" />
                         </div>
-                        <div class="d-flex gap-3 fs-5 text-white-50">
-                            <span aria-label="Facebook"><i class="bi bi-facebook"></i></span>
-                            <span aria-label="Instagram"><i class="bi bi-instagram"></i></span>
-                            <span aria-label="Twitter"><i class="bi bi-twitter-x"></i></span>
+                        <div class="d-flex gap-3 fs-5">
+                            <a href="#" class="text-white-50 hover-white transition" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="text-white-50 hover-white transition" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="text-white-50 hover-white transition" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#" class="text-white-50 hover-white transition" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="border-top border-secondary-subtle mt-4 pt-4 text-center text-white-50">
-                    <small>&copy; 2026 Vezeeta Clone. All Rights Reserved.</small>
+                <div class="border-top border-secondary-subtle mt-4 pt-4 d-flex flex-wrap justify-content-between align-items-center text-white-50 gap-3" style="border-color: rgba(255,255,255,0.1) !important">
+                    <small>&copy; @DateTime.Now.Year Taybat Clone. All Rights Reserved.</small>
+                    <div class="d-flex gap-3 small">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                    </div>
                 </div>
             </div>
         </footer>

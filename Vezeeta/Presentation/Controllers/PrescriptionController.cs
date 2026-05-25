@@ -16,17 +16,20 @@ namespace Presentation.Controllers
     {
         private readonly IPrescriptionService _prescriptionService;
         private readonly IPrescriptionItemService _prescriptionItemService;
+        private readonly IMedicalAiService _medicalAiService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
 
         public PrescriptionController(
             IPrescriptionService prescriptionService,
             IPrescriptionItemService prescriptionItemService,
+            IMedicalAiService medicalAiService,
             IUnitOfWork unitOfWork,
             ICurrentUserService currentUserService)
         {
             _prescriptionService = prescriptionService;
             _prescriptionItemService = prescriptionItemService;
+            _medicalAiService = medicalAiService;
             _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
         }
@@ -149,6 +152,19 @@ namespace Presentation.Controllers
 
             if (appointment == null)
                 return Json(new { success = false, message = "Prescription can only be added for your booked appointments" });
+
+            var safetyReview = await _medicalAiService.AnalyzePrescriptionSafetyAsync(dto);
+
+            if (safetyReview.HasIssues)
+            {
+                return Json(new
+                {
+                    success = false,
+                    requiresReview = true,
+                    message = "Prescription safety review detected potential issues. Please review before final approval.",
+                    safetyReview
+                });
+            }
 
             bool result;
 

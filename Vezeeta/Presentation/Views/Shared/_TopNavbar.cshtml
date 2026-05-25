@@ -1,77 +1,84 @@
 @inject UserManager<ApplicationUser> UserManager
-
 @{
-    var currentUser = User.Identity?.IsAuthenticated == true
-        ? await UserManager.GetUserAsync(User)
-        : null;
-    var displayName = currentUser?.FullName ?? User.Identity?.Name ?? "User";
-    var roleName = User.IsInRole("Admin")
-        ? "Administrator"
-        : User.IsInRole("Doctor")
-            ? "Doctor"
-            : User.IsInRole("Patient")
-                ? "Patient"
-                : "User";
+    var currentUser = await UserManager.GetUserAsync(User);
+    var displayName = currentUser?.FullName ?? User.Identity?.Name ?? "Admin";
+    var controller = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["Action"]?.ToString();
 }
 
-<nav class="admin-topbar px-3 px-lg-4 d-flex align-items-center">
-    <div class="container-fluid p-0">
-        <div class="d-flex align-items-center justify-content-between gap-3">
-            <div class="d-flex align-items-center gap-3">
-                <button class="topbar-icon-btn sidebar-toggle" type="button" data-sidebar-toggle aria-label="Toggle sidebar">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-                <div>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-1">
-                            <li class="breadcrumb-item"><a asp-controller="Admin" asp-action="Index">Vezeeta</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
-                        </ol>
-                    </nav>
-                    <h1 class="h4 mb-0 fw-bold">@ViewData["Title"]</h1>
-                </div>
-            </div>
+<header class="admin-topbar justify-content-between">
+    <div class="d-flex align-items-center gap-3">
+        <button class="sidebar-toggle btn p-0 border-0 shadow-none text-muted" data-sidebar-toggle aria-label="Toggle sidebar">
+            <i class="bi bi-list fs-3"></i>
+        </button>
 
-            <div class="d-flex align-items-center gap-3">
-                <form class="admin-search" asp-controller="Doctor" asp-action="Index" method="get">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input class="form-control" type="search" name="name" placeholder="Search doctors or patients" aria-label="Search" />
-                </form>
-
-                <button class="topbar-icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-
-                <div class="dropdown">
-                    <button class="topbar-icon-btn" type="button" id="notificationsMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-bell"></i>
-                        <span class="badge bg-danger">3</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2" aria-labelledby="notificationsMenu">
-                        <li><h6 class="dropdown-header">Notifications</h6></li>
-                        <li><a class="dropdown-item rounded-3" asp-controller="Appointment" asp-action="Index">New appointment booked</a></li>
-                        <li><a class="dropdown-item rounded-3" asp-controller="Doctor" asp-action="Index">Doctor profile awaiting review</a></li>
-                        <li><a class="dropdown-item rounded-3" asp-controller="Payment" asp-action="Index">Revenue report is ready</a></li>
-                    </ul>
-                </div>
-
-                <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle px-2 px-md-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="@ProfilePictureHelper.GetUrl(currentUser?.ProfilePicture, displayName, size: 80)"
-                             class="avatar-sm" alt="@displayName" />
-                        <span class="d-none d-md-inline text-start">
-                            <span class="d-block fw-bold lh-1">@displayName</span>
-                            <small class="text-muted">@roleName</small>
-                        </span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2">
-                        <li><a class="dropdown-item rounded-3" asp-controller="Account" asp-action="Profile">Profile</a></li>
-                        <li><a class="dropdown-item rounded-3" asp-controller="Account" asp-action="ChangePassword">Security</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item rounded-3 text-danger" asp-controller="Account" asp-action="Logout">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
+        <div class="d-none d-md-flex align-items-center gap-2 text-muted fw-medium fs-sm">
+            <i class="bi bi-house-door"></i>
+            <i class="bi bi-chevron-right small opacity-50"></i>
+            <span>@controller</span>
+            @if (action != "Index" && action != "Dashboard")
+            {
+                <i class="bi bi-chevron-right small opacity-50"></i>
+                <span class="text-body fw-bold">@action</span>
+            }
         </div>
     </div>
-</nav>
+
+    <div class="d-flex align-items-center gap-2 gap-md-3">
+        @if (User.IsInRole("Admin") || User.IsInRole("admin"))
+        {
+            <form class="admin-search" asp-controller="Doctor" asp-action="Index" method="get">
+                <i class="bi bi-search"></i>
+                <input class="form-control" type="search" name="name" placeholder="Search system..." aria-label="Search" />
+            </form>
+        }
+
+        <button class="topbar-icon-btn border-0 bg-transparent" type="button" data-theme-toggle aria-label="Toggle theme">
+            <i class="bi bi-moon fs-5"></i>
+        </button>
+
+        <div class="dropdown">
+            <button class="topbar-icon-btn border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                <i class="bi bi-bell fs-5"></i>
+                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">New alerts</span>
+                </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-3 mt-2 animate-in" style="width: 320px;">
+                <li><h6 class="dropdown-header text-body fw-bold fs-6 px-1 mb-2">Notifications</h6></li>
+                <li>
+                    <a class="dropdown-item rounded-3 py-2 px-3 d-flex gap-3 align-items-start" href="#">
+                        <div class="bg-primary-soft text-primary p-2 rounded-circle mt-1">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0 fw-semibold text-wrap">New system update</p>
+                            <small class="text-muted d-block">Platform has been updated to v2.0</small>
+                            <small class="text-primary fw-semibold mt-1 d-block">Just now</small>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dropdown ms-1">
+            <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2 border-0 bg-transparent p-1 ps-2 pe-3 rounded-pill" style="background: var(--surface-soft) !important;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="@ProfilePictureHelper.GetUrl(currentUser?.ProfilePicture, displayName, size: 80)"
+                     class="avatar-sm rounded-circle" alt="@displayName" />
+                <span class="d-none d-md-inline fw-bold text-body" style="font-size: 0.85rem">@displayName</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate-in">
+                <li>
+                    <div class="px-3 py-2">
+                        <p class="mb-0 fw-bold">@displayName</p>
+                        <small class="text-muted">@(User.IsInRole("Admin") ? "System Administrator" : "Healthcare Provider")</small>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider opacity-10 my-2" /></li>
+                <li><a class="dropdown-item rounded-3 py-2" asp-controller="Account" asp-action="Profile"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                <li><a class="dropdown-item rounded-3 py-2" asp-controller="Account" asp-action="ChangePassword"><i class="bi bi-shield-lock me-2"></i>Security</a></li>
+                <li><a class="dropdown-item rounded-3 py-2 text-danger fw-semibold" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</header>

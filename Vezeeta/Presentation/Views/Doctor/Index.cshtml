@@ -3,54 +3,47 @@
 @{
     ViewData["Title"] = "Doctors";
     var clinics = ViewBag.Clinics as IEnumerable<Domain.Entities.Clinic>;
-    var isAdmin = User.IsInRole("Admin");
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("admin");
 }
 
-<style>
-    .doctor-card .btn {
-        position: relative;
-        z-index: 2;
-    }
-
-    .doctor-card .card-body {
-        position: relative;
-    }
-</style>
-
 <div class="app-container">
-    <section class="hero-panel p-4 p-xl-5 mb-4">
+    <section class="hero-panel p-4 p-xl-5 mb-5 animate-in">
         <div class="row g-4 align-items-center">
             <div class="col-lg-7">
                 <span class="eyebrow text-white-50">
                     <i class="bi bi-search-heart"></i> Doctor marketplace
                 </span>
-
-                <h1 class="display-6 fw-bold mt-3 mb-2">
+                <h1 class="display-5 fw-bold mt-3 mb-3 text-white">
                     Find the right specialist for your next visit.
                 </h1>
-
-                <p class="text-white-50 mb-0">
-                    Search doctors by name or specialization and compare availability in a cleaner experience.
+                <p class="text-white-50 mb-0 fs-5">
+                    Search doctors by name or specialization and compare availability in a secure, transparent environment.
                 </p>
             </div>
 
-            <div class="col-lg-5">
-                <form method="get" asp-action="Index" class="glass-panel p-3">
-                    <div class="d-grid gap-2">
-                        <input type="text"
-                               name="name"
-                               value="@ViewBag.Name"
-                               class="form-control form-control-lg"
-                               placeholder="Search by doctor name" />
+            <div class="col-lg-5 stagger-1 animate-in">
+                <form method="get" asp-action="Index" class="glass-panel p-4 shadow-lg rounded-4 border-0" style="background: rgba(255, 255, 255, 0.15);">
+                    <div class="d-grid gap-3">
+                        <div class="position-relative">
+                            <i class="bi bi-person position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                            <input type="text"
+                                   name="name"
+                                   value="@ViewBag.Name"
+                                   class="form-control form-control-lg ps-5 border-0 shadow-sm fw-medium"
+                                   placeholder="Search by doctor name..." />
+                        </div>
 
-                        <select name="specialization"
-                                asp-items="ViewBag.Specializations"
-                                class="form-select form-select-lg">
-                            <option value="">All specializations</option>
-                        </select>
+                        <div class="position-relative">
+                            <i class="bi bi-star position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" style="z-index: 10;"></i>
+                            <select name="specialization"
+                                    asp-items="ViewBag.Specializations"
+                                    class="form-select form-select-lg ps-5 border-0 shadow-sm fw-medium cursor-pointer">
+                                <option value="">All specializations</option>
+                            </select>
+                        </div>
 
-                        <button type="submit" class="btn btn-warning btn-lg">
-                            <i class="bi bi-search"></i> Search
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold shadow mt-2 border-0" style="box-shadow: 0 4px 14px rgba(0,0,0,0.1) !important;">
+                            <i class="bi bi-search me-2"></i> Find Doctors
                         </button>
                     </div>
                 </form>
@@ -58,94 +51,76 @@
         </div>
     </section>
 
-    <div class="page-header">
+    <div class="page-header mb-4 animate-in stagger-2">
         <div>
-            <h2 class="page-title">Doctors</h2>
-
+            <h2 class="page-title">Verified Providers</h2>
             <p class="page-subtitle">
-                Verified providers, profiles, schedules, and clinic assignments.
+                Explore profiles, schedules, and clinical assignments across the network.
             </p>
         </div>
 
         @if (isAdmin)
         {
-            <a asp-action="Create" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Add Doctor
+            <a asp-action="Create" class="btn btn-primary shadow-sm fw-bold px-4">
+                <i class="bi bi-plus-lg me-2"></i> Add Doctor
             </a>
         }
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-5">
         @if (Model.Any())
         {
             foreach (var doctor in Model)
             {
-                <div class="col-md-6 col-xl-4">
-                    <article class="doctor-card card border-0 h-100 position-relative">
-
-                        <div class="card-body p-4">
-
+                <div class="col-md-6 col-xl-4 animate-in">
+                    <article class="doctor-card card border shadow-sm h-100 position-relative hover-lift">
+                        <div class="card-body p-4 d-flex flex-column h-100">
                             <!-- Clickable Area -->
                             <a asp-action="Details"
                                asp-route-id="@doctor.Id"
-                               class="text-decoration-none text-dark">
-
-                                <div class="d-flex align-items-start gap-3">
+                               class="text-decoration-none text-dark d-block flex-grow-1">
+                                <div class="d-flex align-items-start gap-3 mb-4 border-bottom pb-4">
                                     <img src="@ProfilePictureHelper.GetUrl(doctor.ProfilePicture, doctor.FullName, size: 160)"
-                                         class="avatar-lg"
+                                         class="avatar-lg shadow-sm border border-2 border-white"
+                                         style="width: 72px; height: 72px;"
                                          alt="@doctor.FullName" />
-
                                     <div class="min-w-0">
-                                        <h4 class="h5 fw-bold mb-1">
+                                        <h4 class="h5 fw-bold mb-1 text-body">
                                             @doctor.FullName
                                         </h4>
-
-                                        <span class="status-badge status-muted">
-                                            @doctor.Specialization
+                                        <span class="badge bg-primary-soft text-primary px-2 py-1 mb-2 border border-primary border-opacity-25">
+                                            <i class="bi bi-award me-1"></i> @doctor.Specialization
                                         </span>
-
-                                        <p class="text-muted mt-3 mb-2">
-                                            @doctor.YearsOfExperience years experience
-                                        </p>
-
-                                        <span class="status-badge @(doctor.IsAvailable ? "status-success" : "status-danger")">
-                                            @(doctor.IsAvailable ? "Available" : "Not Available")
+                                        <span class="status-badge @(doctor.IsAvailable ? "status-success" : "status-danger") d-inline-flex mt-1">
+                                            <i class="bi @(doctor.IsAvailable ? "bi-check-circle-fill" : "bi-x-circle-fill") me-1"></i>
+                                            @(doctor.IsAvailable ? "Available" : "Unavailable")
                                         </span>
                                     </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center text-muted fw-medium px-2">
+                                    <span><i class="bi bi-briefcase me-1"></i> @doctor.YearsOfExperience years exp</span>
+                                    <span class="text-primary fw-bold">View Profile <i class="bi bi-arrow-right ms-1"></i></span>
                                 </div>
                             </a>
 
                             <!-- Admin Buttons -->
-                            <div class="d-flex flex-wrap gap-2 mt-4 position-relative z-3">
-
-                                @if (isAdmin)
-                                {
-                                    <a asp-action="Dashboard"
-                                       asp-route-id="@doctor.Id"
-                                       class="btn btn-primary btn-sm">
-                                        <i class="bi bi-grid"></i> Dashboard
+                            @if (isAdmin)
+                            {
+                                <div class="d-flex flex-wrap gap-2 pt-4 mt-auto border-top position-relative z-3" style="pointer-events: auto;">
+                                    <a asp-action="Dashboard" asp-route-id="@doctor.Id" class="btn btn-primary btn-sm flex-grow-1 fw-bold">
+                                        <i class="bi bi-grid-1x2"></i> Dashboard
                                     </a>
-
-                                    <a asp-controller="Account"
-                                       asp-action="EditUser"
-                                       asp-route-id="@doctor.Id"
-                                       class="btn btn-outline-warning btn-sm">
-                                        <i class="bi bi-pencil"></i> Edit
+                                    <a asp-controller="Account" asp-action="EditUser" asp-route-id="@doctor.Id" class="btn btn-outline-warning btn-sm" title="Edit User Profile">
+                                        <i class="bi bi-pencil"></i>
                                     </a>
-
-                                    <a asp-action="Delete"
-                                       asp-route-id="@doctor.Id"
-                                       class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-trash"></i> Delete
+                                    <a asp-action="AddSchedule" asp-route-doctorId="@doctor.Id" class="btn btn-outline-secondary btn-sm" title="Add Schedule">
+                                        <i class="bi bi-calendar-plus"></i>
                                     </a>
-
-                                    <a asp-action="AddSchedule"
-                                       asp-route-doctorId="@doctor.Id"
-                                       class="btn btn-outline-secondary btn-sm">
-                                        <i class="bi bi-calendar-plus"></i> Schedule
+                                    <a asp-action="Delete" asp-route-id="@doctor.Id" class="btn btn-outline-danger btn-sm" title="Delete Doctor">
+                                        <i class="bi bi-trash"></i>
                                     </a>
-                                }
-                            </div>
+                                </div>
+                            }
                         </div>
                     </article>
                 </div>
@@ -153,55 +128,52 @@
         }
         else
         {
-            <div class="col-12">
-                <div class="empty-state">
-                    <i class="bi bi-search"></i>
-
-                    <p class="mt-2 mb-0">
-                        No doctors found.
-                    </p>
+            <div class="col-12 animate-in stagger-2">
+                <div class="empty-state border-0 bg-surface-soft py-5 rounded-4 shadow-sm">
+                    <i class="bi bi-search text-muted opacity-25" style="font-size: 3rem;"></i>
+                    <h5 class="fw-bold mt-3 text-body">No doctors found</h5>
+                    <p class="text-muted mb-0">Try adjusting your search filters or browse all specializations.</p>
                 </div>
             </div>
         }
     </div>
 
-    <div class="page-header mt-5">
+    <div class="page-header mb-4 mt-5 animate-in stagger-3">
         <div>
-            <h2 class="page-title">Clinics</h2>
-
+            <span class="eyebrow"><i class="bi bi-geo-alt"></i> Locations</span>
+            <h2 class="page-title">Clinic Network</h2>
             <p class="page-subtitle">
-                Care locations connected to the doctor network.
+                Care locations connected to the Taybat platform.
             </p>
         </div>
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 animate-in stagger-4">
         @if (clinics != null && clinics.Any())
         {
             foreach (var clinic in clinics)
             {
                 <div class="col-md-6 col-xl-4">
-                    <article class="clinic-card card h-100">
-                        <div class="card-body p-4">
+                    <article class="clinic-card card h-100 border shadow-sm hover-lift">
+                        <div class="card-body p-4 d-flex flex-column h-100">
+                            <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-4">
+                                <span class="bg-info bg-opacity-10 text-info p-3 rounded-circle d-flex" style="width: 56px; height: 56px; align-items:center; justify-content:center;">
+                                    <i class="bi bi-hospital fs-4"></i>
+                                </span>
+                                <div>
+                                    <h4 class="h5 fw-bold text-body mb-1">@clinic.Name</h4>
+                                    <span class="badge bg-success-bg text-success border border-success border-opacity-25 px-2 py-1">Active Clinic</span>
+                                </div>
+                            </div>
 
-                            <span class="icon-box teal mb-3">
-                                <i class="bi bi-hospital"></i>
-                            </span>
-
-                            <h4 class="h5 fw-bold">
-                                @clinic.Name
-                            </h4>
-
-                            <p class="text-muted mb-3">
+                            <p class="text-muted mb-3 fw-medium d-flex align-items-start gap-2">
+                                <i class="bi bi-geo-alt mt-1 text-primary"></i>
                                 @clinic.Address
                             </p>
 
-                            <div class="d-flex align-items-center gap-2 text-muted">
-                                <i class="bi bi-telephone"></i>
-
-                                <span>
-                                    @clinic.PhoneNumber
-                                </span>
+                            <div class="d-flex align-items-center gap-2 text-muted fw-medium mt-auto bg-surface-soft p-3 rounded-3 border">
+                                <i class="bi bi-telephone text-primary"></i>
+                                <span>@clinic.PhoneNumber</span>
                             </div>
                         </div>
                     </article>
@@ -211,8 +183,9 @@
         else
         {
             <div class="col-12">
-                <div class="empty-state">
-                    No clinics available.
+                <div class="empty-state border-0 py-5">
+                    <i class="bi bi-building text-muted opacity-25" style="font-size: 3rem;"></i>
+                    <p class="mt-3 mb-0 fw-medium">No clinics available.</p>
                 </div>
             </div>
         }

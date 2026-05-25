@@ -6,7 +6,7 @@
     var appointmentCount = Model.RecentAppointments?.Count ?? 0;
 }
 
-<section class="hero-panel p-4 p-xl-5 mb-4">
+<section class="hero-panel p-4 p-xl-5 mb-4 animate-in">
     <div class="row g-4 align-items-center">
         <div class="col-lg-7">
             <span class="eyebrow text-white-50"><i class="fa-solid fa-shield-heart"></i> Command center</span>
@@ -14,13 +14,15 @@
             <p class="mb-0 text-white-50">Monitor doctors, patients, appointments, revenue signals, and operational activity across the platform.</p>
         </div>
         <div class="col-lg-5">
-            <div class="glass-panel p-3">
+            <div class="glass-panel p-4 stagger-1 animate-in">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <small class="text-white-50 fw-bold">Completed revenue</small>
-                        <div class="h2 fw-bold mb-0">EGP @Model.TotalRevenue.ToString("N0")</div>
+                        <small class="text-white-50 fw-bold text-uppercase" style="letter-spacing: 0.05em">Completed revenue</small>
+                        <div class="h1 fw-bold mb-0 mt-2">EGP <span class="metric-value">@Model.TotalRevenue.ToString("N0")</span></div>
                     </div>
-                    <i class="fa-solid fa-wallet fs-1 text-white-50"></i>
+                    <div class="bg-white bg-opacity-25 p-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                        <i class="fa-solid fa-wallet fs-3 text-white"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -28,104 +30,121 @@
 </section>
 
 <div class="row g-4 mb-4">
-    <div class="col-md-6 col-xl-3">
-        <div class="stat-card doctors d-flex justify-content-between align-items-center">
-            <div>
+    <div class="col-md-6 col-xl-3 animate-in stagger-1">
+        <div class="stat-card hover-lift">
+            <div class="info">
                 <p>Total Doctors</p>
-                <h2>@Model.DoctorsCount</h2>
+                <h2 class="metric-value">@Model.DoctorsCount</h2>
                 <span>Credentialed providers</span>
             </div>
-            <i class="fa-solid fa-user-doctor"></i>
+            <div class="icon-box" style="background: rgba(37,99,235,0.1); color: #2563eb;">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
-        <div class="stat-card patients d-flex justify-content-between align-items-center">
-            <div>
+    <div class="col-md-6 col-xl-3 animate-in stagger-2">
+        <div class="stat-card hover-lift">
+            <div class="info">
                 <p>Total Patients</p>
-                <h2>@Model.PatientsCount</h2>
+                <h2 class="metric-value">@Model.PatientsCount</h2>
                 <span>Registered accounts</span>
             </div>
-            <i class="fa-solid fa-users"></i>
+            <div class="icon-box green">
+                <i class="fa-solid fa-users"></i>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
-        <div class="stat-card clinics d-flex justify-content-between align-items-center">
-            <div>
+    <div class="col-md-6 col-xl-3 animate-in stagger-3">
+        <div class="stat-card hover-lift">
+            <div class="info">
                 <p>Total Clinics</p>
-                <h2>@Model.ClinicsCount</h2>
+                <h2 class="metric-value">@Model.ClinicsCount</h2>
                 <span>Active locations</span>
             </div>
-            <i class="fa-solid fa-hospital"></i>
+            <div class="icon-box teal">
+                <i class="fa-solid fa-hospital"></i>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
-        <div class="stat-card appointments d-flex justify-content-between align-items-center">
-            <div>
+    <div class="col-md-6 col-xl-3 animate-in stagger-4">
+        <div class="stat-card hover-lift">
+            <div class="info">
                 <p>Total Appointments</p>
-                <h2>@Model.TotalAppointments</h2>
+                <h2 class="metric-value">@Model.TotalAppointments</h2>
                 <span>@Model.TodayAppointments booked today</span>
             </div>
-            <i class="fa-solid fa-calendar-check"></i>
+            <div class="icon-box" style="background: rgba(139,92,246,0.1); color: #8b5cf6;">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-3">
-        <div class="stat-card appointments d-flex justify-content-between align-items-center">
-            <div>
+    
+    <div class="col-md-6 col-xl-3 animate-in stagger-1">
+        <div class="stat-card hover-lift">
+            <div class="info">
                 <p>Pending</p>
-                <h2>@Model.PendingAppointments</h2>
+                <h2 class="metric-value">@Model.PendingAppointments</h2>
                 <span>Awaiting action</span>
             </div>
-            <i class="fa-solid fa-hourglass-half"></i>
+            <div class="icon-box amber">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-3">
-        <div class="stat-card patients d-flex justify-content-between align-items-center">
-            <div>
+    
+    <div class="col-md-6 col-xl-3 animate-in stagger-2">
+        <div class="stat-card hover-lift">
+            <div class="info">
                 <p>Completed</p>
-                <h2>@Model.CompletedAppointments</h2>
+                <h2 class="metric-value">@Model.CompletedAppointments</h2>
                 <span>Finished visits</span>
             </div>
-            <i class="fa-solid fa-circle-check"></i>
+            <div class="icon-box green">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-3">
-        <div class="stat-card clinics d-flex justify-content-between align-items-center">
-            <div>
+    
+    <div class="col-md-6 col-xl-6 animate-in stagger-3">
+        <div class="stat-card hover-lift bg-surface-soft border-primary border-opacity-25">
+            <div class="info">
                 <p>This Month Revenue</p>
-                <h2>@Model.MonthlyRevenue.ToString("N0")</h2>
+                <h2 class="metric-value text-primary">@Model.MonthlyRevenue.ToString("N0")</h2>
                 <span>EGP completed payments</span>
             </div>
-            <i class="fa-solid fa-chart-pie"></i>
+            <div class="icon-box" style="background: var(--primary); color: white;">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="row g-4">
-    <div class="col-xl-8">
-        <div class="admin-card p-4 h-100">
+<div class="row g-4 mb-4">
+    <div class="col-xl-8 animate-in stagger-2">
+        <div class="admin-card p-4 h-100 shadow-sm">
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                 <div>
                     <h5 class="fw-bold mb-1">Appointments & Revenue</h5>
                     <p class="text-muted mb-0">Monthly booking trend and projected revenue.</p>
                 </div>
-                <select id="chartRange" class="form-select w-auto">
+                <select id="chartRange" class="form-select w-auto fw-medium shadow-sm">
                     <option value="year">This Year</option>
                     <option value="month">This Month</option>
                 </select>
             </div>
-            <div class="chart-box">
+            <div class="chart-box mt-2">
                 <canvas id="appointmentsChart"></canvas>
             </div>
         </div>
     </div>
 
-    <div class="col-xl-4">
-        <div class="admin-card p-4 h-100">
+    <div class="col-xl-4 animate-in stagger-3">
+        <div class="admin-card p-4 h-100 shadow-sm">
             <h5 class="fw-bold mb-1">Clinic Mix</h5>
-            <p class="text-muted mb-4">Appointments by clinic.</p>
+            <p class="text-muted mb-4">Appointments distributed by clinic.</p>
             <div class="chart-box">
                 <canvas id="clinicChart"></canvas>
             </div>
@@ -133,111 +152,118 @@
     </div>
 </div>
 
-<div class="row g-4 mt-1">
-    <div class="col-xl-8">
-        <div class="admin-card p-4">
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+<div class="row g-4 mt-1 mb-4">
+    <div class="col-xl-8 animate-in stagger-2">
+        <div class="admin-card p-4 shadow-sm h-100">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                 <div>
                     <h5 class="fw-bold mb-1">Recent Appointments</h5>
                     <p class="text-muted mb-0">Latest bookings moving through the system.</p>
                 </div>
-                <a class="btn btn-primary btn-sm" asp-controller="Appointment" asp-action="Index">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> View all
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Appointment" asp-action="Index">
+                    View all <i class="fa-solid fa-arrow-right ms-1"></i>
                 </a>
             </div>
 
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Patient</th>
-                        <th>Doctor</th>
-                        <th>Clinic</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.RecentAppointments != null && Model.RecentAppointments.Any())
-                    {
-                        foreach (var appt in Model.RecentAppointments)
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Clinic</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.RecentAppointments != null && Model.RecentAppointments.Any())
                         {
-                            var statusClass = appt.Status.ToString().ToLowerInvariant() switch
+                            foreach (var appt in Model.RecentAppointments)
                             {
-                                "confirmed" => "status-success",
-                                "pending" => "status-warning",
-                                "completed" => "status-success",
-                                _ => "status-muted"
-                            };
+                                var statusClass = appt.Status.ToString().ToLowerInvariant() switch
+                                {
+                                    "confirmed" => "status-success",
+                                    "pending" => "status-warning",
+                                    "completed" => "status-info",
+                                    _ => "status-muted"
+                                };
 
+                                <tr>
+                                    <td class="fw-bold text-body">@appt.PatientName</td>
+                                    <td>@appt.DoctorName</td>
+                                    <td>@appt.ClinicName</td>
+                                    <td><span class="status-badge @statusClass">@appt.Status</span></td>
+                                    <td class="text-muted">@appt.AppointmentDate.ToString("dd MMM yyyy, HH:mm")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
                             <tr>
-                                <td class="fw-semibold">@appt.PatientName</td>
-                                <td>@appt.DoctorName</td>
-                                <td>@appt.ClinicName</td>
-                                <td><span class="status-badge @statusClass">@appt.Status</span></td>
-                                <td>@appt.AppointmentDate.ToString("dd MMM yyyy, HH:mm")</td>
+                                <td colspan="5">
+                                    <div class="empty-state border-0 bg-transparent py-4">
+                                        <i class="fa-regular fa-calendar-xmark text-muted opacity-50 mb-3" style="font-size: 2rem;"></i>
+                                        <p class="mb-0 fw-medium">No recent appointments found.</p>
+                                    </div>
+                                </td>
                             </tr>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="5">
-                                <div class="empty-state my-2">
-                                    <i class="fa-regular fa-calendar-xmark"></i>
-                                    <p class="mt-2 mb-0">No recent appointments found.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <div class="col-xl-4">
-        <div class="admin-card p-4 mb-4">
+    <div class="col-xl-4 animate-in stagger-3">
+        <div class="admin-card p-4 mb-4 shadow-sm bg-surface">
             <h5 class="fw-bold mb-3">Quick Actions</h5>
             <div class="d-grid gap-2">
                 <a class="btn quick-action" asp-controller="Doctor" asp-action="Create">
-                    <i class="fa-solid fa-user-doctor text-primary"></i> Add doctor
+                    <i class="fa-solid fa-user-doctor text-primary fs-5 me-2"></i> 
+                    <span class="fw-semibold">Add doctor</span>
                 </a>
                 <a class="btn quick-action" asp-controller="Patient" asp-action="Create">
-                    <i class="fa-solid fa-user-plus text-success"></i> Add patient
+                    <i class="fa-solid fa-user-plus text-success fs-5 me-2"></i> 
+                    <span class="fw-semibold">Add patient</span>
                 </a>
                 <a class="btn quick-action" asp-controller="Clinic" asp-action="Create">
-                    <i class="fa-solid fa-hospital-user text-info"></i> Add clinic
+                    <i class="fa-solid fa-hospital-user text-info fs-5 me-2"></i> 
+                    <span class="fw-semibold">Add clinic</span>
                 </a>
             </div>
         </div>
 
-        <div class="admin-card p-4">
-            <h5 class="fw-bold mb-3">System Activity</h5>
-            <div class="activity-item">
-                <span class="activity-dot"></span>
-                <div>
-                    <div class="fw-bold">Appointment queue refreshed</div>
-                    <small class="text-muted">Updated moments ago</small>
+        <div class="admin-card p-4 shadow-sm bg-surface">
+            <h5 class="fw-bold mb-4">System Activity</h5>
+            <div class="d-flex flex-column gap-3">
+                <div class="activity-item py-0 border-0">
+                    <span class="activity-dot mt-1"></span>
+                    <div>
+                        <div class="fw-bold text-body">Appointment queue refreshed</div>
+                        <small class="text-muted d-block mt-1">Updated moments ago</small>
+                    </div>
                 </div>
-            </div>
-            <div class="activity-item">
-                <span class="activity-dot bg-success"></span>
-                <div>
-                    <div class="fw-bold">Patient records synchronized</div>
-                    <small class="text-muted">@Model.PatientsCount profiles available</small>
+                <div class="activity-item py-0 border-0">
+                    <span class="activity-dot bg-success mt-1 shadow-none"></span>
+                    <div>
+                        <div class="fw-bold text-body">Patient records synchronized</div>
+                        <small class="text-muted d-block mt-1">@Model.PatientsCount profiles available</small>
+                    </div>
                 </div>
-            </div>
-            <div class="activity-item">
-                <span class="activity-dot bg-warning"></span>
-                <div>
-                    <div class="fw-bold">Clinic capacity review</div>
-                    <small class="text-muted">@Model.ClinicsCount clinics in network</small>
+                <div class="activity-item py-0 border-0">
+                    <span class="activity-dot bg-warning mt-1 shadow-none"></span>
+                    <div>
+                        <div class="fw-bold text-body">Clinic capacity review</div>
+                        <small class="text-muted d-block mt-1">@Model.ClinicsCount clinics in network</small>
+                    </div>
                 </div>
             </div>
 
-            <div class="calendar-mini mt-4" aria-label="Calendar widget">
+            <div class="calendar-mini mt-4 pt-3 border-top border-secondary-subtle" aria-label="Calendar widget">
                 @for (var day = 1; day <= 28; day++)
                 {
-                    <span class="@(day == DateTime.Today.Day ? "active" : "")">@day</span>
+                    <span class="@(day == DateTime.Today.Day ? "active shadow-sm" : "")">@day</span>
                 }
             </div>
         </div>
@@ -245,76 +271,89 @@
 </div>
 
 <div class="row g-4 mt-1">
-    <div class="col-xl-6">
-        <div class="admin-card p-4 h-100">
-            <h5 class="fw-bold mb-3">Recent Users</h5>
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Joined</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.RecentUsers.Any())
-                    {
-                        foreach (var user in Model.RecentUsers)
+    <div class="col-xl-6 animate-in stagger-4">
+        <div class="admin-card p-4 h-100 shadow-sm">
+            <h5 class="fw-bold mb-4">Recent Users</h5>
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.RecentUsers.Any())
                         {
-                            <tr>
-                                <td class="fw-semibold">@user.FullName</td>
-                                <td>@user.Email</td>
-                                <td><span class="status-badge status-muted">@user.Role</span></td>
-                                <td>@user.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
-                            </tr>
+                            foreach (var user in Model.RecentUsers)
+                            {
+                                <tr>
+                                    <td class="fw-bold text-body">@user.FullName</td>
+                                    <td class="text-muted">@user.Email</td>
+                                    <td><span class="status-badge status-muted">@user.Role</span></td>
+                                    <td class="text-muted small">@user.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
+                                </tr>
+                            }
                         }
-                    }
-                    else
-                    {
-                        <tr><td colspan="4"><div class="empty-state my-2">No recent users found.</div></td></tr>
-                    }
-                </tbody>
-            </table>
+                        else
+                        {
+                            <tr><td colspan="4"><div class="empty-state border-0 py-3">No recent users found.</div></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <div class="col-xl-6">
-        <div class="admin-card p-4 h-100">
-            <h5 class="fw-bold mb-3">Top Doctors</h5>
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Doctor</th>
-                        <th>Specialization</th>
-                        <th>Appointments</th>
-                        <th>Revenue</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.TopDoctors.Any())
-                    {
-                        foreach (var doctor in Model.TopDoctors)
+    <div class="col-xl-6 animate-in stagger-5">
+        <div class="admin-card p-4 h-100 shadow-sm">
+            <h5 class="fw-bold mb-4">Top Doctors</h5>
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Specialization</th>
+                            <th class="text-center">Visits</th>
+                            <th class="text-end">Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TopDoctors.Any())
                         {
-                            <tr>
-                                <td class="fw-semibold">@doctor.DoctorName</td>
-                                <td>@doctor.Specialization</td>
-                                <td>@doctor.AppointmentCount</td>
-                                <td>EGP @doctor.Revenue.ToString("N0")</td>
-                            </tr>
+                            foreach (var doctor in Model.TopDoctors)
+                            {
+                                <tr>
+                                    <td class="fw-bold text-body">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="avatar-sm bg-primary-soft text-primary rounded-circle"><i class="fa-solid fa-user-doctor"></i></div>
+                                            @doctor.DoctorName
+                                        </div>
+                                    </td>
+                                    <td class="text-muted">@doctor.Specialization</td>
+                                    <td class="text-center fw-medium">@doctor.AppointmentCount</td>
+                                    <td class="text-end fw-bold text-primary">EGP @doctor.Revenue.ToString("N0")</td>
+                                </tr>
+                            }
                         }
-                    }
-                    else
-                    {
-                        <tr><td colspan="4"><div class="empty-state my-2">No appointment trends yet.</div></td></tr>
-                    }
-                </tbody>
-            </table>
+                        else
+                        {
+                            <tr><td colspan="4"><div class="empty-state border-0 py-3">No appointment trends yet.</div></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
+        // Use modern color palette for charts matching design system
+        Chart.defaults.color = '#64748b';
+        Chart.defaults.font.family = '"Inter", system-ui, -apple-system, sans-serif';
+
         const appointmentSeries = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyAppointments));
         const revenueSeries = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyRevenuePoints));
         const recentAppointments = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.RecentAppointments));
@@ -322,7 +361,20 @@
         const appointments = appointmentSeries.map(point => point.Count);
         const revenue = revenueSeries.map(point => point.Amount);
 
-        new Chart(document.getElementById("appointmentsChart"), {
+        // Chart 1: Appointments & Revenue Line Chart
+        const ctx1 = document.getElementById("appointmentsChart").getContext('2d');
+        
+        // Create gradient for Revenue line
+        const gradientRevenue = ctx1.createLinearGradient(0, 0, 0, 300);
+        gradientRevenue.addColorStop(0, 'rgba(20, 184, 166, 0.2)');
+        gradientRevenue.addColorStop(1, 'rgba(20, 184, 166, 0)');
+
+        // Create gradient for Appointments line
+        const gradientAppt = ctx1.createLinearGradient(0, 0, 0, 300);
+        gradientAppt.addColorStop(0, 'rgba(37, 99, 235, 0.2)');
+        gradientAppt.addColorStop(1, 'rgba(37, 99, 235, 0)');
+
+        new Chart(ctx1, {
             type: "line",
             data: {
                 labels,
@@ -331,29 +383,74 @@
                         label: "Appointments",
                         data: appointments,
                         borderWidth: 3,
-                        tension: 0.42,
+                        tension: 0.4,
                         fill: true,
-                        backgroundColor: "rgba(37,99,235,0.12)",
-                        borderColor: "#2563eb"
+                        backgroundColor: gradientAppt,
+                        borderColor: "#2563eb",
+                        pointBackgroundColor: "#ffffff",
+                        pointBorderColor: "#2563eb",
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
                     },
                     {
-                        label: "Revenue",
+                        label: "Revenue (EGP)",
                         data: revenue,
                         borderWidth: 3,
-                        tension: 0.42,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: gradientRevenue,
                         borderColor: "#14b8a6",
-                        backgroundColor: "rgba(20,184,166,0.08)"
+                        pointBackgroundColor: "#ffffff",
+                        pointBorderColor: "#14b8a6",
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { labels: { usePointStyle: true } } },
-                scales: { y: { beginAtZero: true } }
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: { 
+                    legend: { 
+                        position: 'top',
+                        align: 'end',
+                        labels: { 
+                            usePointStyle: true,
+                            boxWidth: 8,
+                            padding: 20,
+                            font: { weight: '600' }
+                        } 
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleFont: { size: 13, weight: '700' },
+                        bodyFont: { size: 13 },
+                        padding: 12,
+                        cornerRadius: 8,
+                        displayColors: true,
+                    }
+                },
+                scales: { 
+                    y: { 
+                        beginAtZero: true,
+                        grid: { borderDash: [4, 4], color: 'rgba(0,0,0,0.05)' },
+                        border: { display: false }
+                    },
+                    x: {
+                        grid: { display: false },
+                        border: { display: false }
+                    }
+                }
             }
         });
 
+        // Chart 2: Clinic Mix Doughnut Chart
         const clinics = (recentAppointments || []).reduce((acc, appointment) => {
             const key = appointment.ClinicName || "Unassigned";
             acc[key] = (acc[key] || 0) + 1;
@@ -369,15 +466,26 @@
                 labels: clinicLabels.length ? clinicLabels : ["No clinic data"],
                 datasets: [{
                     data: clinicData.length ? clinicData : [1],
-                    backgroundColor: ["#2563eb", "#14b8a6", "#f59e0b", "#22c55e", "#ef4444"],
-                    borderWidth: 0
+                    backgroundColor: ["#2563eb", "#14b8a6", "#6366f1", "#f59e0b", "#ec4899", "#8b5cf6"],
+                    borderWidth: 0,
+                    hoverOffset: 4
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: "68%",
-                plugins: { legend: { position: "bottom" } }
+                cutout: "75%",
+                plugins: { 
+                    legend: { 
+                        position: "bottom",
+                        labels: { usePointStyle: true, padding: 20, font: { weight: '500' } }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                }
             }
         });
     </script>

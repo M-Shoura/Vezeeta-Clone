@@ -2,78 +2,85 @@
 
 @{
     ViewData["Title"] = "Clinics";
-    var isAdmin = User.IsInRole("Admin");
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("admin");
 }
 
 <div class="app-container">
-    <div class="page-header">
+    <div class="page-header animate-in">
         <div>
-            <span class="eyebrow"><i class="bi bi-hospital"></i> Clinic network</span>
+            <span class="eyebrow"><i class="bi bi-hospital text-info"></i> Clinic network</span>
             <h1 class="page-title mt-2">Clinics</h1>
             <p class="page-subtitle">Locations, contact details, and operational status.</p>
         </div>
         @if (isAdmin)
         {
-            <a asp-action="Create" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Add Clinic
+            <a asp-action="Create" class="btn btn-primary shadow-sm fw-bold px-4">
+                <i class="bi bi-plus-lg me-2"></i> Add Clinic
             </a>
         }
     </div>
 
-    <div class="section-card p-4">
+    <div class="section-card p-4 animate-in stagger-1">
         @if (Model.Any())
         {
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var clinic in Model)
-                    {
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
                         <tr>
-                            <td class="fw-semibold">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="icon-box teal" style="width:38px;height:38px;flex-basis:38px;"><i class="bi bi-hospital"></i></span>
-                                    @clinic.Name
-                                </div>
-                            </td>
-                            <td>@clinic.Address</td>
-                            <td>@clinic.PhoneNumber</td>
-                            <td>
-                                <span class="status-badge @(clinic.IsActive ? "status-success" : "status-muted")">
-                                    @(clinic.IsActive ? "Active" : "Inactive")
-                                </span>
-                            </td>
-                            <td class="text-end">
-                                <a asp-action="Details" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-eye"></i> Details
-                                </a>
-                                @if (isAdmin)
-                                {
-                                    <a asp-action="Edit" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-warning">
-                                        <i class="bi bi-pencil"></i> Edit
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-danger">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </a>
-                                }
-                            </td>
+                            <th>Clinic Name</th>
+                            <th>Address</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var clinic in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold text-body">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-hospital fs-5"></i>
+                                        </div>
+                                        @clinic.Name
+                                    </div>
+                                </td>
+                                <td class="text-muted"><i class="bi bi-geo-alt me-1 text-primary"></i> @clinic.Address</td>
+                                <td class="text-muted"><i class="bi bi-telephone me-1 text-primary"></i> @clinic.PhoneNumber</td>
+                                <td>
+                                    <span class="status-badge @(clinic.IsActive ? "status-success" : "status-muted") px-3 py-1">
+                                        @(clinic.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a asp-action="Details" asp-route-id="@clinic.Id" class="btn btn-sm btn-light border shadow-sm fw-medium">
+                                            <i class="bi bi-eye text-primary"></i> Details
+                                        </a>
+                                        @if (isAdmin)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-warning shadow-sm" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@clinic.Id" class="btn btn-sm btn-outline-danger shadow-sm" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
         else
         {
-            <div class="empty-state">
-                <i class="bi bi-hospital"></i>
-                <p class="mt-2 mb-0">No clinics found.</p>
+            <div class="empty-state border-0 py-5">
+                <i class="bi bi-hospital text-muted opacity-25" style="font-size: 3rem;"></i>
+                <h5 class="fw-bold mt-3 text-body">No clinics found</h5>
+                <p class="text-muted mb-0">The network currently has no registered locations.</p>
             </div>
         }
     </div>

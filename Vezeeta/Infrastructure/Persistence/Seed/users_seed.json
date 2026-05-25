@@ -1,7 +1,7 @@
 [
   {
     "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf0001",
-    "email": "admin@vezeeta.local",
+    "email": "admin@Taybat.local",
     "password": "Admin123!",
     "fullName": "Admin User",
     "role": "Admin",
@@ -11,9 +11,9 @@
   },
   {
     "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf1001",
-    "email": "dr.sara@vezeeta.local",
+    "email": "dr.sara@Taybat.local",
     "password": "Doctor123!",
-    "fullName": "Dr. Sara Ahmed",
+    "fullName": "Sara Ahmed",
     "role": "Doctor",
     "address": "Dokki, Giza",
     "phoneNumber": "+201000000001",
@@ -21,9 +21,9 @@
   },
   {
     "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf1002",
-    "email": "dr.omar@vezeeta.local",
+    "email": "dr.omar@Taybat.local",
     "password": "Doctor123!",
-    "fullName": "Dr. Omar Hassan",
+    "fullName": "Omar Hassan",
     "role": "Doctor",
     "address": "Maadi, Cairo",
     "phoneNumber": "+201000000002",
@@ -31,7 +31,7 @@
   },
   {
     "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf2001",
-    "email": "patient.hana@vezeeta.local",
+    "email": "patient.hana@Taybat.local",
     "password": "Patient123!",
     "fullName": "Hana Mostafa",
     "role": "Patient",
@@ -41,7 +41,7 @@
   },
   {
     "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf2002",
-    "email": "patient.youssef@vezeeta.local",
+    "email": "patient.youssef@Taybat.local",
     "password": "Patient123!",
     "fullName": "Youssef Adel",
     "role": "Patient",
@@ -51,7 +51,7 @@
   },
   {
     "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf3001",
-    "email": "test.patient@vezeeta.local",
+    "email": "test.patient@Taybat.local",
     "password": "Patient123!",
     "fullName": "Test Patient",
     "role": "Patient",
@@ -61,9 +61,9 @@
   },
   {
     "id": "d4f0d083-3f8b-4ec6-a7b0-0d1e6ebf1999",
-    "email": "dr.test@vezeeta.local",
+    "email": "dr.test@Taybat.local",
     "password": "Doctor123!",
-    "fullName": "Dr. Test Physician",
+    "fullName": "Abuttalib",
     "role": "Doctor",
     "address": "Test Medical Center, Cairo",
     "phoneNumber": "+201000000888",

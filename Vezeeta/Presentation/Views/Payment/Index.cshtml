@@ -2,83 +2,109 @@
 
 @{
     ViewData["Title"] = "Payments";
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("admin");
 }
 
 <div class="app-container">
-    <div class="page-header">
-        <div>
-            <span class="eyebrow"><i class="bi bi-credit-card"></i> Revenue operations</span>
-            <h1 class="page-title mt-2">Payments</h1>
-            <p class="page-subtitle">Track appointment payments, methods, and settlement status.</p>
+    <div class="page-header animate-in border-bottom pb-4 mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-primary-soft text-primary p-3 rounded-4">
+                <i class="bi bi-wallet2 fs-2"></i>
+            </div>
+            <div>
+                <span class="eyebrow"><i class="bi bi-currency-exchange text-info"></i> Revenue operations</span>
+                <h1 class="page-title mt-1 mb-1">Payments</h1>
+                <p class="page-subtitle">Track appointment payments, methods, and settlement status.</p>
+            </div>
         </div>
-        @if (!User.IsInRole("Admin"))
-        {
-            <a class="btn btn-primary" asp-action="Create">
-                <i class="bi bi-plus-lg"></i> Add Payment
-            </a>
-        }
+        <div class="mt-3 mt-md-0">
+            @if (!isAdmin)
+            {
+                <a class="btn btn-primary shadow-sm fw-bold px-4" asp-action="Create">
+                    <i class="bi bi-plus-lg me-2"></i> Add Payment
+                </a>
+            }
+        </div>
     </div>
 
-    <div class="section-card p-4">
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>Amount</th>
-                    <th>Method</th>
-                    <th>Status</th>
-                    <th>Appointment</th>
-                    <th>Doctor</th>
-                    <th>Patient</th>
-                    <th>Clinic</th>
-                    <th>Created</th>
-                    <th class="text-end">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Any())
-                {
-                    foreach (var payment in Model)
-                    {
-                        var statusClass = payment.Status.ToString().ToLowerInvariant() switch
-                        {
-                            "paid" or "completed" or "success" => "status-success",
-                            "pending" => "status-warning",
-                            "failed" or "cancelled" => "status-danger",
-                            _ => "status-muted"
-                        };
-
+    <div class="section-card p-4 animate-in stagger-1">
+        @if (Model.Any())
+        {
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
                         <tr>
-                            <td class="fw-bold">@payment.Amount.ToString("C")</td>
-                            <td>@payment.PaymentMethod</td>
-                            <td><span class="status-badge @statusClass">@payment.Status</span></td>
-                            <td>#@payment.AppointmentId</td>
-                            <td>@payment.DoctorName</td>
-                            <td>@payment.PatientName</td>
-                            <td>@payment.ClinicName</td>
-                            <td>@payment.CreatedAt.ToLocalTime().ToString("g")</td>
-                            <td class="text-end">
-                                <a asp-action="Details" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-primary">Details</a>
-                                @if (!User.IsInRole("Admin"))
-                                {
-                                    <a asp-action="Edit" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-warning">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                                }
-                            </td>
+                            <th>Transaction</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Method</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th class="text-end">Actions</th>
                         </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="9">
-                            <div class="empty-state my-2">
-                                <i class="bi bi-credit-card"></i>
-                                <p class="mt-2 mb-0">No payments found.</p>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var payment in Model)
+                        {
+                            var statusClass = payment.Status.ToString().ToLowerInvariant() switch
+                            {
+                                "paid" or "completed" or "success" => "status-success",
+                                "pending" => "status-warning",
+                                "failed" or "cancelled" => "status-danger",
+                                _ => "status-muted"
+                            };
+
+                            var methodString = payment.PaymentMethod.ToString().ToLowerInvariant();
+                            var methodIcon = "bi-bank";
+                            if (methodString.Contains("card") || methodString.Contains("visa") || methodString.Contains("master")) methodIcon = "bi-credit-card";
+                            else if (methodString.Contains("cash")) methodIcon = "bi-cash";
+                            else if (methodString.Contains("wallet") || methodString.Contains("pay")) methodIcon = "bi-wallet";
+
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-body">@payment.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</div>
+                                    <small class="text-muted font-monospace">APT-#@payment.AppointmentId</small>
+                                </td>
+                                <td>
+                                    <span class="fw-bold fs-6 text-body">@payment.Amount.ToString("C")</span>
+                                </td>
+                                <td><span class="status-badge @statusClass px-3 py-1 fw-bold">@payment.Status</span></td>
+                                <td>
+                                    <span class="badge bg-surface-soft text-body border px-2 py-1">
+                                        <i class="bi @methodIcon me-1 text-muted"></i> @payment.PaymentMethod
+                                    </span>
+                                </td>
+                                <td class="fw-medium text-body">@payment.PatientName</td>
+                                <td class="fw-medium text-body">@payment.DoctorName</td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a asp-action="Details" asp-route-id="@payment.Id" class="btn btn-sm btn-light border shadow-sm fw-medium">
+                                            Details
+                                        </a>
+                                        @if (!isAdmin)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-warning shadow-sm" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-danger shadow-sm" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state border-0 py-5">
+                <i class="bi bi-credit-card text-muted opacity-25" style="font-size: 3rem;"></i>
+                <h5 class="fw-bold mt-3 text-body">No payments found</h5>
+                <p class="text-muted mb-0">There are no financial transactions recorded yet.</p>
+            </div>
+        }
     </div>
 </div>

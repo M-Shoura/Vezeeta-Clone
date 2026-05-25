@@ -142,7 +142,7 @@ namespace Infrastructure.Services
                 shipping_data = new
                 {
                     apartment = "0", email, floor = "0", first_name = firstName,
-                    street = description ?? "Vezeeta appointment payment", building = "0",
+                    street = description ?? "Taybat appointment payment", building = "0",
                     phone_number = phone, shipping_method = "PKG", postal_code = "00000",
                     city = "Cairo", country = "EG", last_name = lastName, state = "Cairo"
                 }
@@ -167,7 +167,7 @@ namespace Infrastructure.Services
                 billing_data = new
                 {
                     apartment = "0", email, floor = "0", first_name = firstName,
-                    street = description ?? "Vezeeta appointment payment", building = "0",
+                    street = description ?? "Taybat appointment payment", building = "0",
                     phone_number = phone, shipping_method = "PKG", postal_code = "00000",
                     city = "Cairo", country = "EG", last_name = lastName, state = "Cairo"
                 },
@@ -188,12 +188,12 @@ namespace Infrastructure.Services
         private static (string FirstName, string LastName, string Email, string Phone) ExtractPatientInfo(Payment payment)
         {
             var patient = payment.Appointment?.Patient?.ApplicationUser;
-            var fullName = patient?.FullName ?? "Vezeeta Patient";
+            var fullName = patient?.FullName ?? "Taybat Patient";
             var names = fullName.Split(' ', 2);
             var firstName = names[0];
             var lastName = names.Length > 1 ? names[1] : "Patient";
 
-            return (firstName, lastName, patient?.Email ?? "payment@vezeeta.local", patient?.PhoneNumber ?? "01000000000");
+            return (firstName, lastName, patient?.Email ?? "payment@Taybat.local", patient?.PhoneNumber ?? "01000000000");
         }
     }
 }

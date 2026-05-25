@@ -1,230 +1,144 @@
-﻿@model Application.DTOs.Auth.RegisterDto
-
-@using Domain.Enums
-
+@using Application.DTOs.Auth
+@model RegisterDto
 @{
     ViewData["Title"] = "Register";
-    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+    Layout = "_AuthLayout";
 }
 
-<div class="card auth-card shadow-lg">
-
-    <div class="auth-header text-center">
-        <h2>Create Account</h2>
-        <p class="mb-0">Join the medical platform</p>
+<div class="w-100" style="max-width: 600px; margin: 0 auto;">
+    <div class="mb-4">
+        <h2 class="fw-bold text-body" style="letter-spacing: -0.03em;">Create an account</h2>
+        <p class="text-muted">Join Taybat to manage your healthcare journey.</p>
     </div>
 
-    <div class="card-body p-4">
+    <form id="registerForm" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-        <form asp-action="Register"
-              method="post"
-              enctype="multipart/form-data">
-
-            <div asp-validation-summary="ModelOnly"
-                 class="alert alert-danger"></div>
-
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="FullName"></label>
-
-                    <input asp-for="FullName"
-                           class="form-control" />
-
-                    <span asp-validation-for="FullName"
-                          class="text-danger small"></span>
+        <div class="auth-section bg-surface shadow-sm border-0 position-relative" style="border-left: 4px solid var(--primary) !important;">
+            <h5 class="fw-bold mb-3 fs-6">Account Details</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="FullName" class="form-label">Full Name</label>
+                    <input asp-for="FullName" class="form-control" autocomplete="name" aria-required="true" placeholder="John Doe" />
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Email"></label>
-
-                    <input asp-for="Email"
-                           class="form-control" />
-
-                    <span asp-validation-for="Email"
-                          class="text-danger small"></span>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="PhoneNumber"></label>
-
-                    <input asp-for="PhoneNumber"
-                           class="form-control" />
-
-                    <span asp-validation-for="PhoneNumber"
-                          class="text-danger small"></span>
+                <div class="col-md-6">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Role"></label>
-
-                    <select asp-for="Role"
-                            class="form-select"
-                            id="roleSelect"
-                            asp-items="Html.GetEnumSelectList<UserRole>()">
+                <div class="col-md-6">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="••••••••" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control" id="phone" autocomplete="tel" aria-required="true" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Role" class="form-label">I am a</label>
+                    <select asp-for="Role" class="form-select" id="roleSelect">
+                        <option value="Patient">Patient</option>
+                        <option value="Doctor">Doctor</option>
                     </select>
+                    <span asp-validation-for="Role" class="text-danger small"></span>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Password"></label>
-
-                    <input asp-for="Password"
-                           class="form-control" />
-
-                    <span asp-validation-for="Password"
-                          class="text-danger small"></span>
+                <div class="col-12">
+                    <label asp-for="ProfilePicture" class="form-label">Profile Picture (Optional)</label>
+                    <input asp-for="ProfilePicture" type="file" accept=".jpg,.jpeg,.png,.webp,image/*" class="form-control" />
+                    <span asp-validation-for="ProfilePicture" class="text-danger small"></span>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="ConfirmPassword"></label>
-
-                    <input asp-for="ConfirmPassword"
-                           class="form-control" />
-
-                    <span asp-validation-for="ConfirmPassword"
-                          class="text-danger small"></span>
-                </div>
-
-                <div class="col-12 mb-3">
-                    <label asp-for="Address"></label>
-
-                    <textarea asp-for="Address"
-                              class="form-control"></textarea>
-                </div>
-
-                <div class="col-12 mb-3">
-                    <label asp-for="ProfilePicture"></label>
-
-                    <input asp-for="ProfilePicture"
-                           class="form-control" />
-                </div>
-
             </div>
+        </div>
 
-            <!-- Doctor Section -->
-            <div id="doctorFields" class="border rounded p-3 mb-4 d-none">
-
-                <h5 class="mb-3">Doctor Information</h5>
-
-                <div class="mb-3">
-                    <label asp-for="Specialization"></label>
-
-                    <input asp-for="Specialization"
-                           class="form-control" />
+        <div id="patientFields" class="auth-section bg-surface shadow-sm border-0 position-relative animate-in" style="border-left: 4px solid var(--secondary) !important;">
+            <h5 class="fw-bold mb-3 fs-6">Patient Profile</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="DateOfBirth" class="form-label">Birth Date</label>
+                    <input asp-for="DateOfBirth" type="date" class="form-control" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
                 </div>
-
-                <div class="mb-3">
-                    <label asp-for="Qualification"></label>
-
-                    <input asp-for="Qualification"
-                           class="form-control" />
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="YearsOfExperience"></label>
-
-                    <input asp-for="YearsOfExperience"
-                           class="form-control" />
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Bio"></label>
-
-                    <textarea asp-for="Bio"
-                              class="form-control"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="LicenseNumber"></label>
-
-                    <input asp-for="LicenseNumber"
-                           class="form-control" />
-                </div>
-
-            </div>
-
-            <!-- Patient Section -->
-            <div id="patientFields" class="border rounded p-3 mb-4 d-none">
-
-                <h5 class="mb-3">Patient Information</h5>
-
-                <div class="mb-3">
-                    <label asp-for="DateOfBirth"></label>
-
-                    <input asp-for="DateOfBirth"
-                           class="form-control" />
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Gender"></label>
-
-                    <select asp-for="Gender"
-                            class="form-select"
-                            asp-items="Html.GetEnumSelectList<Gender>()">
+                <div class="col-md-6">
+                    <label asp-for="Gender" class="form-label">Gender</label>
+                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Domain.Enums.Gender>()" class="form-select">
+                        <option value="">Select Gender</option>
                     </select>
+                    <span asp-validation-for="Gender" class="text-danger small"></span>
                 </div>
-
-                <div class="mb-3">
-                    <label asp-for="BloodType"></label>
-
-                    <input asp-for="BloodType"
-                           class="form-control" />
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="EmergencyContactName"></label>
-
-                    <input asp-for="EmergencyContactName"
-                           class="form-control" />
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="EmergencyContactPhone"></label>
-
-                    <input asp-for="EmergencyContactPhone"
-                           class="form-control" />
-                </div>
-
             </div>
+        </div>
 
-            <button type="submit"
-                    class="btn btn-primary w-100">
-                Create Account
-            </button>
+        <div id="doctorFields" class="auth-section bg-surface shadow-sm border-0 position-relative d-none animate-in" style="border-left: 4px solid var(--info) !important;">
+            <h5 class="fw-bold mb-3 fs-6">Doctor Profile</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Specialization" class="form-label">Specialization <span class="text-danger">*</span></label>
+                    <input asp-for="Specialization" class="form-control" placeholder="e.g. Cardiology" />
+                    <span asp-validation-for="Specialization" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Qualification" class="form-label">Qualification <span class="text-danger">*</span></label>
+                    <input asp-for="Qualification" class="form-control" placeholder="e.g. MD, PhD" />
+                    <span asp-validation-for="Qualification" class="text-danger small"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Bio" class="form-label">Bio (Optional)</label>
+                    <textarea asp-for="Bio" class="form-control" rows="2" placeholder="Tell patients about yourself..."></textarea>
+                    <span asp-validation-for="Bio" class="text-danger small"></span>
+                </div>
+            </div>
+        </div>
 
-        </form>
-    </div>
+        <button id="registerSubmit" type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm mb-4">
+            Create Account
+        </button>
+
+        <div class="text-center mt-3">
+            <p class="text-muted">Already have an account? <a asp-action="Login" class="text-primary fw-bold text-decoration-none">Sign in</a></p>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const roleSelect = document.getElementById("roleSelect");
+            const patientFields = document.getElementById("patientFields");
+            const doctorFields = document.getElementById("doctorFields");
 
-        const roleSelect = document.getElementById('roleSelect');
-        const doctorFields = document.getElementById('doctorFields');
-        const patientFields = document.getElementById('patientFields');
-
-        function toggleRoleFields() {
-
-            const roleText =
-                roleSelect.options[roleSelect.selectedIndex].text;
-
-            doctorFields.classList.add('d-none');
-            patientFields.classList.add('d-none');
-
-            if (roleText === 'Doctor') {
-                doctorFields.classList.remove('d-none');
+            function toggleRoleFields() {
+                const selectedRole = roleSelect.value;
+                if (selectedRole === "Patient") {
+                    patientFields.classList.remove("d-none");
+                    doctorFields.classList.add("d-none");
+                } else if (selectedRole === "Doctor") {
+                    doctorFields.classList.remove("d-none");
+                    patientFields.classList.add("d-none");
+                }
             }
 
-            if (roleText === 'Patient') {
-                patientFields.classList.remove('d-none');
+            roleSelect.addEventListener("change", toggleRoleFields);
+            toggleRoleFields();
+
+            const phoneInput = document.querySelector("#phone");
+            if (phoneInput) {
+                window.intlTelInput(phoneInput, {
+                    initialCountry: "eg",
+                    preferredCountries: ["eg", "jo", "lb", "sa", "ae"],
+                    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                });
             }
-        }
-
-        toggleRoleFields();
-
-        roleSelect.addEventListener('change', toggleRoleFields);
-
+        });
     </script>
-
+    <partial name="_ValidationScriptsPartial" />
 }

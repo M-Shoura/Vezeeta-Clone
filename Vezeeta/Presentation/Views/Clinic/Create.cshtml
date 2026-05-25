@@ -4,9 +4,16 @@
     ViewData["Title"] = "Add Clinic";
 }
 
-<div class="container mt-4">
-    <h1 class="fw-bold mb-4">Add Clinic</h1>
-    <partial name="_ClinicForm" model="Model" />
+<div class="app-container" style="max-width: 800px; margin: 0 auto;">
+    <div class="page-header animate-in border-bottom pb-3 mb-4">
+        <a asp-action="Index" class="btn btn-sm btn-light text-muted mb-3 shadow-sm border fw-medium"><i class="bi bi-arrow-left me-1"></i> Back to Clinics</a>
+        <h1 class="page-title"><i class="bi bi-hospital me-2 text-primary"></i> Add New Clinic</h1>
+        <p class="page-subtitle">Register a new care facility to the network.</p>
+    </div>
+
+    <div class="section-card p-4 p-md-5 animate-in stagger-1">
+        <partial name="_ClinicForm" model="Model" />
+    </div>
 </div>
 
 @section Scripts {

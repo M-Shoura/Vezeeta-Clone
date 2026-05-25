@@ -1,76 +1,121 @@
 @{
-    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-    string IsActive(string controller) =>
-        string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    var controller = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["Action"]?.ToString();
+    string IsActive(string c, string a = "Index") => controller == c && action == a ? "active" : "";
 }
 
-<aside class="sidebar" aria-label="Admin navigation">
-    <div class="sidebar-header">
-        <div class="logo-box">
-            <i class="fa-solid fa-heart-pulse"></i>
+<aside class="sidebar">
+    <div class="sidebar-header d-flex justify-content-between align-items-center">
+        <a asp-controller="Home" asp-action="Index" class="logo-box text-decoration-none">
+            <i class="bi bi-heart-pulse-fill"></i>
             <div>
-                <h4>Vezeeta</h4>
-                <span>Healthcare OS</span>
+                <h4>Taybat</h4>
+                <span>Workspace</span>
             </div>
-        </div>
+        </a>
+        <button class="sidebar-toggle btn btn-sm text-white-50 p-0 border-0 shadow-none d-lg-none" data-sidebar-toggle aria-label="Close sidebar">
+            <i class="bi bi-x-lg fs-4"></i>
+        </button>
     </div>
 
-    <ul class="sidebar-menu">
-        <li>
-            <a asp-controller="Admin" asp-action="Index" class="@IsActive("Admin")">
-                <i class="fa-solid fa-chart-line"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li>
-            <a asp-controller="Doctor" asp-action="Index" class="@IsActive("Doctor")">
-                <i class="fa-solid fa-user-doctor"></i>
-                <span>Doctors</span>
-            </a>
-        </li>
-        <li>
-            <a asp-controller="Patient" asp-action="Index" class="@IsActive("Patient")">
-                <i class="fa-solid fa-users"></i>
-                <span>Patients</span>
-            </a>
-        </li>
-        <li>
-            <a asp-controller="Appointment" asp-action="Index" class="@IsActive("Appointment")">
-                <i class="fa-solid fa-calendar-check"></i>
-                <span>Appointments</span>
-            </a>
-        </li>
-        <li>
-            <a asp-controller="Clinic" asp-action="Index" class="@IsActive("Clinic")">
-                <i class="fa-solid fa-hospital"></i>
-                <span>Clinics</span>
-            </a>
-        </li>
-        <li>
-            <a asp-controller="Drug" asp-action="Index" class="@IsActive("Drug")">
-                <i class="fa-solid fa-pills"></i>
-                <span>Drugs</span>
-            </a>
-        </li>
-        <li>
-            <a asp-controller="Payment" asp-action="Index" class="@IsActive("Payment")">
-                <i class="fa-solid fa-credit-card"></i>
-                <span>Payments</span>
-            </a>
-        </li>
-        <li>
-            <a asp-controller="Review" asp-action="Index" class="@IsActive("Review")">
-                <i class="fa-solid fa-star"></i>
-                <span>Reviews</span>
-            </a>
-        </li>
-    </ul>
+    <div class="sidebar-body">
+        <ul class="sidebar-menu">
+            <li class="sidebar-menu-header">Main</li>
+
+            @if (User.IsInRole("Admin") || User.IsInRole("admin"))
+            {
+                <li>
+                    <a asp-controller="Admin" asp-action="Index" class="@IsActive("Admin", "Index")">
+                        <i class="bi bi-grid-1x2"></i> Overview
+                    </a>
+                </li>
+                
+                <li class="sidebar-menu-header">Management</li>
+                <li>
+                    <a asp-controller="Doctor" asp-action="Index" class="@IsActive("Doctor")">
+                        <i class="bi bi-person-badge"></i> Doctors
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Patient" asp-action="Index" class="@IsActive("Patient")">
+                        <i class="bi bi-people"></i> Patients
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Clinic" asp-action="Index" class="@IsActive("Clinic")">
+                        <i class="bi bi-hospital"></i> Clinics
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Appointment" asp-action="Index" class="@IsActive("Appointment")">
+                        <i class="bi bi-calendar-check"></i> Appointments
+                    </a>
+                </li>
+                
+                <li class="sidebar-menu-header">Clinical Data</li>
+                <li>
+                    <a asp-controller="Drug" asp-action="Index" class="@IsActive("Drug")">
+                        <i class="bi bi-capsule"></i> Drugs Registry
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="MedicalRecord" asp-action="Index" class="@IsActive("MedicalRecord")">
+                        <i class="bi bi-file-medical"></i> Medical Records
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Prescription" asp-action="Index" class="@IsActive("Prescription")">
+                        <i class="bi bi-prescription2"></i> Prescriptions
+                    </a>
+                </li>
+
+                <li class="sidebar-menu-header">Finance & Feedback</li>
+                <li>
+                    <a asp-controller="Payment" asp-action="Index" class="@IsActive("Payment")">
+                        <i class="bi bi-credit-card"></i> Payments
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Review" asp-action="Index" class="@IsActive("Review")">
+                        <i class="bi bi-star"></i> Reviews
+                    </a>
+                </li>
+            }
+            else if (User.IsInRole("Doctor") || User.IsInRole("doctor"))
+            {
+                <li>
+                    <a asp-controller="Doctor" asp-action="Dashboard" class="@IsActive("Doctor", "Dashboard")">
+                        <i class="bi bi-grid-1x2"></i> Workspace
+                    </a>
+                </li>
+                
+                <li class="sidebar-menu-header">My Practice</li>
+                <li>
+                    <a asp-controller="Appointment" asp-action="Index" class="@IsActive("Appointment")">
+                        <i class="bi bi-calendar-check"></i> Schedule
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="MedicalRecord" asp-action="Index" class="@IsActive("MedicalRecord")">
+                        <i class="bi bi-file-medical"></i> Patient Records
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Prescription" asp-action="Index" class="@IsActive("Prescription")">
+                        <i class="bi bi-prescription2"></i> Prescriptions
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
 
     <div class="sidebar-footer">
-        <small class="text-uppercase text-white-50 fw-bold">System health</small>
-        <div class="d-flex align-items-center justify-content-between mt-2">
-            <span class="fw-bold text-white">Operational</span>
-            <span class="status-badge status-success">Live</span>
+        <div class="status-box">
+            <div class="d-flex align-items-center gap-2">
+                <div class="activity-dot shadow-none mt-0"></div>
+                <span>System Online</span>
+            </div>
+            <i class="bi bi-cloud-check text-success"></i>
         </div>
     </div>
 </aside>

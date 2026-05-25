@@ -1,39 +1,136 @@
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Home Page";
 }
 
 <div class="app-container">
-    <section class="hero-panel p-4 p-xl-5 mb-5">
-        <div class="row g-4 align-items-center">
-            <div class="col-lg-7">
-                <span class="eyebrow text-white-50"><i class="bi bi-heart-pulse"></i> Premium healthcare booking</span>
-                <h1 class="display-5 fw-bold mt-3 mb-3">Find trusted doctors and manage care without the waiting-room chaos.</h1>
-                <p class="lead text-white-50 mb-4">Book visits, track appointments, and keep your healthcare journey organized in a clean modern workspace.</p>
-                <form asp-controller="Doctor" asp-action="Index" method="get" class="row g-2">
-                    <div class="col-md-5">
-                        <input class="form-control form-control-lg" name="name" placeholder="Doctor name" />
-                    </div>
-                    <div class="col-md-5">
-                        <input class="form-control form-control-lg" name="specialization" placeholder="Specialization" />
-                    </div>
-                    <div class="col-md-2 d-grid">
-                        <button class="btn btn-warning btn-lg" type="submit"><i class="bi bi-search"></i></button>
-                    </div>
-                </form>
+    <section class="hero-panel p-5 mb-5 text-center text-lg-start animate-in">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7 position-relative z-1">
+                <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">Premium Care Network</span>
+                <h1 class="display-4 fw-bold mt-2 mb-4 text-white" style="line-height: 1.15; letter-spacing: -0.02em;">Find the right doctor and book your appointment instantly.</h1>
+                <p class="lead mb-4 text-white-50" style="max-width: 600px;">Access top-rated specialists, manage your medical records, and experience seamless healthcare from anywhere.</p>
+
+                <div class="glass-panel p-3 p-md-4 rounded-4 mt-4 shadow-lg stagger-1 animate-in">
+                    <form asp-controller="Doctor" asp-action="Index" method="get" class="row g-2 align-items-center">
+                        <div class="col-md-8">
+                            <div class="position-relative">
+                                <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                <input type="text" name="name" class="form-control form-control-lg ps-5 border-0 shadow-none" placeholder="Search by doctor name or specialty..." aria-label="Search doctors" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold border-0" style="box-shadow: 0 4px 12px rgba(0,0,0,0.1)">
+                                <i class="bi bi-search me-2"></i> Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
+            <div class="col-lg-5 d-none d-lg-block position-relative z-1 text-center stagger-2 animate-in">
+                <div class="position-relative d-inline-block">
+                    <div class="position-absolute top-0 start-0 w-100 h-100 rounded-circle bg-white opacity-10 blur-xl" style="transform: scale(1.2)"></div>
+                    <img src="~/Images/doctor-hero.png" alt="Doctor" class="img-fluid position-relative z-2" style="max-height: 500px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.2));" onerror="this.src='https://ui-avatars.com/api/?name=Dr&background=ffffff&color=2563eb&size=400&rounded=true'" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 mb-5 text-center">
+        <div class="mb-5 animate-in stagger-2">
+            <span class="eyebrow"><i class="bi bi-star"></i> Why choose Taybat</span>
+            <h2 class="display-6 fw-bold mt-2">Healthcare made simple</h2>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4 animate-in stagger-3">
+                <div class="section-card p-4 h-100 hover-lift text-center">
+                    <div class="icon-box mx-auto mb-4" style="width: 4rem; height: 4rem; font-size: 1.75rem;">
+                        <i class="bi bi-calendar2-check"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Instant Booking</h4>
+                    <p class="text-muted mb-0">Book your appointment in seconds without any phone calls or waiting times.</p>
+                </div>
+            </div>
+            <div class="col-md-4 animate-in stagger-4">
+                <div class="section-card p-4 h-100 hover-lift text-center">
+                    <div class="icon-box green mx-auto mb-4" style="width: 4rem; height: 4rem; font-size: 1.75rem;">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Verified Doctors</h4>
+                    <p class="text-muted mb-0">Every doctor on our platform is verified and rated by real patients.</p>
+                </div>
+            </div>
+            <div class="col-md-4 animate-in stagger-5">
+                <div class="section-card p-4 h-100 hover-lift text-center">
+                    <div class="icon-box teal mx-auto mb-4" style="width: 4rem; height: 4rem; font-size: 1.75rem;">
+                        <i class="bi bi-file-medical"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Medical Records</h4>
+                    <p class="text-muted mb-0">Access your complete medical history, prescriptions, and test results anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 mb-5 bg-surface-soft rounded-4 px-4 px-md-5 border animate-in">
+        <div class="row align-items-center g-5">
             <div class="col-lg-5">
-                <div class="glass-panel p-4">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <div class="h2 fw-bold mb-0">24/7</div>
-                            <small class="text-white-50">Smart booking</small>
+                <span class="eyebrow"><i class="bi bi-info-circle"></i> How it works</span>
+                <h2 class="display-6 fw-bold mt-2 mb-4">Your journey to better health</h2>
+                <div class="d-flex flex-column gap-4 mt-4">
+                    <div class="d-flex gap-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-circle flex-shrink-0 fw-bold" style="width: 2.5rem; height: 2.5rem;">1</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Search for a doctor</h5>
+                            <p class="text-muted mb-0">Find specialists in your area based on reviews and availability.</p>
                         </div>
-                        <div class="col-6">
-                            <div class="h2 fw-bold mb-0">3</div>
-                            <small class="text-white-50">Role dashboards</small>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-circle flex-shrink-0 fw-bold" style="width: 2.5rem; height: 2.5rem;">2</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Book an appointment</h5>
+                            <p class="text-muted mb-0">Choose a convenient time slot and book instantly online.</p>
                         </div>
-                        <div class="col-12">
-                            <a asp-controller="Doctor" asp-action="Index" class="btn btn-light w-100">Explore Doctors</a>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-circle flex-shrink-0 fw-bold" style="width: 2.5rem; height: 2.5rem;">3</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Get your care</h5>
+                            <p class="text-muted mb-0">Visit the clinic, get treated, and access your records easily.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 position-relative">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="section-card p-4 shadow-lg mb-3" style="transform: translateY(20px);">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="avatar bg-primary-soft text-primary"><i class="bi bi-person-heart"></i></div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Dr. Ahmed Ali</h6>
+                                    <small class="text-muted">Cardiology</small>
+                                </div>
+                            </div>
+                            <div class="rating-stars mb-2 justify-content-start" style="font-size: 1rem; color: var(--warning)">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                            </div>
+                            <button class="btn btn-primary btn-sm w-100">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="section-card p-4 shadow-sm" style="transform: translateY(-20px);">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="avatar bg-secondary-soft text-secondary-dark"><i class="bi bi-person-fill"></i></div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Dr. Sarah Tarek</h6>
+                                    <small class="text-muted">Dermatology</small>
+                                </div>
+                            </div>
+                            <div class="rating-stars mb-2 justify-content-start" style="font-size: 1rem; color: var(--warning)">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm w-100">Book Now</button>
                         </div>
                     </div>
                 </div>
@@ -41,27 +138,14 @@
         </div>
     </section>
 
-    <div class="row g-4">
-        <div class="col-md-4">
-            <article class="metric-card">
-                <span class="icon-box"><i class="bi bi-calendar2-check"></i></span>
-                <h5 class="fw-bold mt-3">Book faster</h5>
-                <p class="text-muted mb-0">Search by doctor, specialization, or clinic and move straight to available appointments.</p>
-            </article>
+    <section class="py-5 mb-4 text-center animate-in">
+        <h2 class="display-6 fw-bold mb-4">Ready to start?</h2>
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-controller="Doctor" asp-action="Index" class="btn btn-primary btn-lg shadow-md px-5">Find a Doctor</a>
+            @if (!User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-lg px-5">Sign Up</a>
+            }
         </div>
-        <div class="col-md-4">
-            <article class="metric-card">
-                <span class="icon-box teal"><i class="bi bi-shield-check"></i></span>
-                <h5 class="fw-bold mt-3">Manage securely</h5>
-                <p class="text-muted mb-0">Profiles, schedules, records, payments, and reviews use the app's existing secure workflows.</p>
-            </article>
-        </div>
-        <div class="col-md-4">
-            <article class="metric-card">
-                <span class="icon-box green"><i class="bi bi-clipboard2-pulse"></i></span>
-                <h5 class="fw-bold mt-3">Stay organized</h5>
-                <p class="text-muted mb-0">Role-based dashboards keep admins, doctors, and patients focused on their next action.</p>
-            </article>
-        </div>
-    </div>
+    </section>
 </div>

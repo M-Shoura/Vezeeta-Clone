@@ -6,23 +6,25 @@
 }
 
 <div class="app-container">
-    <section class="hero-panel p-4 p-xl-5 mb-4">
+    <section class="hero-panel p-4 p-xl-5 mb-4 animate-in">
         <div class="row g-4 align-items-center">
             <div class="col-lg-8">
                 <span class="eyebrow text-white-50"><i class="bi bi-heart-pulse"></i> Patient home</span>
-                <h1 class="display-6 fw-bold mt-3 mb-2">Welcome back, @Model.FullName</h1>
-                <p class="mb-0 text-white-50">Track real appointments, prescriptions, medical history, and reminders from your care dashboard.</p>
+                <h1 class="display-6 fw-bold mt-3 mb-2 text-white">Welcome back, @Model.FullName</h1>
+                <p class="mb-0 text-white-50 fs-5">Track real appointments, prescriptions, medical history, and reminders from your care dashboard.</p>
             </div>
             <div class="col-lg-4">
-                <div class="glass-panel p-3">
-                    <div class="d-flex align-items-center gap-3">
+                <div class="glass-panel p-4 stagger-1 animate-in">
+                    <div class="d-flex align-items-center gap-4">
                         <img src="@ProfilePictureHelper.GetUrl(Model.ProfilePicture, Model.FullName, size: 120)"
-                             class="avatar-lg border border-3 border-white" alt="@Model.FullName" />
-                        <div>
-                            <small class="text-white-50 fw-bold">Profile completion</small>
-                            <div class="h3 fw-bold mb-2">@Model.ProfileCompletion%</div>
-                            <div class="progress progress-soft bg-white bg-opacity-25">
-                                <progress class="progress-bar w-100" value="@Model.ProfileCompletion" max="100">@Model.ProfileCompletion%</progress>
+                             class="avatar-lg border border-3 border-white shadow" alt="@Model.FullName" style="width: 80px; height: 80px;" />
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-end mb-2">
+                                <small class="text-white-50 fw-bold text-uppercase" style="letter-spacing: 0.05em">Profile completion</small>
+                                <div class="h4 fw-bold mb-0 text-white">@Model.ProfileCompletion%</div>
+                            </div>
+                            <div class="progress progress-soft bg-white bg-opacity-25 rounded-pill" style="height: 8px;">
+                                <div class="progress-bar bg-white rounded-pill" role="progressbar" style="width: @Model.ProfileCompletion%;" aria-valuenow="@Model.ProfileCompletion" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
                     </div>
@@ -32,45 +34,56 @@
     </section>
 
     <div class="row g-4 mb-4">
-        <div class="col-sm-6 col-xl-3">
-            <div class="metric-card">
+        <div class="col-sm-6 col-xl-3 animate-in stagger-1">
+            <div class="metric-card hover-lift">
+                <div class="icon-box">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
                 <p class="metric-label">Upcoming</p>
                 <h2 class="metric-value">@Model.UpcomingAppointmentsCount</h2>
-                <span class="metric-trend">Booked visits</span>
+                <span class="metric-trend"><i class="bi bi-calendar-plus me-1"></i> Booked visits</span>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="metric-card">
+        <div class="col-sm-6 col-xl-3 animate-in stagger-2">
+            <div class="metric-card hover-lift">
+                <div class="icon-box teal">
+                    <i class="bi bi-clock-history"></i>
+                </div>
                 <p class="metric-label">History</p>
                 <h2 class="metric-value">@Model.AppointmentHistoryCount</h2>
-                <span class="metric-trend">Previous visits</span>
+                <span class="metric-trend"><i class="bi bi-check2-circle me-1"></i> Previous visits</span>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="metric-card">
+        <div class="col-sm-6 col-xl-3 animate-in stagger-3">
+            <div class="metric-card hover-lift">
+                <div class="icon-box green">
+                    <i class="bi bi-prescription2"></i>
+                </div>
                 <p class="metric-label">Prescriptions</p>
                 <h2 class="metric-value">@Model.PrescriptionCount</h2>
-                <span class="metric-trend">Medication plans</span>
+                <span class="metric-trend"><i class="bi bi-capsule me-1"></i> Medication plans</span>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="metric-card">
+        <div class="col-sm-6 col-xl-3 animate-in stagger-4">
+            <div class="metric-card hover-lift">
+                <div class="icon-box amber">
+                    <i class="bi bi-file-medical"></i>
+                </div>
                 <p class="metric-label">Medical Records</p>
                 <h2 class="metric-value">@Model.MedicalRecordCount</h2>
-                <span class="metric-trend">Clinical summaries</span>
+                <span class="metric-trend"><i class="bi bi-clipboard2-pulse me-1"></i> Clinical summaries</span>
             </div>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-xl-8">
-            <div class="section-card p-4 mb-4">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <div class="section-card p-4 mb-4 animate-in stagger-2">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                     <div>
                         <h5 class="fw-bold mb-1">Upcoming Appointments</h5>
                         <p class="text-muted mb-0">Your next visits and booking status.</p>
                     </div>
-                    @* <a asp-action="Appointments" class="btn btn-outline-primary btn-sm">View All</a> *@
                 </div>
 
                 @if (Model.UpcomingAppointments.Any())
@@ -78,20 +91,29 @@
                     <div class="d-grid gap-3">
                         @foreach (var appointment in Model.UpcomingAppointments)
                         {
-                            var statusClass = appointment.Status == Domain.Enums.AppointmentStatus.Confirmed
-                                ? "status-success"
-                                : appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted";
+                            var statusClass = appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-success" : 
+                                              appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted";
 
-                            <article class="appointment-card card p-3">
-                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                            <article class="appointment-card card p-4 border-0 shadow-sm hover-lift">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-4">
                                     <div class="d-flex align-items-center gap-3">
-                                        <span class="icon-box"><i class="bi bi-person-vcard"></i></span>
+                                        <div class="avatar bg-primary-soft text-primary fw-bold shadow-sm rounded-circle" style="width: 48px; height: 48px;">
+                                            <i class="bi bi-person-vcard fs-5"></i>
+                                        </div>
                                         <div>
-                                            <h6 class="fw-bold mb-1">@appointment.DoctorName</h6>
-                                            <small class="text-muted">@appointment.ClinicName • @appointment.AppointmentDate.ToString("dd MMM yyyy"), @appointment.StartTime.ToString(@"hh\:mm")</small>
+                                            <h6 class="fw-bold mb-1 text-body fs-5">@appointment.DoctorName</h6>
+                                            <div class="d-flex align-items-center gap-2 text-muted small">
+                                                <span class="fw-semibold text-body"><i class="bi bi-calendar-event me-1"></i> @appointment.AppointmentDate.ToString("dd MMM yyyy")</span>
+                                                <span class="text-primary-soft mx-1">•</span>
+                                                <span class="fw-semibold text-body"><i class="bi bi-clock me-1"></i> @appointment.StartTime.ToString(@"hh\:mm")</span>
+                                                <span class="text-primary-soft mx-1">•</span>
+                                                <span><i class="bi bi-hospital me-1"></i> @appointment.ClinicName</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <span class="status-badge @statusClass">@appointment.Status</span>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="status-badge @statusClass px-3 py-2 fw-bold">@appointment.Status</span>
+                                    </div>
                                 </div>
                             </article>
                         }
@@ -99,26 +121,26 @@
                 }
                 else
                 {
-                    <div class="empty-state">
-                        <i class="bi bi-calendar-plus"></i>
-                        <p class="mt-2 mb-3">No upcoming appointments yet.</p>
-                        <a asp-controller="Doctor" asp-action="Index" class="btn btn-primary">Book an Appointment</a>
+                    <div class="empty-state border-0 bg-surface-soft py-5">
+                        <i class="bi bi-calendar-plus text-primary opacity-25" style="font-size: 3rem;"></i>
+                        <h5 class="fw-bold mt-3 text-body">No upcoming appointments</h5>
+                        <p class="text-muted mb-4">Book a visit with a specialist to see it here.</p>
+                        <a asp-controller="Doctor" asp-action="Index" class="btn btn-primary fw-bold px-4 shadow-sm">Book an Appointment</a>
                     </div>
                 }
             </div>
 
-            <div class="section-card p-4 mb-4">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <div class="section-card p-4 mb-4 animate-in stagger-3">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                     <div>
                         <h5 class="fw-bold mb-1">Appointment History</h5>
                         <p class="text-muted mb-0">Past visits and review eligibility.</p>
                     </div>
-                   
                 </div>
 
                 @if (Model.AppointmentHistory.Any())
                 {
-                    <div class="table-responsive">
+                    <div class="table-responsive border-0">
                         <table class="table table-hover align-middle">
                             <thead>
                                 <tr>
@@ -132,14 +154,15 @@
                             <tbody>
                                 @foreach (var appointment in Model.AppointmentHistory)
                                 {
-                                    var statusClass = appointment.Status == Domain.Enums.AppointmentStatus.Completed
-                                        ? "status-success"
-                                        : appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-warning" : "status-muted";
+                                    var statusClass = appointment.Status == Domain.Enums.AppointmentStatus.Completed ? "status-success" : 
+                                                      appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-warning" : "status-muted";
 
                                     <tr>
-                                        <td>@appointment.AppointmentDate.ToString("dd MMM yyyy")</td>
-                                        <td>@appointment.DoctorName</td>
-                                        <td>@appointment.ClinicName</td>
+                                        <td>
+                                            <div class="fw-bold text-body">@appointment.AppointmentDate.ToString("dd MMM yyyy")</div>
+                                        </td>
+                                        <td class="fw-semibold text-body">@appointment.DoctorName</td>
+                                        <td class="text-muted">@appointment.ClinicName</td>
                                         <td><span class="status-badge @statusClass">@appointment.Status</span></td>
                                         <td class="text-end">
                                             @if (appointment.Status == Domain.Enums.AppointmentStatus.Completed && appointment.ReviewId == 0)
@@ -147,17 +170,17 @@
                                                 <a asp-controller="Review"
                                                    asp-action="Create"
                                                    asp-route-appointmentId="@appointment.Id"
-                                                   class="btn btn-sm btn-outline-success">
-                                                    Write Review
+                                                   class="btn btn-sm btn-success text-white fw-bold shadow-sm px-3">
+                                                    <i class="bi bi-star-fill me-1"></i> Review
                                                 </a>
                                             }
                                             else if (appointment.Status == Domain.Enums.AppointmentStatus.Completed && appointment.ReviewId != 0)
                                             {
-                                                <span class="text-success small fw-semibold">Reviewed</span>
+                                                <span class="badge bg-surface-soft text-success border border-success border-opacity-25 px-2 py-1"><i class="bi bi-check-lg me-1"></i>Reviewed</span>
                                             }
                                             else
                                             {
-                                                <span class="text-muted small">Unavailable</span>
+                                                <span class="text-muted small px-2">Unavailable</span>
                                             }
                                         </td>
                                     </tr>
@@ -168,114 +191,130 @@
                 }
                 else
                 {
-                    <div class="empty-state">
-                        <i class="bi bi-clock-history"></i>
-                        <p class="mt-2 mb-0">No appointment history yet.</p>
+                    <div class="empty-state border-0 py-4">
+                        <i class="bi bi-clock-history text-muted opacity-50 fs-1 mb-2"></i>
+                        <p class="mb-0 fw-medium">No appointment history yet.</p>
                     </div>
                 }
             </div>
 
-            <div class="section-card p-4">
-                <h5 class="fw-bold mb-3">Recent Prescriptions</h5>
+            <div class="section-card p-4 animate-in stagger-4">
+                <h5 class="fw-bold mb-4">Recent Prescriptions</h5>
                 @if (Model.Prescriptions.Any())
                 {
-                    <table class="table table-hover align-middle">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Doctor</th>
-                                <th>Items</th>
-                                <th>Notes</th>
-                                                            <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var prescription in Model.Prescriptions)
-                            {
+                    <div class="table-responsive border-0">
+                        <table class="table table-hover align-middle">
+                            <thead>
                                 <tr>
-                                    <td>@prescription.PrescriptionDate.ToString("dd MMM yyyy")</td>
-                                    <td>@prescription.DoctorName</td>
-                                    <td><span class="status-badge status-muted">@prescription.ItemsCount</span></td>
-                                    <td>@(prescription.Notes ?? "N/A")</td>
-                                                                    <td class="text-end">
-                                                                        <a asp-controller="Prescription" asp-action="Details" asp-route-id="@prescription.Id" class="btn btn-sm btn-primary">
-                                                                            <i class="bi bi-eye"></i> Details
-                                                                        </a>
-                                                                    </td>
+                                    <th>Date</th>
+                                    <th>Doctor</th>
+                                    <th class="text-center">Items</th>
+                                    <th>Notes</th>
+                                    <th class="text-end">Action</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var prescription in Model.Prescriptions)
+                                {
+                                    <tr>
+                                        <td class="fw-bold text-body">@prescription.PrescriptionDate.ToString("dd MMM yyyy")</td>
+                                        <td class="fw-medium text-body">@prescription.DoctorName</td>
+                                        <td class="text-center">
+                                            <span class="badge bg-primary-soft text-primary px-2 py-1 rounded-circle fs-6">@prescription.ItemsCount</span>
+                                        </td>
+                                        <td class="text-muted text-truncate" style="max-width: 150px;">@(prescription.Notes ?? "N/A")</td>
+                                        <td class="text-end">
+                                            <a asp-controller="Prescription" asp-action="Details" asp-route-id="@prescription.Id" class="btn btn-sm btn-light border shadow-sm fw-medium">
+                                                <i class="bi bi-eye text-primary"></i> Details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
                 else
                 {
-                    <div class="empty-state">No prescriptions found.</div>
+                    <div class="empty-state border-0 py-4">
+                        <p class="mb-0 fw-medium">No prescriptions found.</p>
+                    </div>
                 }
             </div>
         </div>
 
         <div class="col-xl-4">
-            <div class="section-card p-4 mb-4">
-                <h5 class="fw-bold mb-3">Health Summary</h5>
-                <div class="d-grid gap-3">
-                    <div class="d-flex justify-content-between">
-                        <span class="text-muted">Phone</span>
-                        <strong>@(Model.PhoneNumber ?? "Not added")</strong>
+            <div class="section-card p-4 mb-4 animate-in stagger-3">
+                <h5 class="fw-bold mb-4">Health Summary</h5>
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                        <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-telephone fs-5"></i> Phone</span>
+                        <strong class="text-body">@(Model.PhoneNumber ?? "Not added")</strong>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <span class="text-muted">Birth Date</span>
-                        <strong>@Model.DateOfBirth.ToString("dd MMM yyyy")</strong>
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                        <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-calendar2-heart fs-5"></i> Birth Date</span>
+                        <strong class="text-body">@Model.DateOfBirth.ToString("dd MMM yyyy")</strong>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <span class="text-muted">Blood type</span>
-                        <strong>@(Model.BloodType ?? "Not added")</strong>
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                        <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-droplet-half text-danger fs-5"></i> Blood type</span>
+                        <strong class="text-body">@(Model.BloodType ?? "Not added")</strong>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <span class="text-muted">Favorite doctors</span>
-                        <strong>@Model.FavoriteDoctorsCount</strong>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-star-fill text-warning fs-5"></i> Favorite doctors</span>
+                        <strong class="text-body">@Model.FavoriteDoctorsCount</strong>
                     </div>
                 </div>
-                <div class="d-grid mt-4">
-                    <a asp-controller="Account" asp-action="Profile" class="btn btn-outline-primary">Complete Profile</a>
+                <div class="d-grid mt-4 pt-2">
+                    <a asp-controller="Account" asp-action="Profile" class="btn btn-outline-primary fw-bold shadow-sm">Complete Profile</a>
                 </div>
             </div>
 
-            <div class="section-card p-4 mb-4">
-                <h5 class="fw-bold mb-3">Medical Summaries</h5>
+            <div class="section-card p-4 mb-4 animate-in stagger-4">
+                <h5 class="fw-bold mb-4">Medical Summaries</h5>
                 @if (Model.MedicalSummaries.Any())
                 {
-                    <div class="d-grid gap-2">
+                    <div class="d-grid gap-3">
                         @foreach (var summary in Model.MedicalSummaries)
                         {
-                            <div class="p-3 rounded-4 bg-light">
-                                <div class="d-flex justify-content-between gap-2">
-                                    <strong>@summary.Condition</strong>
-                                    <span class="status-badge @(summary.IsActive ? "status-success" : "status-muted")">
+                            <div class="p-3 rounded-4 border bg-surface hover-lift transition">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                    <strong class="text-body fw-bold fs-6">@summary.Condition</strong>
+                                    <span class="status-badge px-2 py-1 @(summary.IsActive ? "bg-success text-white border-0" : "bg-surface-soft text-muted border")">
                                         @(summary.IsActive ? "Active" : "Resolved")
                                     </span>
                                 </div>
-                                <small class="text-muted">@summary.DiagnosedDate.ToString("dd MMM yyyy")</small>
+                                <small class="text-muted fw-medium d-flex align-items-center gap-1">
+                                    <i class="bi bi-calendar2"></i> Diagnosed: @summary.DiagnosedDate.ToString("dd MMM yyyy")
+                                </small>
                             </div>
                         }
                     </div>
                 }
                 else
                 {
-                    <div class="empty-state">No medical summaries found.</div>
+                    <div class="empty-state border-0 py-4">
+                        <p class="mb-0 fw-medium">No medical summaries found.</p>
+                    </div>
                 }
             </div>
 
-            <div class="section-card p-4">
-                <h5 class="fw-bold mb-3">Care Shortcuts</h5>
-                <div class="d-grid gap-2">
-                    <a asp-controller="Doctor" asp-action="Index" class="btn quick-action">
-                        <i class="bi bi-calendar-plus text-primary"></i> Book appointment
+            <div class="section-card p-4 animate-in stagger-5">
+                <h5 class="fw-bold mb-4">Care Shortcuts</h5>
+                <div class="d-grid gap-3">
+                    <a asp-controller="Doctor" asp-action="Index" class="quick-action d-flex align-items-center gap-3 p-3 text-decoration-none shadow-sm fw-medium">
+                        <div class="bg-primary-soft text-primary rounded-circle p-2 d-flex"><i class="bi bi-calendar-plus fs-5"></i></div>
+                        Book appointment
+                        <i class="bi bi-chevron-right ms-auto text-muted small"></i>
                     </a>
-                    <a asp-controller="MedicalRecord" asp-action="Index" class="btn quick-action">
-                        <i class="bi bi-file-medical text-success"></i> Medical history
+                    <a asp-controller="MedicalRecord" asp-action="Index" class="quick-action d-flex align-items-center gap-3 p-3 text-decoration-none shadow-sm fw-medium">
+                        <div class="bg-success text-success bg-opacity-10 rounded-circle p-2 d-flex"><i class="bi bi-file-medical fs-5"></i></div>
+                        Medical history
+                        <i class="bi bi-chevron-right ms-auto text-muted small"></i>
                     </a>
-                    <a asp-controller="Prescription" asp-action="Index" class="btn quick-action">
-                        <i class="bi bi-prescription2 text-info"></i> Prescriptions
+                    <a asp-controller="Prescription" asp-action="Index" class="quick-action d-flex align-items-center gap-3 p-3 text-decoration-none shadow-sm fw-medium">
+                        <div class="bg-info text-info bg-opacity-10 rounded-circle p-2 d-flex"><i class="bi bi-prescription2 fs-5"></i></div>
+                        Prescriptions
+                        <i class="bi bi-chevron-right ms-auto text-muted small"></i>
                     </a>
                 </div>
             </div>

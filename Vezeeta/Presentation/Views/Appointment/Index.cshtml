@@ -5,71 +5,84 @@
 }
 
 <div class="app-container">
-    <div class="page-header">
-        <div>
-            <span class="eyebrow"><i class="bi bi-calendar2-check"></i> Scheduling</span>
-            <h1 class="page-title mt-2">Appointments</h1>
-            <p class="page-subtitle">Real appointment records with doctor, patient, clinic, payment, and status.</p>
+    <div class="page-header animate-in border-bottom pb-4 mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-primary-soft text-primary p-3 rounded-4">
+                <i class="bi bi-calendar2-check fs-2"></i>
+            </div>
+            <div>
+                <span class="eyebrow"><i class="bi bi-calendar-event text-info"></i> Scheduling Network</span>
+                <h1 class="page-title mt-1 mb-1">Appointments</h1>
+                <p class="page-subtitle">Real appointment records with doctor, patient, clinic, payment, and status.</p>
+            </div>
         </div>
-        <a asp-controller="Doctor" asp-action="Index" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Book via Doctor
-        </a>
+        <div class="mt-3 mt-md-0">
+            <a asp-controller="Doctor" asp-action="Index" class="btn btn-primary shadow-sm fw-bold px-4">
+                <i class="bi bi-calendar-plus me-2"></i> Book via Doctor
+            </a>
+        </div>
     </div>
 
-    <div class="section-card p-4">
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Patient</th>
-                    <th>Doctor</th>
-                    <th>Clinic</th>
-                    <th>Status</th>
-                    <th>Payment</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Any())
-                {
-                    foreach (var appointment in Model)
-                    {
-                        var statusClass = appointment.Status == Domain.Enums.AppointmentStatus.Confirmed
-                            ? "status-success"
-                            : appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : "status-muted";
-
+    <div class="section-card p-4 animate-in stagger-1">
+        @if (Model.Any())
+        {
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
                         <tr>
-                            <td>@appointment.AppointmentDate.ToString("dd MMM yyyy")</td>
-                            <td>@appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</td>
-                            <td>@(appointment.Patient?.ApplicationUser?.FullName ?? "N/A")</td>
-                            <td>@(appointment.Doctor?.ApplicationUser?.FullName ?? "N/A")</td>
-                            <td>@(appointment.Clinic?.Name ?? "N/A")</td>
-                            <td><span class="status-badge @statusClass">@appointment.Status</span></td>
-                            <td>
-                                @if (appointment.Payment != null)
-                                {
-                                    <span class="status-badge status-muted">@appointment.Payment.Status</span>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">No payment</span>
-                                }
-                            </td>
+                            <th>Patient</th>
+                            <th>Doctor & Clinic</th>
+                            <th>Date & Time</th>
+                            <th>Payment</th>
+                            <th>Status</th>
                         </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="7">
-                            <div class="empty-state my-2">
-                                <i class="bi bi-calendar-x"></i>
-                                <p class="mt-2 mb-0">No appointments found.</p>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var appointment in Model)
+                        {
+                            var statusClass = appointment.Status == Domain.Enums.AppointmentStatus.Confirmed ? "status-success" : 
+                                              appointment.Status == Domain.Enums.AppointmentStatus.Pending ? "status-warning" : 
+                                              appointment.Status == Domain.Enums.AppointmentStatus.Completed ? "status-info" : "status-muted";
+
+                            <tr>
+                                <td class="fw-bold text-body">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-sm bg-primary-soft text-primary rounded-circle"><i class="bi bi-person"></i></div>
+                                        @(appointment.Patient?.ApplicationUser?.FullName ?? "N/A")
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fw-medium text-body">@(appointment.Doctor?.ApplicationUser?.FullName ?? "N/A")</div>
+                                    <small class="text-muted"><i class="bi bi-hospital me-1 text-primary"></i> @(appointment.Clinic?.Name ?? "N/A")</small>
+                                </td>
+                                <td>
+                                    <div class="fw-medium text-body">@appointment.AppointmentDate.ToString("dd MMM yyyy")</div>
+                                    <small class="text-muted"><i class="bi bi-clock me-1 text-primary"></i> @appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</small>
+                                </td>
+                                <td>
+                                    @if (appointment.Payment != null)
+                                    {
+                                        <span class="badge bg-surface-soft text-body border px-2 py-1"><i class="bi bi-credit-card me-1 text-muted"></i> @appointment.Payment.Status</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">No payment</span>
+                                    }
+                                </td>
+                                <td><span class="status-badge @statusClass px-3 py-1">@appointment.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state border-0 py-5">
+                <i class="bi bi-calendar-x text-muted opacity-25" style="font-size: 3rem;"></i>
+                <h5 class="fw-bold mt-3 text-body">No appointments found</h5>
+                <p class="text-muted mb-0">There are no scheduled visits matching the current criteria.</p>
+            </div>
+        }
     </div>
 </div>

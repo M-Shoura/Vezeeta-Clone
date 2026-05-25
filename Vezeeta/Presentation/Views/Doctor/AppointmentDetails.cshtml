@@ -107,7 +107,7 @@
                 </div>
                 
                 <p class="text-muted small mb-3">
-                    Click "Start AI Listening" when starting your session with the patient. The AI will securely process the vocal consultation to draft clinical symptoms and diagnostic lines below.
+                    Click "Start AI Listening" when starting your session with the patient. The AI will extract symptoms first, then wait for your validation before generating diagnostic suggestions.
                 </p>
 
                 <div class="mb-3">
@@ -119,23 +119,100 @@
                 <form asp-action="SaveAmbientAnalysis" method="post" id="form-ai-analysis">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="AppointmentId" value="@Model.Appointment.Id" />
+                    <input type="hidden" id="ai-transcript" name="Transcript" value="" />
                     
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-secondary">Extracted Symptoms</label>
-                            <textarea id="ai-symptoms" name="ExtractedSymptoms" class="form-control bg-white" rows="5" placeholder="Symptoms from speech will process here..."></textarea>
+                    <div id="live-extraction-panel" class="alert alert-info d-none" role="status">
+                        <div class="fw-semibold"><i class="bi bi-broadcast"></i> Live extraction preview</div>
+                        <div id="live-extraction-summary" class="small mt-1"></div>
+                    </div>
+
+                    <div id="symptom-review-panel" class="d-none">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0">Stage 2 - Symptom Review & Doctor Validation</h6>
+                            <span class="status-badge bg-white text-primary border">Review required</span>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-secondary">Suggested Diagnostics & Interventions</label>
-                            <textarea id="ai-diagnostics" name="SuggestedDiagnostics" class="form-control bg-white" rows="5" placeholder="Potential diagnostics will process here..."></textarea>
+
+                        <label class="form-label fw-semibold text-secondary">AI-Extracted Symptoms</label>
+                        <div id="ai-symptom-list" class="structured-symptom-list"></div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" data-add-target="ai-symptom-list" data-source="AI">
+                            <i class="bi bi-plus-circle"></i> Add AI symptom
+                        </button>
+
+                        <label class="form-label fw-semibold text-secondary mt-4">Doctor Additions</label>
+                        <div id="doctor-symptom-list" class="structured-symptom-list"></div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" data-add-target="doctor-symptom-list" data-source="Doctor">
+                            <i class="bi bi-plus-circle"></i> Add symptom
+                        </button>
+
+                        <label class="form-label fw-semibold text-secondary mt-4">Physical Examination Findings (الأعراض بعد الفحص الجسدي)</label>
+                        <div id="physical-finding-list" class="structured-symptom-list"></div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" data-add-target="physical-finding-list" data-source="Exam">
+                            <i class="bi bi-plus-circle"></i> Add exam finding
+                        </button>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary">Vital signs</label>
+                                <textarea id="vital-signs" class="form-control bg-white" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary">Doctor observations</label>
+                                <textarea id="doctor-observations" class="form-control bg-white" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary">Current medications</label>
+                                <textarea id="current-medications" class="form-control bg-white" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary">History, chronic diseases, allergies, family/lifestyle</label>
+                                <textarea id="history-context" class="form-control bg-white" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <label class="form-label fw-semibold text-secondary">Notes or clarifications</label>
+                            <textarea id="doctor-notes" class="form-control bg-white" rows="3" placeholder="Add clarifications, negatives, severity, duration, examination context, or uncertainty..."></textarea>
+                        </div>
+
+                        <div class="mt-3">
+                            <label class="form-label fw-semibold text-secondary">Clinical observations, history, medications, and context extracted by AI</label>
+                            <textarea id="ai-context" class="form-control bg-white" rows="4" readonly></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="button" id="btn-confirm-symptoms" class="btn btn-success">
+                                <i class="bi bi-check2-circle"></i> Confirm Symptoms & Generate Diagnostics
+                            </button>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-end">
+                    <div id="diagnostic-panel" class="d-none mt-4 clinical-dashboard">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0">Stages 3-4 - Clinical Sufficiency & Diagnostic Dashboard</h6>
+                            <span class="status-badge bg-white text-success border">Doctor-confirmed input</span>
+                        </div>
+
+                        <textarea id="ai-symptoms" name="ExtractedSymptoms" class="form-control bg-white d-none" rows="7" readonly></textarea>
+                        <textarea id="ai-diagnostics" name="SuggestedDiagnostics" class="form-control bg-white d-none" rows="7" readonly></textarea>
+
+                        <div class="dashboard-grid">
+                            <section class="dashboard-panel" id="patient-overview-card"></section>
+                            <section class="dashboard-panel" id="confirmed-data-card"></section>
+                            <section class="dashboard-panel missing-panel" id="missing-info-panel"></section>
+                            <section class="dashboard-panel diagnosis-panel" id="diagnosis-cards-panel"></section>
+                            <section class="dashboard-panel" id="differential-panel"></section>
+                            <section class="dashboard-panel redflag-panel" id="redflag-panel"></section>
+                            <section class="dashboard-panel" id="tests-panel"></section>
+                            <section class="dashboard-panel" id="clinical-plan-panel"></section>
+                            <section class="dashboard-panel uncertainty-panel" id="uncertainty-panel"></section>
+                        </div>
+                    </div>
+
+                    @* <div class="d-flex justify-content-end">
                         <button type="submit" id="btn-save-ai" class="btn btn-primary" disabled>
                             <i class="bi bi-file-earmark-plus"></i> Merge insights into Clinical File
                         </button>
-                    </div>
+                    </div> *@
                 </form>
             </div>
         }
@@ -231,6 +308,70 @@
         animation: pulse 1.5s infinite;
     }
 
+    .structured-symptom-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        min-height: 44px;
+    }
+
+    .structured-symptom-row {
+        background: #fff;
+        border: 1px solid #d6e3f8;
+        border-radius: 8px;
+        padding: 0.75rem;
+    }
+
+    .structured-symptom-row .row {
+        --bs-gutter-y: 0.5rem;
+    }
+
+    .clinical-dashboard .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .dashboard-panel {
+        background: #fff;
+        border: 1px solid #dce4ef;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+
+    .diagnosis-panel,
+    .redflag-panel,
+    .uncertainty-panel {
+        grid-column: 1 / -1;
+    }
+
+    .redflag-panel {
+        border-color: #dc3545;
+        background: #fff5f5;
+    }
+
+    .missing-panel {
+        border-color: #ffc107;
+        background: #fffaf0;
+    }
+
+    .uncertainty-panel {
+        background: #f6f7fb;
+    }
+
+    .diagnosis-card {
+        border: 1px solid #dce4ef;
+        border-radius: 8px;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    @@media (max-width: 991.98px) {
+        .clinical-dashboard .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
     @@keyframes pulse {
         0% { opacity: 1; transform: scale(1); }
         50% { opacity: 0.4; transform: scale(0.95); }
@@ -244,7 +385,15 @@
     <script>
         const appointmentId = '@Model?.Appointment?.Id';
         const btnAiRecord = document.getElementById("btn-ai-record");
-        
+        const symptomReviewPanel = document.getElementById("symptom-review-panel");
+        const diagnosticPanel = document.getElementById("diagnostic-panel");
+        const liveExtractionPanel = document.getElementById("live-extraction-panel");
+        const liveExtractionSummary = document.getElementById("live-extraction-summary");
+        const aiTranscriptField = document.getElementById("ai-transcript");
+        const doctorNotesField = document.getElementById("doctor-notes");
+        const saveBtn = document.getElementById("btn-save-ai");
+        const confirmSymptomsBtn = document.getElementById("btn-confirm-symptoms");
+
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/consultationHub")
             .withAutomaticReconnect()
@@ -252,6 +401,8 @@
 
         let mediaRecorder;
         let recordingContextActive = false;
+        let liveSnapshotTimer;
+        let latestExtraction = {};
 
         if (btnAiRecord) {
             connection.start()
@@ -260,110 +411,381 @@
 
             btnAiRecord.addEventListener("click", async () => {
                 if (!recordingContextActive) {
-                    try {
-                        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                            throw new Error("The browser blocks recording input devices. Ensure local deployments run via localhost or explicit HTTPS channels.");
-                        }
-
-                        const symptomsField = document.getElementById("ai-symptoms");
-                        const diagnosticsField = document.getElementById("ai-diagnostics");
-                        if (symptomsField) symptomsField.value = "";
-                        if (diagnosticsField) diagnosticsField.value = "";
-                        
-                        const saveBtn = document.getElementById("btn-save-ai");
-                        if (saveBtn) saveBtn.setAttribute("disabled", "disabled");
-
-                        const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                        
-                        // Select a supported MIME format variant dynamically to prevent hardware engine initialization fault exceptions
-                        let selectedMimeType = 'audio/webm';
-                        if (typeof MediaRecorder.isTypeSupported === "function") {
-                            if (MediaRecorder.isTypeSupported('audio/webm')) {
-                                selectedMimeType = 'audio/webm';
-                            } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
-                                selectedMimeType = 'audio/ogg';
-                            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
-                                selectedMimeType = 'audio/mp4';
-                            }
-                        }
-
-                        mediaRecorder = new MediaRecorder(audioStream, { mimeType: selectedMimeType });
-                        
-                        mediaRecorder.ondataavailable = async (e) => {
-                            if (e.data && e.data.size > 0 && mediaRecorder.state === "recording" && connection.state === "Connected") {
-                                const buffer = await e.data.arrayBuffer();
-                                const byteView = new Uint8Array(buffer);
-                                connection.invoke("SendAudioChunk", appointmentId, Array.from(byteView))
-                                          .catch(err => console.error(err));
-                            }
-                        };
-
-                        mediaRecorder.start(1000);
-                        recordingContextActive = true;
-                        toggleAudioUiState(true);
-                    } catch (micError) {
-                        alert("Microphone configuration or access mismatch. Details: " + micError.message);
-                        console.error("Detailed Tracking Target:", micError);
-                    }
+                    await startListening();
                 } else {
-                    recordingContextActive = false;
-                    toggleAudioUiState(false);
-
-                    if (mediaRecorder && mediaRecorder.state !== "inactive") {
-                        mediaRecorder.stop();
-                        mediaRecorder.stream.getTracks().forEach(track => track.stop());
-
-                        setTimeout(() => {
-                            connection.invoke("StopAndAnalyze", appointmentId)
-                                      .catch(err => console.error(err));
-                        }, 500);
-                    }
+                    stopListening();
                 }
             });
         }
 
-        connection.on("ReceiveAnalysis", (symptoms, diagnostics) => {
-            const symptomsField = document.getElementById("ai-symptoms");
-            const diagnosticsField = document.getElementById("ai-diagnostics");
-            const saveBtn = document.getElementById("btn-save-ai");
-            const badge = document.getElementById("ai-status");
-
-            if (symptomsField) symptomsField.value = symptoms;
-            if (diagnosticsField) diagnosticsField.value = diagnostics;
-            
-            if (badge) {
-                badge.className = "status-badge status-success";
-                badge.innerHTML = '<span class="status-dot bg-success"></span> Data Extracted';
-            }
-            
-            if (saveBtn) saveBtn.removeAttribute("disabled");
+        document.querySelectorAll("[data-add-target]").forEach(button => {
+            button.addEventListener("click", () => addSymptomRow(button.dataset.addTarget, { source: button.dataset.source || "" }));
         });
 
+        if (confirmSymptomsBtn) {
+            confirmSymptomsBtn.addEventListener("click", () => {
+                const request = buildDiagnosticRequest();
+                const totalClinicalItems =
+                    request.aiExtractedSymptoms.length
+                    + request.doctorAddedSymptoms.length
+                    + request.physicalExaminationFindings.length
+                    + request.vitalSigns.length
+                    + request.doctorObservations.length;
+
+                if (totalClinicalItems === 0 && !request.doctorNotes.trim()) {
+                    alert("Please confirm at least one symptom, finding, vital sign, observation, or note before proceeding.");
+                    return;
+                }
+
+                setBadge("Checking sufficiency...", "bg-warning text-dark", "bg-dark");
+                confirmSymptomsBtn.setAttribute("disabled", "disabled");
+                confirmSymptomsBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Checking Clinical Sufficiency...';
+                updateValidatedSymptomsField(request);
+
+                connection.invoke("GenerateDiagnostics", request)
+                    .catch(err => {
+                        showAiError(err.toString());
+                        resetConfirmButton();
+                    });
+            });
+        }
+
+        connection.on("ReceiveLiveExtraction", (result) => {
+            latestExtraction = result || {};
+            if (liveExtractionPanel) liveExtractionPanel.classList.remove("d-none");
+            if (liveExtractionSummary) {
+                const symptoms = (latestExtraction.aiExtractedSymptoms || []).map(s => s.name).filter(Boolean).slice(0, 6);
+                liveExtractionSummary.textContent = symptoms.length
+                    ? `Detected so far: ${symptoms.join(", ")}`
+                    : "Listening and extracting clinical context...";
+            }
+        });
+
+        connection.on("ReceiveSymptomExtraction", (result) => {
+            latestExtraction = result || {};
+            if (aiTranscriptField) aiTranscriptField.value = latestExtraction.transcript || "";
+
+            renderSymptomRows("ai-symptom-list", latestExtraction.aiExtractedSymptoms || []);
+            clearList("doctor-symptom-list");
+            clearList("physical-finding-list");
+            setTextareaLines("vital-signs", latestExtraction.vitalSigns || []);
+            setTextareaLines("doctor-observations", latestExtraction.doctorObservations || []);
+            setTextareaLines("current-medications", latestExtraction.currentMedications || []);
+            setTextareaLines("history-context", [
+                ...(latestExtraction.pastMedicalHistory || []).map(v => `History: ${v}`),
+                ...(latestExtraction.chronicDiseases || []).map(v => `Chronic: ${v}`),
+                ...(latestExtraction.allergies || []).map(v => `Allergy: ${v}`),
+                ...(latestExtraction.familyHistory || []).map(v => `Family: ${v}`),
+                ...(latestExtraction.lifestyleFactors || []).map(v => `Lifestyle: ${v}`),
+                ...(latestExtraction.patientConcerns || []).map(v => `Concern: ${v}`)
+            ]);
+
+            if (diagnosticPanel) diagnosticPanel.classList.add("d-none");
+            if (symptomReviewPanel) symptomReviewPanel.classList.remove("d-none");
+            if (saveBtn) saveBtn.setAttribute("disabled", "disabled");
+            resetConfirmButton();
+            setBadge("Clinical data extracted - validation required", "status-success", "bg-success");
+            symptomReviewPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        connection.on("ReceiveDiagnostics", (diagnostics) => {
+            const result = diagnostics || {};
+            renderDiagnosticDashboard(result);
+            document.getElementById("ai-diagnostics").value = JSON.stringify(result, null, 2);
+            if (diagnosticPanel) diagnosticPanel.classList.remove("d-none");
+            if (saveBtn) saveBtn.removeAttribute("disabled");
+            setBadge(result.isClinicalInformationSufficient ? "Diagnostics generated" : "Clinical information required", result.isClinicalInformationSufficient ? "status-success" : "bg-warning text-dark", result.isClinicalInformationSufficient ? "bg-success" : "bg-dark");
+            resetConfirmButton();
+            diagnosticPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        connection.on("ReceiveAiError", (message) => {
+            showAiError(message);
+            resetConfirmButton();
+        });
+
+        async function startListening() {
+            try {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error("The browser blocks recording input devices. Use localhost or HTTPS.");
+                }
+
+                resetWorkflow();
+                const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                let selectedMimeType = 'audio/webm';
+
+                if (typeof MediaRecorder.isTypeSupported === "function") {
+                    if (MediaRecorder.isTypeSupported('audio/webm')) selectedMimeType = 'audio/webm';
+                    else if (MediaRecorder.isTypeSupported('audio/ogg')) selectedMimeType = 'audio/ogg';
+                    else if (MediaRecorder.isTypeSupported('audio/mp4')) selectedMimeType = 'audio/mp4';
+                }
+
+                mediaRecorder = new MediaRecorder(audioStream, { mimeType: selectedMimeType });
+                mediaRecorder.ondataavailable = async (e) => {
+                    if (e.data && e.data.size > 0 && mediaRecorder.state === "recording" && connection.state === "Connected") {
+                        const buffer = await e.data.arrayBuffer();
+                        connection.invoke("SendAudioChunk", appointmentId, Array.from(new Uint8Array(buffer))).catch(err => console.error(err));
+                    }
+                };
+
+                mediaRecorder.start(1000);
+                liveSnapshotTimer = setInterval(() => {
+                    if (connection.state === "Connected") {
+                        connection.invoke("AnalyzeLiveSnapshot", appointmentId).catch(err => console.debug(err));
+                    }
+                }, 20000);
+
+                recordingContextActive = true;
+                toggleAudioUiState(true);
+            } catch (micError) {
+                alert("Microphone configuration or access mismatch. Details: " + micError.message);
+                console.error("Detailed Tracking Target:", micError);
+            }
+        }
+
+        function stopListening() {
+            recordingContextActive = false;
+            toggleAudioUiState(false);
+            clearInterval(liveSnapshotTimer);
+
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+
+                setTimeout(() => {
+                    connection.invoke("StopAndAnalyze", appointmentId).catch(err => console.error(err));
+                }, 500);
+            }
+        }
+
+        function resetWorkflow() {
+            ["ai-symptoms", "ai-diagnostics", "ai-transcript", "doctor-notes", "vital-signs", "doctor-observations", "current-medications", "history-context"].forEach(id => {
+                const field = document.getElementById(id);
+                if (field) field.value = "";
+            });
+            clearList("ai-symptom-list");
+            clearList("doctor-symptom-list");
+            clearList("physical-finding-list");
+            if (symptomReviewPanel) symptomReviewPanel.classList.add("d-none");
+            if (diagnosticPanel) diagnosticPanel.classList.add("d-none");
+            if (liveExtractionPanel) liveExtractionPanel.classList.add("d-none");
+            if (saveBtn) saveBtn.setAttribute("disabled", "disabled");
+            latestExtraction = {};
+        }
+
         function toggleAudioUiState(isListening) {
-            const btn = document.getElementById("btn-ai-record");
             const btnText = document.getElementById("ai-btn-text");
             const icon = document.getElementById("ai-icon");
-            const badge = document.getElementById("ai-status");
 
-            if (!btn) return;
+            if (!btnAiRecord) return;
 
             if (isListening) {
-                btn.className = "btn btn-danger btn-lg pulse-animation";
-                if (btnText) btnText.innerText = "Stop Listening & Analyze";
+                btnAiRecord.className = "btn btn-danger btn-lg pulse-animation";
+                if (btnText) btnText.innerText = "Stop Listening & Extract";
                 if (icon) icon.className = "bi bi-stop-circle";
-                if (badge) {
-                    badge.className = "status-badge bg-danger text-white";
-                    badge.innerHTML = '<span class="status-dot bg-white pulse-animation"></span> AI Listening Live...';
-                }
+                setBadge("AI listening live...", "bg-danger text-white", "bg-white pulse-animation");
             } else {
-                btn.className = "btn btn-outline-primary btn-lg";
+                btnAiRecord.className = "btn btn-outline-primary btn-lg";
                 if (btnText) btnText.innerText = "Start AI Listening";
                 if (icon) icon.className = "bi bi-mic";
-                if (badge) {
-                    badge.className = "status-badge bg-warning text-dark";
-                    badge.innerHTML = '<span class="status-dot bg-dark pulse-animation"></span> Analyzing voice...';
-                }
+                setBadge("Analyzing voice...", "bg-warning text-dark", "bg-dark pulse-animation");
             }
+        }
+
+        function addSymptomRow(listId, item = {}) {
+            const list = document.getElementById(listId);
+            if (!list) return;
+
+            const row = document.createElement("div");
+            row.className = "structured-symptom-row";
+            row.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>${escapeHtml(item.source || "Clinical item")}</strong>
+                    <button type="button" class="btn btn-sm btn-outline-danger" title="Remove"><i class="bi bi-x-lg"></i></button>
+                </div>
+                <div class="row">
+                    ${input("name", "Symptom / finding", item.name)}
+                    ${input("onset", "Onset", item.onset)}
+                    ${input("duration", "Duration", item.duration)}
+                    ${input("severity", "Severity", item.severity)}
+                    ${input("frequency", "Frequency", item.frequency)}
+                    ${input("progression", "Progression", item.progression)}
+                    ${input("location", "Location", item.location)}
+                    ${input("triggers", "Triggers", item.triggers)}
+                    ${input("relievingFactors", "Relieving", item.relievingFactors)}
+                    ${input("associatedSymptoms", "Associated symptoms", item.associatedSymptoms)}
+                </div>
+                <input type="hidden" data-field="source" value="${escapeHtml(item.source || "")}" />
+            `;
+            row.querySelector("button").addEventListener("click", () => row.remove());
+            list.appendChild(row);
+        }
+
+        function input(field, label, value) {
+            return `
+                <div class="col-md-6 col-xl-3">
+                    <input type="text" data-field="${field}" class="form-control form-control-sm" placeholder="${label}" value="${escapeHtml(value || "")}" />
+                </div>`;
+        }
+
+        function renderSymptomRows(listId, items) {
+            clearList(listId);
+            (items || []).forEach(item => addSymptomRow(listId, item));
+        }
+
+        function clearList(listId) {
+            const list = document.getElementById(listId);
+            if (list) list.innerHTML = "";
+        }
+
+        function collectSymptoms(listId) {
+            const list = document.getElementById(listId);
+            if (!list) return [];
+
+            return Array.from(list.querySelectorAll(".structured-symptom-row")).map(row => {
+                const item = {};
+                row.querySelectorAll("[data-field]").forEach(input => item[input.dataset.field] = input.value.trim());
+                return item;
+            }).filter(item => item.name);
+        }
+
+        function buildDiagnosticRequest() {
+            return {
+                appointmentId,
+                aiExtractedSymptoms: collectSymptoms("ai-symptom-list"),
+                doctorAddedSymptoms: collectSymptoms("doctor-symptom-list"),
+                physicalExaminationFindings: collectSymptoms("physical-finding-list"),
+                vitalSigns: linesFrom("vital-signs"),
+                doctorObservations: linesFrom("doctor-observations"),
+                currentMedications: linesFrom("current-medications"),
+                pastMedicalHistory: latestExtraction.pastMedicalHistory || [],
+                chronicDiseases: latestExtraction.chronicDiseases || [],
+                allergies: latestExtraction.allergies || [],
+                familyHistory: latestExtraction.familyHistory || [],
+                lifestyleFactors: latestExtraction.lifestyleFactors || [],
+                patientConcerns: latestExtraction.patientConcerns || [],
+                doctorNotes: doctorNotesField ? doctorNotesField.value : "",
+                transcript: aiTranscriptField ? aiTranscriptField.value : ""
+            };
+        }
+
+        function updateValidatedSymptomsField(request) {
+            document.getElementById("ai-symptoms").value = JSON.stringify(request, null, 2);
+        }
+
+        function renderDiagnosticDashboard(result) {
+            renderPanel("patient-overview-card", "Patient Overview", [
+                `Age: ${result.patientOverview?.age || "Unknown"}`,
+                `Gender: ${result.patientOverview?.gender || "Unknown"}`,
+                `Key history: ${join(result.patientOverview?.keyHistory)}`,
+                `Chronic diseases: ${join(result.patientOverview?.chronicDiseases)}`,
+                `Allergies: ${join(result.patientOverview?.allergies)}`
+            ]);
+            renderPanel("confirmed-data-card", "Confirmed Clinical Data", [
+                `Symptoms: ${join((result.confirmedClinicalData?.symptoms || []).map(s => s.name))}`,
+                `Exam findings: ${join((result.confirmedClinicalData?.physicalExaminationFindings || []).map(s => s.name))}`,
+                `Vital signs: ${join(result.confirmedClinicalData?.vitalSigns)}`,
+                `Notes: ${result.confirmedClinicalData?.doctorNotes || "None"}`
+            ]);
+            renderMissingInfo(result.missingInformation || [], result.targetedFollowUpQuestions || [], result.clinicalJustification || []);
+            renderDiagnosisCards("diagnosis-cards-panel", "Diagnosis Cards", result.possibleDiagnoses || []);
+            renderDiagnosisCards("differential-panel", "Differential Diagnosis", result.differentialDiagnoses || []);
+            renderPanel("redflag-panel", "Red Flag Emergency Panel", result.redFlagWarnings || ["No red flags identified from current validated data."]);
+            renderTests(result.recommendedTests || {});
+            renderPanel("clinical-plan-panel", "Clinical Plan", result.clinicalPlan || []);
+            renderPanel("uncertainty-panel", "AI Uncertainty Panel", [result.uncertaintyAnalysis || "No uncertainty analysis returned."]);
+        }
+
+        function renderMissingInfo(missing, questions, justifications) {
+            const html = `
+                <h6 class="fw-bold">Missing Information Panel</h6>
+                ${missing.length ? missing.map(m => `<div class="mb-2"><strong>${escapeHtml(m.field || "Missing data")}</strong> <span class="badge bg-warning text-dark">${escapeHtml(m.urgency || "Unknown")}</span><br><span>${escapeHtml(m.reason || "")}</span></div>`).join("") : "<p class='mb-2'>No missing critical information flagged.</p>"}
+                <strong>Targeted follow-up questions</strong>
+                ${listHtml(questions)}
+                <strong>Clinical justification</strong>
+                ${listHtml(justifications)}
+            `;
+            document.getElementById("missing-info-panel").innerHTML = html;
+        }
+
+        function renderDiagnosisCards(id, title, candidates) {
+            const panel = document.getElementById(id);
+            panel.innerHTML = `<h6 class="fw-bold">${title}</h6>` + (candidates.length
+                ? candidates.map(c => `
+                    <div class="diagnosis-card">
+                        <div class="d-flex justify-content-between gap-2">
+                            <strong>${escapeHtml(c.name || "Unnamed")}</strong>
+                            <span class="badge bg-primary">${escapeHtml(c.confidenceLevel || "Unknown")} ${Number(c.confidenceScore || 0)}%</span>
+                        </div>
+                        <div class="mt-2"><strong>Supporting:</strong>${listHtml(c.supportingSymptoms || [])}</div>
+                        <div><strong>Contradicting:</strong>${listHtml(c.contradictingSymptoms || [])}</div>
+                        <div><strong>Reasoning:</strong> ${escapeHtml(c.clinicalReasoning || "")}</div>
+                    </div>`).join("")
+                : "<p class='mb-0'>No diagnoses generated. Clinical information may be insufficient.</p>");
+        }
+
+        function renderTests(tests) {
+            renderPanel("tests-panel", "Recommended Tests", [
+                `Laboratory: ${join(tests.laboratory)}`,
+                `Imaging: ${join(tests.imaging)}`,
+                `Monitoring: ${join(tests.monitoring)}`
+            ]);
+        }
+
+        function renderPanel(id, title, lines) {
+            const panel = document.getElementById(id);
+            if (!panel) return;
+            panel.innerHTML = `<h6 class="fw-bold">${escapeHtml(title)}</h6>${listHtml(lines || [])}`;
+        }
+
+        function linesFrom(id) {
+            const field = document.getElementById(id);
+            return field && field.value.trim()
+                ? field.value.split(/\r?\n/).map(v => v.trim()).filter(Boolean)
+                : [];
+        }
+
+        function setTextareaLines(id, values) {
+            const field = document.getElementById(id);
+            if (field) field.value = (values || []).join("\n");
+        }
+
+        function listHtml(values) {
+            const cleaned = (values || []).filter(Boolean);
+            return cleaned.length
+                ? `<ul class="mb-2">${cleaned.map(value => `<li>${escapeHtml(value)}</li>`).join("")}</ul>`
+                : "<p class='mb-2'>None recorded.</p>";
+        }
+
+        function join(values) {
+            return values && values.length ? values.join(", ") : "None recorded";
+        }
+
+        function setBadge(text, badgeClass, dotClass) {
+            const badge = document.getElementById("ai-status");
+            if (!badge) return;
+            badge.className = `status-badge ${badgeClass}`;
+            badge.innerHTML = `<span class="status-dot ${dotClass}"></span> ${escapeHtml(text)}`;
+        }
+
+        function showAiError(message) {
+            setBadge("AI workflow error", "bg-danger text-white", "bg-white");
+            alert(message || "AI processing failed.");
+        }
+
+        function resetConfirmButton() {
+            if (!confirmSymptomsBtn) return;
+            confirmSymptomsBtn.removeAttribute("disabled");
+            confirmSymptomsBtn.innerHTML = '<i class="bi bi-check2-circle"></i> Confirm Symptoms & Generate Diagnostics';
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
         }
     </script>
 }

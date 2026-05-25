@@ -1,49 +1,78 @@
-﻿@model Domain.Entities.DoctorProfile
+@model Domain.Entities.DoctorProfile
 
 @{
     ViewData["Title"] = "Create Doctor";
 }
 
-<div class="card p-4">
-    <h3 class="mb-3">Create Doctor</h3>
+<div class="app-container" style="max-width: 800px; margin: 0 auto;">
+    <div class="page-header animate-in border-bottom pb-3 mb-4">
+        <a asp-action="Index" class="btn btn-sm btn-light text-muted mb-3 shadow-sm border fw-medium"><i class="bi bi-arrow-left me-1"></i> Back to Doctors</a>
+        <h1 class="page-title"><i class="bi bi-person-plus me-2 text-primary"></i> Create Doctor</h1>
+        <p class="page-subtitle">Assign an existing user account as a new healthcare provider.</p>
+    </div>
 
-    <form method="post">
-        @Html.AntiForgeryToken()
+    <div class="section-card p-4 p-md-5 animate-in stagger-1">
+        <form method="post" class="needs-validation">
+            @Html.AntiForgeryToken()
 
-        <div asp-validation-summary="All" class="alert alert-danger"></div>
+            <div asp-validation-summary="All" class="alert alert-danger shadow-sm d-none"></div>
 
-        <div class="mb-3">
-            <label class="form-label">Application User Id</label>
-            <input asp-for="ApplicationUserId" class="form-control" />
-            <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
-        </div>
+            <div class="row g-4 mb-4">
+                <div class="col-md-12">
+                    <div class="form-group position-relative">
+                        <label asp-for="ApplicationUserId" class="form-label fw-bold">Application User ID <span class="text-danger">*</span></label>
+                        <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person-badge"></i></span>
+                            <input asp-for="ApplicationUserId" class="form-control border-start-0 ps-0 bg-light" placeholder="Paste the unique user ID here" />
+                        </div>
+                        <span asp-validation-for="ApplicationUserId" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
 
-        <div class="mb-3">
-            <label class="form-label">Specialization</label>
-            <input asp-for="Specialization" class="form-control" />
-            <span asp-validation-for="Specialization" class="text-danger"></span>
-        </div>
+                <div class="col-md-12">
+                    <div class="form-group position-relative">
+                        <label asp-for="Specialization" class="form-label fw-bold">Specialization <span class="text-danger">*</span></label>
+                        <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-award"></i></span>
+                            <input asp-for="Specialization" class="form-control border-start-0 ps-0 bg-light" placeholder="e.g. Neurology" />
+                        </div>
+                        <span asp-validation-for="Specialization" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
 
-        <div class="mb-3 row">
-            <div class="col-md-6">
-                <label class="form-label">Years of Experience</label>
-                <input asp-for="YearsOfExperience" class="form-control" />
-                <span asp-validation-for="YearsOfExperience" class="text-danger"></span>
+                <div class="col-md-6">
+                    <div class="form-group position-relative">
+                        <label asp-for="YearsOfExperience" class="form-label fw-bold">Years of Experience <span class="text-danger">*</span></label>
+                        <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-briefcase"></i></span>
+                            <input asp-for="YearsOfExperience" class="form-control border-start-0 ps-0 bg-light" placeholder="e.g. 5" />
+                        </div>
+                        <span asp-validation-for="YearsOfExperience" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group position-relative">
+                        <label asp-for="Qualification" class="form-label fw-bold">Qualification <span class="text-danger">*</span></label>
+                        <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-mortarboard"></i></span>
+                            <input asp-for="Qualification" class="form-control border-start-0 ps-0 bg-light" placeholder="e.g. MD, PhD" />
+                        </div>
+                        <span asp-validation-for="Qualification" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Qualification</label>
-                <input asp-for="Qualification" class="form-control" />
-                <span asp-validation-for="Qualification" class="text-danger"></span>
+
+            <div class="d-flex gap-3 pt-3 border-top">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold px-5 shadow-sm">
+                    <i class="bi bi-check2 me-2"></i> Create Doctor
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg fw-bold px-4">Cancel</a>
             </div>
-        </div>
-
-        <div class="d-flex gap-2">
-            <button class="btn btn-primary">Create</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-        </div>
-    </form>
-
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }
+        </form>
+    </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

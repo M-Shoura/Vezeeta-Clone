@@ -1,10 +1,11 @@
 @model Application.DTOs.Prescriptions.PrescriptionDto
 
 <div class="card shadow-sm">
-    <div class="card-header bg-success text-white">
+    <div class="card-header bg-primary text-white">
         <h5 class="mb-0">@(Model?.Id == 0 ? "Create Prescription" : "Edit Prescription")</h5>
     </div>
     <div class="card-body">
+        <div id="safetyReviewPanel" class="alert alert-warning d-none" role="alert"></div>
         <form id="prescriptionForm">
             @Html.AntiForgeryToken()
 
@@ -83,6 +84,7 @@
     let itemIndex = @(Model?.Items?.Count() ?? 0);
 
     const container = document.getElementById('itemsContainer');
+    const safetyReviewPanel = document.getElementById('safetyReviewPanel');
 
     // Add Item
     document.getElementById('addItemBtn')
@@ -284,14 +286,58 @@
         return;
     }
 
-    const result = await response.json();
+        const result = await response.json();
 
-    // alert(result.message);
+    if (result.requiresReview && result.safetyReview) {
+        renderSafetyReview(result.safetyReview, result.message);
+        return;
+    }
+
+    if (!result.success) {
+        alert(result.message || "Failed to save prescription");
+        return;
+    }
 
     if (result.success) {
         window.location.href = '/Doctor/Dashboard';
     }
     });
+
+    function renderSafetyReview(review, fallbackMessage) {
+        const issues = review.issues || [];
+        const riskLevel = review.overallRiskLevel || "Unknown";
+        const summary = review.summary || fallbackMessage || "Prescription safety review detected potential issues.";
+
+        safetyReviewPanel.classList.remove('d-none');
+        safetyReviewPanel.innerHTML = `
+            <div class="d-flex align-items-start gap-2 mb-2">
+                <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                <div>
+                    <div class="fw-bold">Medication safety review: ${escapeHtml(riskLevel)} risk</div>
+                    <div>${escapeHtml(summary)}</div>
+                </div>
+            </div>
+            ${issues.map(issue => `
+                <div class="border-top border-warning pt-2 mt-2">
+                    <div class="fw-semibold">${escapeHtml(issue.riskLevel || "Risk")} - ${escapeHtml((issue.problematicDrugs || []).join(', ') || "Medication review")}</div>
+                    <div><strong>Reasoning:</strong> ${escapeHtml(issue.medicalReasoning || "No reasoning provided.")}</div>
+                    <div><strong>Related record:</strong> ${escapeHtml(issue.relatedPatientRecordOrCondition || "Not specified.")}</div>
+                    <div><strong>Alternatives:</strong> ${escapeHtml((issue.suggestedSaferAlternatives || []).join(', ') || "Not specified.")}</div>
+                    <div><strong>Recommendation:</strong> ${escapeHtml(issue.clinicalRecommendation || "Review before approval.")}</div>
+                </div>
+            `).join('')}
+        `;
+        safetyReviewPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function escapeHtml(value) {
+        return String(value)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
 
 </script>
 

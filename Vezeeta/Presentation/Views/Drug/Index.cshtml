@@ -2,123 +2,157 @@
 
 @{
     ViewData["Title"] = "Drugs";
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("admin");
 }
 
 <div class="app-container">
-    <div class="page-header">
-        <div>
-            <span class="eyebrow"><i class="bi bi-capsule"></i> Pharmacy catalog</span>
-            <h1 class="page-title mt-2">Drugs</h1>
-            <p class="page-subtitle">Search, review, and maintain medication records.</p>
+    <div class="page-header animate-in border-bottom pb-4 mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-primary-soft text-primary p-3 rounded-4">
+                <i class="bi bi-capsule fs-2"></i>
+            </div>
+            <div>
+                <span class="eyebrow"><i class="bi bi-h-square text-info"></i> Pharmacy catalog</span>
+                <h1 class="page-title mt-1 mb-1">Drugs Registry</h1>
+                <p class="page-subtitle">Search, review, and maintain medication records.</p>
+            </div>
         </div>
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Add Drug
-        </a>
+        <div class="mt-3 mt-md-0">
+            @if (isAdmin)
+            {
+                <a asp-action="Create" class="btn btn-primary shadow-sm fw-bold px-4">
+                    <i class="bi bi-plus-lg me-2"></i> Add Drug
+                </a>
+            }
+        </div>
     </div>
 
-    <div class="section-card p-4 mb-4">
-        <form class="row g-3 align-items-end" method="get" asp-action="Index">
-            <div class="col-md-9">
-                <label for="SearchInp" class="form-label">Search medications</label>
-                <input type="text" name="search" id="SearchInp" value="@Model?.Search" placeholder="Search by name, manufacturer, or strength" class="form-control form-control-lg" />
-            </div>
-            <div class="col-md-3 d-grid">
-                <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="bi bi-search"></i> Search
-                </button>
+    <div class="section-card p-4 mb-4 animate-in stagger-1">
+        <form method="get" asp-action="Index">
+            <div class="row g-3">
+                <div class="col-md-9">
+                    <div class="position-relative">
+                        <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                        <input type="text" name="search" value="@Model?.Search" placeholder="Search by name, generic name, or strength..." class="form-control form-control-lg ps-5 bg-light border-0 shadow-sm fw-medium" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">
+                        Find Medication
+                    </button>
+                </div>
             </div>
         </form>
     </div>
 
-    <div class="section-card p-4">
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Generic</th>
-                    <th>Description</th>
-                    <th>Side Effect</th>
-                    <th>Manufacturer</th>
-                    <th>Strength</th>
-                    <th>Price</th>
-                    <th class="text-end">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model?.Items != null && Model.Items.Any())
-                {
-                    foreach (var item in Model.Items)
-                    {
-                        <tr>
-                            <td class="fw-semibold">@item.Name</td>
-                            <td>@item.GenericName</td>
-                            <td>@item.Description</td>
-                            <td>@item.SideEffects</td>
-                            <td>@item.Manufacturer</td>
-                            <td><span class="status-badge status-muted">@item.Strength</span></td>
-                            <td class="fw-bold">@item.Price.ToString("C")</td>
-                            <td class="text-end">
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-eye"></i> Details
-                                </a>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">
-                                    <i class="bi bi-pencil"></i> Edit
-                                </a>
-                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Name">
-                                    <i class="bi bi-trash"></i> Delete
-                                </button>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="8">
-                            <div class="empty-state my-2">
-                                <i class="bi bi-capsule"></i>
-                                <p class="mt-2 mb-0">No drugs found.</p>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        @if (Model != null && Model.TotalPages > 1)
+    <div class="section-card p-4 animate-in stagger-2">
+        @if (Model?.Items != null && Model.Items.Any())
         {
-            var startPage = Math.Max(1, Model.PageNumber - 2);
-            var endPage = Math.Min(Model.TotalPages, Model.PageNumber + 2);
-
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-4">
-                <div class="text-muted">
-                    Showing <strong>@(((Model.PageNumber - 1) * 10) + 1)</strong>
-                    to <strong>@Math.Min(Model.PageNumber * 10, Model.TotalCount)</strong>
-                    of <strong>@Model.TotalCount</strong> results
-                </div>
-
-                <nav aria-label="Drug page navigation">
-                    <ul class="pagination mb-0">
-                        <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
-                            <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="1">&laquo;</a>
-                        </li>
-                        <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
-                            <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="@(Model.PageNumber - 1)">&lsaquo;</a>
-                        </li>
-                        @for (int i = startPage; i <= endPage; i++)
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Medication</th>
+                            <th>Manufacturer</th>
+                            <th>Strength</th>
+                            <th>Side Effects</th>
+                            <th>Price</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
                         {
-                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                                <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="@i">@i</a>
-                            </li>
+                            <tr>
+                                <td class="fw-bold text-body">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-sm bg-info bg-opacity-10 text-info rounded-circle"><i class="bi bi-capsule"></i></div>
+                                        <div>
+                                            <div class="fs-6">@item.Name</div>
+                                            <small class="text-muted fw-medium">@item.GenericName</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-muted"><i class="bi bi-building me-1 text-primary opacity-50"></i> @item.Manufacturer</td>
+                                <td><span class="badge bg-surface-soft text-body border px-2 py-1">@item.Strength</span></td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.SideEffects))
+                                    {
+                                        <span class="text-truncate d-inline-block text-muted" style="max-width: 150px;" title="@item.SideEffects">
+                                            <i class="bi bi-exclamation-circle me-1 text-warning"></i> @item.SideEffects
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted opacity-50">None listed</span>
+                                    }
+                                </td>
+                                <td class="fw-bold text-primary">@item.Price.ToString("C")</td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light border shadow-sm fw-medium">
+                                            <i class="bi bi-eye text-primary"></i>
+                                        </a>
+                                        @if (isAdmin)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning shadow-sm" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Name" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
                         }
-                        <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
-                            <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="@(Model.PageNumber + 1)">&rsaquo;</a>
-                        </li>
-                        <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
-                            <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="@Model.TotalPages">&raquo;</a>
-                        </li>
-                    </ul>
-                </nav>
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                var startPage = Math.Max(1, Model.PageNumber - 2);
+                var endPage = Math.Min(Model.TotalPages, Model.PageNumber + 2);
+
+                <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 pt-3 border-top">
+                    <div class="text-muted small fw-medium">
+                        Showing <strong>@(((Model.PageNumber - 1) * 10) + 1)</strong>
+                        to <strong>@Math.Min(Model.PageNumber * 10, Model.TotalCount)</strong>
+                        of <strong>@Model.TotalCount</strong> results
+                    </div>
+
+                    <nav aria-label="Drug page navigation">
+                        <ul class="pagination pagination-sm mb-0 shadow-sm">
+                            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="1">&laquo;</a>
+                            </li>
+                            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="@(Model.PageNumber - 1)">&lsaquo;</a>
+                            </li>
+                            @for (int i = startPage; i <= endPage; i++)
+                            {
+                                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="@i">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="@(Model.PageNumber + 1)">&rsaquo;</a>
+                            </li>
+                            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageNumber="@Model.TotalPages">&raquo;</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-state border-0 py-5">
+                <i class="bi bi-capsule text-muted opacity-25" style="font-size: 3rem;"></i>
+                <h5 class="fw-bold mt-3 text-body">No medications found</h5>
+                <p class="text-muted mb-0">Try adjusting your search criteria or add a new drug.</p>
             </div>
         }
     </div>
@@ -126,20 +160,21 @@
 
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-4">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header bg-danger text-white border-0">
+                <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Deletion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                Are you sure you want to delete <strong id="drugName"></strong>?
+            <div class="modal-body p-4">
+                <p class="mb-0 fs-5">Are you sure you want to permanently delete <strong id="drugName" class="text-body"></strong> from the registry?</p>
+                <div class="text-muted small mt-2">This action cannot be undone and may affect active prescriptions.</div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <div class="modal-footer border-0 bg-light p-3">
+                <button type="button" class="btn btn-light fw-bold px-4" data-bs-dismiss="modal">Cancel</button>
                 <form asp-action="Delete" method="post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="deleteDrugId" name="id" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger fw-bold px-4">Delete Drug</button>
                 </form>
             </div>
         </div>

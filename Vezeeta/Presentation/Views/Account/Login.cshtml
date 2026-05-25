@@ -1,81 +1,53 @@
-﻿@model Application.DTOs.Auth.LoginDto
+@using Application.DTOs.Auth
+@model LoginDto
 
 @{
-    ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+    ViewData["Title"] = "Log in";
+    Layout = "_AuthLayout";
 }
 
-<div class="card auth-card shadow-lg">
-
-    <div class="auth-header text-center">
-        <h2>Welcome Back</h2>
-        <p class="mb-0">Login to your account</p>
+<div class="w-100" style="max-width: 480px; margin: 0 auto;">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-body" style="letter-spacing: -0.03em;">Welcome back</h2>
+        <p class="text-muted">Enter your credentials to access your account.</p>
     </div>
 
-    <div class="card-body p-4">
+    <form id="account" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        
+        <div class="form-floating mb-3 position-relative">
+            <input asp-for="Email" class="form-control bg-surface ps-4" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <label asp-for="Email" class="ps-4">Email</label>
+            <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+        </div>
+        
+        <div class="form-floating mb-4 position-relative">
+            <input asp-for="Password" class="form-control bg-surface ps-4" autocomplete="current-password" aria-required="true" placeholder="password" />
+            <label asp-for="Password" class="ps-4">Password</label>
+            <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+        </div>
 
-        <form asp-action="Login" method="post">
-
-            <div asp-validation-summary="ModelOnly"
-                 class="alert alert-danger"></div>
-
-            <input type="hidden"
-                   asp-for="ReturnUrl"
-                   value="@ViewData["ReturnUrl"]" />
-
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
-
-                <input asp-for="Email"
-                       class="form-control"
-                       placeholder="Enter your email" />
-
-                <span asp-validation-for="Email"
-                      class="text-danger small"></span>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="RememberMe" />
+                <label class="form-check-label text-muted user-select-none" asp-for="RememberMe">
+                    @Html.DisplayNameFor(m => m.RememberMe)
+                </label>
             </div>
+            <a id="forgot-password" asp-action="ForgotPassword" class="text-primary text-decoration-none fw-medium small">Forgot password?</a>
+        </div>
 
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
+        <button id="login-submit" type="submit" class="btn btn-primary btn-lg w-100 fw-bold mb-4 shadow-sm">
+            Sign In
+        </button>
 
-                <input asp-for="Password"
-                       class="form-control"
-                       placeholder="Enter your password" />
-
-                <span asp-validation-for="Password"
-                      class="text-danger small"></span>
-            </div>
-
-            <div class="form-check mb-3">
-                <input asp-for="RememberMe"
-                       class="form-check-input" />
-
-                <label asp-for="RememberMe"
-                       class="form-check-label"></label>
-            </div>
-
-            <button type="submit"
-                    class="btn btn-primary w-100">
-                Login
-            </button>
-
-            <hr />
-
-            <a asp-action="ExternalLogin"
-                   asp-route-provider="Google"
-                   class="btn btn-outline-dark w-100 mb-3">
-                <i class="bi bi-google"></i>
-                Continue with Google
-            </a>
-
-            <div class="text-center">
-                <a asp-action="ForgotPassword">Forgot Password?</a>
-            </div>
-
-            <div class="text-center mt-3">
-                Don't have an account?
-                <a asp-action="Register">Register</a>
-            </div>
-
-        </form>
-    </div>
+        <div class="text-center mt-4">
+            <p class="text-muted">Don't have an account? <a asp-action="Register" class="text-primary fw-bold text-decoration-none">Sign up</a></p>
+            <p class="text-muted small"><a id="resend-confirmation" asp-action="ResendEmailConfirmation" class="text-secondary text-decoration-none">Resend email confirmation</a></p>
+        </div>
+    </form>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

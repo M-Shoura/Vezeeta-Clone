@@ -1,48 +1,77 @@
 @model Domain.Entities.Clinic
 
-<form asp-action="@ViewContext.RouteData.Values["action"]" method="post" class="col-lg-7">
+<form asp-action="@ViewContext.RouteData.Values["action"]" method="post" class="needs-validation">
     @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
 
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm" role="alert"></div>
 
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="form-group position-relative">
+                <label asp-for="Name" class="form-label fw-bold">Clinic Name <span class="text-danger">*</span></label>
+                <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-building"></i></span>
+                    <input asp-for="Name" class="form-control border-start-0 ps-0 bg-light" placeholder="e.g. City Central Clinic" />
+                </div>
+                <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group position-relative">
+                <label asp-for="PhoneNumber" class="form-label fw-bold">Phone Number <span class="text-danger">*</span></label>
+                <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-telephone"></i></span>
+                    <input asp-for="PhoneNumber" class="form-control border-start-0 ps-0 bg-light" placeholder="e.g. 01012345678" />
+                </div>
+                <span asp-validation-for="PhoneNumber" class="text-danger small mt-1 d-block"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group position-relative">
+                <label asp-for="Address" class="form-label fw-bold">Address <span class="text-danger">*</span></label>
+                <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-geo-alt"></i></span>
+                    <input asp-for="Address" class="form-control border-start-0 ps-0 bg-light" placeholder="Full street address" />
+                </div>
+                <span asp-validation-for="Address" class="text-danger small mt-1 d-block"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group position-relative">
+                <label asp-for="Email" class="form-label fw-bold">Email Address</label>
+                <div class="input-group input-group-lg shadow-sm rounded-md overflow-hidden">
+                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                    <input asp-for="Email" class="form-control border-start-0 ps-0 bg-light" placeholder="clinic@example.com" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="Description" class="form-label fw-bold">Description / Notes</label>
+                <textarea asp-for="Description" class="form-control bg-light shadow-sm" rows="4" placeholder="Important details about the facility..."></textarea>
+                <span asp-validation-for="Description" class="text-danger small mt-1 d-block"></span>
+            </div>
+        </div>
+        
+        <div class="col-md-12">
+            <div class="form-check form-switch p-4 bg-surface-soft rounded-4 border">
+                <input asp-for="IsActive" class="form-check-input fs-4 ms-0 me-3" type="checkbox" role="switch" />
+                <label asp-for="IsActive" class="form-check-label pt-1 fw-bold fs-5 cursor-pointer">Active Status</label>
+                <div class="text-muted mt-1 ms-5 ps-2">If inactive, the clinic will be hidden from searches and booking options.</div>
+            </div>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Address" class="form-label"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="PhoneNumber" class="form-label"></label>
-        <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-check mb-4">
-        <input asp-for="IsActive" class="form-check-input" />
-        <label asp-for="IsActive" class="form-check-label"></label>
-    </div>
-
-    <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    <div class="d-flex gap-3 pt-3 border-top">
+        <button type="submit" class="btn btn-primary btn-lg fw-bold px-5 shadow-sm">
+            <i class="bi bi-check2 me-2"></i> Save Changes
+        </button>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-lg fw-bold px-4">Cancel</a>
     </div>
 </form>
