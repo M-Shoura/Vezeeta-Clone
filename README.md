@@ -1,4 +1,4 @@
-# Vezeeta-Clone-MVC
+# Vezeeta-Clone
 
 An enterprise-grade healthcare platform built using ASP.NET Core MVC and .NET 10. This project implements a clinical booking and live consultation system, structured following Clean Architecture (Onion Architecture) principles.
 
