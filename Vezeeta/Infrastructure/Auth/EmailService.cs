@@ -84,16 +84,16 @@ public sealed class EmailService : IEmailService
             message.Subject = subject;
             message.Body = new TextPart("html") { Text = htmlBody };
 
-            //using var smtp = new SmtpClient();
-            //await smtp.ConnectAsync(Host, Port, SecureSocketOptions.StartTls);
-            //await smtp.AuthenticateAsync(Username, Password);
-            //await smtp.SendAsync(message);
-            //await smtp.DisconnectAsync(true);
+            using var smtp = new SmtpClient();
+            await smtp.ConnectAsync(Host, Port, SecureSocketOptions.StartTls);
+            await smtp.AuthenticateAsync(Username, Password);
+            await smtp.SendAsync(message);
+            await smtp.DisconnectAsync(true);
         }
         catch (Exception ex)
         {
+            // Log the failure but do not crash registration — email is non-critical
             _logger.LogError(ex, "Failed to send email to {Email}", toEmail);
-            throw;   // Let caller decide whether to swallow or bubble
         }
     }
 }

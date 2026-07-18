@@ -72,11 +72,15 @@ namespace Presentation
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                // HSTS and HTTPS redirect are handled by the host/reverse proxy in Docker/EC2
+                if (!app.Environment.IsEnvironment("Docker"))
+                {
+                    app.UseHsts();
+                    app.UseHttpsRedirection();
+                }
             }
 
             app.UseStaticFiles();
-            app.UseHttpsRedirection();
             app.UseSharedMiddleware();
 
             // IMPORTANT: Pipeline Order Matters!
