@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Extensions;
-using Presentation.Hubs; // ◄ 1. ADD THIS to import the folder where you saved your Hub!
+using Presentation.Hubs;
 
 namespace Presentation
 {
@@ -60,13 +60,26 @@ namespace Presentation
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
 
-                DataSeeder.SeedAsync(context, userManager, roleManager)
-                    .GetAwaiter()
-                    .GetResult();
+                try
+                {
+                    logger.LogInformation("Applying migrations...");
+                    context.Database.Migrate();
+                    logger.LogInformation("Migrations applied. Starting seed...");
+                    DataSeeder.SeedAsync(context, userManager, roleManager)
+                        .GetAwaiter()
+                        .GetResult();
+                    logger.LogInformation("Seed completed.");
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "An error occurred during migration or seeding.");
+                    throw;
+                }
             }
 
             if (!app.Environment.IsDevelopment())
