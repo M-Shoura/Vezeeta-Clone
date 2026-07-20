@@ -20,7 +20,8 @@ namespace Presentation.Extensions
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString,
+                    sql => sql.MigrationsAssembly("Infrastructure")));
 
 
 
@@ -39,9 +40,6 @@ namespace Presentation.Extensions
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             // ==================== DATABASE CONFIGURATION ====================
-
-
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IDoctorService, DoctorService>();

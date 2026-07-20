@@ -177,7 +177,15 @@ Initialize the database schemas and run the application:
 4.  Launch your browser and head to https://localhost:7129 to explore!
 
 ---
+## Deployment Preview
 
+The following screenshots showcase the application after being deployed to an AWS EC2 instance for production deployment testing and validation.
+
+<p align="center">
+  <img src="assets/aws-ec2-instance.png" alt="AWS EC2 Instance" width="48%">
+  <img src="assets/deployed-application.png" alt="Vezeeta Application Running on AWS" width="48%">
+</p>
+---
 ## Development Team
 
 This project was built and is maintained by:
